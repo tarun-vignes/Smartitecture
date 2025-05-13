@@ -8,22 +8,42 @@ using AIPal.Services;
 
 namespace AIPal.ViewModels
 {
+    /// <summary>
+    /// View model for the main chat interface.
+    /// Handles user input processing, message display, and command execution.
+    /// Uses MVVM pattern with CommunityToolkit.Mvvm for property and command bindings.
+    /// </summary>
     public partial class MainViewModel : ObservableObject
     {
+        /// <summary>Service for natural language processing and command parsing</summary>
         private readonly ILLMService _llmService;
+
+        /// <summary>Service for executing system commands</summary>
         private readonly CommandMapper _commandMapper;
 
+        /// <summary>User's current input text in the chat box</summary>
         [ObservableProperty]
         private string inputText;
 
+        /// <summary>Collection of chat messages displayed in the conversation</summary>
         public ObservableCollection<ChatMessage> Messages { get; } = new();
 
+        /// <summary>
+        /// Initializes a new instance of the MainViewModel
+        /// </summary>
+        /// <param name="llmService">Service for natural language processing</param>
+        /// <param name="commandMapper">Service for executing system commands</param>
         public MainViewModel(ILLMService llmService, CommandMapper commandMapper)
         {
             _llmService = llmService;
             _commandMapper = commandMapper;
         }
 
+        /// <summary>
+        /// Processes and sends the user's message.
+        /// Attempts to parse the input as a command, executes it if possible,
+        /// otherwise gets a conversational response from the LLM.
+        /// </summary>
         [RelayCommand]
         public async Task SendMessage()
         {

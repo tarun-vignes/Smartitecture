@@ -4,14 +4,27 @@ using Windows.System;
 
 namespace AIPal.Commands
 {
-    public class LaunchAppCommand : ISystemCommand
-    {
+    /// <summary>
+    /// Command implementation for launching Windows applications.
+    /// Supports both Microsoft Store apps and traditional desktop applications.
+    /// </summary>
+        /// <summary>Gets the name of the command</summary>
         public string CommandName => "LaunchApp";
+
+        /// <summary>Gets the description of what the command does</summary>
         public string Description => "Launches a Windows application";
+
+        /// <summary>Indicates whether the command requires administrative elevation</summary>
         public bool RequiresElevation => false;
 
+        /// <summary>
+        /// Attempts to launch a Windows application using the provided application name
+        /// </summary>
+        /// <param name="parameters">Array where first parameter is the application name/identifier</param>
+        /// <returns>True if the application was launched successfully, false otherwise</returns>
         public async Task<bool> ExecuteAsync(string[] parameters)
         {
+            // Validate that an application name was provided
             if (parameters.Length == 0)
                 return false;
 
