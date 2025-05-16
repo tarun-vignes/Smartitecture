@@ -2,12 +2,9 @@
 <!--
 MainWindow.xaml
 Main window of the AIPal application.
-Implements a modern chat interface with support for:
-- Message history display
-- Text input
-- Voice input toggle
-- Send button
-- Adaptive layout
+Implements a modern interface with navigation between:
+- Standard chat interface
+- Advanced agent interface with tool usage
 -->
 <Window
     x:Class="AIPal.UI.MainWindow"
@@ -18,12 +15,11 @@ Implements a modern chat interface with support for:
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <!-- Main layout grid with three rows: title bar, chat area, and input area -->
+    <!-- Main layout grid with two rows: title bar and content area -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>  <!-- Title bar -->
-            <RowDefinition Height="*"/>    <!-- Chat messages -->
-            <RowDefinition Height="Auto"/> <!-- Input area -->
+            <RowDefinition Height="*"/>    <!-- Content area -->
         </Grid.RowDefinitions>
 
         <!-- Custom title bar for modern Windows app look -->
@@ -35,64 +31,37 @@ Implements a modern chat interface with support for:
                        Style="{StaticResource CaptionTextBlockStyle}"/>
         </Grid>
 
-        <!-- Scrollable chat message area with message bubbles -->
-        <ScrollViewer Grid.Row="1" Padding="12">
-            <!-- ItemsControl for displaying chat messages with data binding -->
-            <ItemsControl ItemsSource="{x:Bind ViewModel.Messages}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <!-- Avatar -->
-                            <PersonPicture Width="32" Height="32"
-                                          Margin="0,0,8,0"
-                                          ProfilePicture="{Binding AvatarUri}"/>
-
-                            <!-- Message Bubble -->
-                            <Border Grid.Column="1"
-                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="8"
-                                    Padding="12">
-                                <TextBlock Text="{Binding Content}"
-                                           TextWrapping="Wrap"/>
-                            </Border>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-
-        <!-- Bottom input area with text box and buttons -->
-        <Grid Grid.Row="2" Padding="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>      <!-- Text input takes most space -->
-                <ColumnDefinition Width="Auto"/>   <!-- Voice button -->
-                <ColumnDefinition Width="Auto"/>   <!-- Send button -->
-            </Grid.ColumnDefinitions>
-
-            <TextBox x:Name="InputBox"
-                     PlaceholderText="Type a message..."
-                     Text="{x:Bind ViewModel.InputText, Mode=TwoWay}"
-                     KeyDown="InputBox_KeyDown"/>
-
-            <Button Grid.Column="1"
-                    Margin="8,0,0,0"
-                    Click="VoiceButton_Click">
-                <FontIcon Glyph="&#xE720;"/>
-            </Button>
-
-            <Button Grid.Column="2"
-                    Margin="8,0,0,0"
-                    Style="{StaticResource AccentButtonStyle}"
-                    Click="SendButton_Click">
-                <FontIcon Glyph="&#xE724;"/>
-            </Button>
-        </Grid>
+        <!-- Navigation view for switching between chat and agent interfaces -->
+        <NavigationView x:Name="NavView" 
+                         Grid.Row="1"
+                         IsSettingsVisible="False"
+                         IsBackButtonVisible="Collapsed"
+                         SelectionChanged="NavView_SelectionChanged"
+                         PaneDisplayMode="Top">
+            
+            <!-- Navigation menu items -->
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Chat" Tag="ChatPage" IsSelected="True">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8BD;"/> <!-- Chat icon -->
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                
+                <NavigationViewItem Content="Agent" Tag="AgentPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE9D9;"/> <!-- Robot/Agent icon -->
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            
+            <!-- Content frame for page navigation -->
+            <Frame x:Name="ContentFrame" Padding="0,0,0,0">
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition/>
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+            </Frame>
+        </NavigationView>
     </Grid>
 </Window>

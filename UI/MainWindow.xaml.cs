@@ -1,16 +1,18 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Navigation;
 using AIPal.ViewModels;
+using System;
 
 namespace AIPal.UI
 {
     /// <summary>
     /// Main window of the AIPal application.
-    /// Implements a modern chat interface with Windows 11 design language.
+    /// Implements a modern interface with Windows 11 design language.
     /// Features:
+    /// - Navigation between chat and agent interfaces
     /// - Dockable window (similar to Windows Copilot)
-    /// - Chat message display
     /// - Text and voice input
     /// - Adaptive sizing and positioning
     /// </summary>
@@ -19,64 +21,64 @@ namespace AIPal.UI
         /// <summary>
         /// Gets the view model that handles the chat interface logic
         /// </summary>
-        public MainViewModel ViewModel { get; }
+        public MainViewModel ChatViewModel { get; }
+        
+        /// <summary>
+        /// Gets the view model that handles the agent interface logic
+        /// </summary>
+        public AgentViewModel AgentViewModel { get; }
 
         /// <summary>
         /// Initializes the main window and sets up the initial layout.
-        /// Configures window size, position, and gets the view model from DI.
+        /// Configures window size, position, and gets the view models from DI.
         /// </summary>
         public MainWindow()
         {
             this.InitializeComponent();
             
-            // Get the view model from dependency injection
-            ViewModel = App.Current.Services.GetService<MainViewModel>();
+            // Get the view models from dependency injection
+            ChatViewModel = App.Current.Services.GetService(typeof(MainViewModel)) as MainViewModel;
+            AgentViewModel = App.Current.Services.GetService(typeof(AgentViewModel)) as AgentViewModel;
             
             // Get the native window handle for Win32 interop
             var windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(this);
             var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
             var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
             
-            // Set default window size (400x700 is optimal for chat interface)
-            appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 400, Height = 700 });
+            // Set default window size (500x700 is optimal for our interface)
+            appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 500, Height = 700 });
             
             // Position the window on the right side of the screen (Copilot-style)
             var displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(windowId, Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
             appWindow.Move(new Windows.Graphics.PointInt32 
             { 
-                X = displayArea.WorkArea.Width - 420,  // 20px margin from screen edge
+                X = displayArea.WorkArea.Width - 520,  // 20px margin from screen edge
                 Y = (displayArea.WorkArea.Height - 700) / 2  // Centered vertically
             });
+            
+            // Navigate to the default page (Chat)
+            ContentFrame.Navigate(typeof(ChatPage));
         }
 
         /// <summary>
-        /// Handles the send button click event.
-        /// Forwards the message to the view model for processing.
+        /// Handles navigation view selection changes to switch between pages.
         /// </summary>
-        private async void SendButton_Click(object sender, RoutedEventArgs e)
+        private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            await ViewModel.SendMessageAsync();
-        }
-
-        /// <summary>
-        /// Handles the voice input button click event.
-        /// Initiates voice recognition for hands-free input.
-        /// </summary>
-        private async void VoiceButton_Click(object sender, RoutedEventArgs e)
-        {
-            await ViewModel.StartVoiceInputAsync();
-        }
-
-        /// <summary>
-        /// Handles keyboard input in the message box.
-        /// Sends the message when Enter is pressed (without modifier keys).
-        /// </summary>
-        private async void InputBox_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == Windows.System.VirtualKey.Enter && !e.KeyStatus.IsMenuKeyDown)
+            if (args.SelectedItemContainer != null)
             {
-                e.Handled = true;
-                await ViewModel.SendMessageAsync();
+                var navItemTag = args.SelectedItemContainer.Tag.ToString();
+                
+                switch (navItemTag)
+                {
+                    case "ChatPage":
+                        ContentFrame.Navigate(typeof(ChatPage));
+                        break;
+                        
+                    case "AgentPage":
+                        ContentFrame.Navigate(typeof(AgentPage));
+                        break;
+                }
             }
         }
     }
