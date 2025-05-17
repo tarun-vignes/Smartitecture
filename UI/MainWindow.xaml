@@ -24,11 +24,26 @@ Implements a modern interface with navigation between:
 
         <!-- Custom title bar for modern Windows app look -->
         <Grid x:Name="AppTitleBar" Height="32" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
             <TextBlock x:Name="AppTitle"
                        Text="AIPal"
                        VerticalAlignment="Center"
                        Margin="12,0,0,0"
                        Style="{StaticResource CaptionTextBlockStyle}"/>
+                       
+            <!-- Theme toggle button -->
+            <ToggleButton x:Name="ThemeToggleButton" 
+                         Grid.Column="1"
+                         Margin="0,0,12,0"
+                         VerticalAlignment="Center"
+                         Click="ThemeToggleButton_Click"
+                         ToolTipService.ToolTip="Toggle Light/Dark Mode">
+                <FontIcon x:Name="ThemeIcon" Glyph="&#xE793;"/> <!-- Moon icon -->
+            </ToggleButton>
         </Grid>
 
         <!-- Navigation view for switching between chat and agent interfaces -->
@@ -41,7 +56,13 @@ Implements a modern interface with navigation between:
             
             <!-- Navigation menu items -->
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Chat" Tag="ChatPage" IsSelected="True">
+                <NavigationViewItem Content="Getting Started" Tag="GettingStartedPage" IsSelected="True">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE80F;"/> <!-- Home icon -->
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                
+                <NavigationViewItem Content="Chat" Tag="ChatPage">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8BD;"/> <!-- Chat icon -->
                     </NavigationViewItem.Icon>
@@ -52,7 +73,40 @@ Implements a modern interface with navigation between:
                         <FontIcon Glyph="&#xE9D9;"/> <!-- Robot/Agent icon -->
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                
+                <NavigationViewItem Content="Security" Tag="SecurityPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE72E;"/> <!-- Shield icon -->
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                
+                <NavigationViewItem Content="Screen Help" Tag="ScreenAnalysisPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7F4;"/> <!-- Screen icon -->
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
+            
+            <!-- Settings menu items -->
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="Appearance" Tag="ThemeSettingsPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE790;"/> <!-- Color icon -->
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                
+                <NavigationViewItem Content="Language" Tag="LanguageSettingsPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE774;"/> <!-- Globe icon -->
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                
+                <NavigationViewItem Content="Accessibility" Tag="AccessibilitySettingsPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE776;"/> <!-- Accessibility icon -->
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.FooterMenuItems>
             
             <!-- Content frame for page navigation -->
             <Frame x:Name="ContentFrame" Padding="0,0,0,0">

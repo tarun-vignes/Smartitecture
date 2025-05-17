@@ -72,6 +72,13 @@ namespace AIPal.Services
             // Register date/time tool
             agentService.RegisterTool(SystemTools.CreateDateTimeTool());
             _logger.LogInformation("Registered date/time tool");
+            
+            // Register system diagnostics tools
+            foreach (var tool in SystemDiagnosticsTools.Tools)
+            {
+                agentService.RegisterTool(tool);
+                _logger.LogInformation($"Registered system diagnostics tool: {tool.Name}");
+            }
         }
 
         /// <summary>

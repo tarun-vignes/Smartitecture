@@ -89,6 +89,7 @@ namespace AIPal.Services
             services.AddTransient<LaunchAppRequestHandler>();
             services.AddTransient<WebSearchRequestHandler>();
             services.AddTransient<WeatherRequestHandler>();
+            services.AddTransient<SystemDiagnosticsHandler>();
             
             // Register default handler
             services.AddTransient<DefaultRequestHandler>();

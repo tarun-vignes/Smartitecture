@@ -75,11 +75,27 @@ namespace AIPal
 
             // Register ViewModels
             services.AddTransient<AgentViewModel>();
+            services.AddTransient<SecurityViewModel>();
+            services.AddTransient<ScreenAnalysisViewModel>();
+            
+            // Register theme service
+            services.AddSingleton<ThemeService>();
+            
+            // Register language service
+            services.AddSingleton<LanguageService>();
 
             _serviceProvider = services.BuildServiceProvider();
 
             // Initialize agent system
             ServiceCollectionExtensions.InitializeAgentSystem(_serviceProvider);
+
+            // Initialize theme service
+            var themeService = _serviceProvider.GetRequiredService<ThemeService>();
+            await themeService.InitializeThemeAsync();
+            
+            // Initialize language service
+            var languageService = _serviceProvider.GetRequiredService<LanguageService>();
+            await languageService.InitializeLanguageAsync();
 
             // Initialize API host
             var llmService = _serviceProvider.GetRequiredService<ILLMService>();
