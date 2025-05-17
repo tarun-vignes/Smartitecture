@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import aipalLogoLight from '../assets/images/aipal-logo-light.svg'
+import aipalLogoDark from '../assets/images/aipal-logo-dark.svg'
 import './Header.css'
 
 function Header({ darkMode, toggleDarkMode }) {
@@ -15,8 +17,11 @@ function Header({ darkMode, toggleDarkMode }) {
         <div className="logo-container">
           <Link to="/" className="logo-link">
             <div className="logo">
-              <div className="logo-icon"></div>
-              <span className="logo-text">AIPal</span>
+              <img 
+                src={darkMode ? aipalLogoDark : aipalLogoLight} 
+                alt="AIPal Logo" 
+                className="logo-full" 
+              />
             </div>
           </Link>
         </div>

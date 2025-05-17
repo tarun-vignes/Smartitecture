@@ -30,24 +30,34 @@
   gap: 0.75rem;
 }
 
-.logo-icon {
-  width: 40px;
-  height: 40px;
-  background-color: var(--primary-color);
-  border-radius: 8px;
-  position: relative;
-  overflow: hidden;
-  /* We'll add the AIPal logo styling here */
-  background-image: url('../assets/images/logo-icon.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+.logo-full {
+  height: 50px;
+  width: auto;
+  display: block;
+  transition: transform 0.3s ease;
 }
 
-.logo-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-color);
+.logo-link:hover .logo-full {
+  transform: scale(1.05);
+}
+
+/* Control visibility of logo text based on theme */
+/* Light mode: show dark text, hide white text */
+div.app.light-mode .logo-text-light {
+  display: inline;
+}
+
+div.app.light-mode .logo-text-dark {
+  display: none;
+}
+
+/* Dark mode: hide dark text, show white text */
+div.app.dark-mode .logo-text-light {
+  display: none;
+}
+
+div.app.dark-mode .logo-text-dark {
+  display: inline;
 }
 
 .main-nav {
