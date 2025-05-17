@@ -8,9 +8,14 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <!-- Other merged dictionaries here -->
+                <!-- Logo resources -->
+                <ResourceDictionary Source="ms-appx:///Assets/Logo/AIPalLogo.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <!-- Other app resources here -->
+            
+            <!-- App colors -->
+            <SolidColorBrush x:Key="AIPalPrimaryBrush" Color="#3584D9"/>
+            <SolidColorBrush x:Key="AIPalSecondaryBrush" Color="#4D9FF3"/>
+            <SolidColorBrush x:Key="AIPalAccentBrush" Color="#FF5A5A"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

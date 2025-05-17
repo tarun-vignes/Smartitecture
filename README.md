@@ -1,4 +1,4 @@
-# AIPal - Your Windows AI Companion for Elderly Users
+# AIPal - Your Windows AI Companion
 
 AIPal is a modern Windows desktop application designed specifically to help elderly and less tech-savvy users understand their computers, avoid scams, and optimize performance. With its AI-powered assistant, AIPal provides natural conversation and system task automation in a simple, accessible interface.
 
