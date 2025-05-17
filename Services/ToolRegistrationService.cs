@@ -79,6 +79,13 @@ namespace AIPal.Services
                 agentService.RegisterTool(tool);
                 _logger.LogInformation($"Registered system diagnostics tool: {tool.Name}");
             }
+            
+            // Register network security tools
+            foreach (var tool in NetworkSecurityTools.Tools)
+            {
+                agentService.RegisterTool(tool);
+                _logger.LogInformation($"Registered network security tool: {tool.Name}");
+            }
         }
 
         /// <summary>
