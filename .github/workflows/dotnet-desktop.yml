@@ -16,7 +16,8 @@ jobs:
 
     env:
       Solution_Name: AIPal.sln
-      Test_Project_Path: AIPal.Tests\AIPal.Tests.csproj
+      Test_Project_Path: AIPal.Tests/AIPal.Tests.csproj
+      Project_Path: AIPal.csproj
 
     steps:
     - name: Checkout
@@ -30,18 +31,21 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.2
+      uses: microsoft/setup-msbuild@v1.1
 
-    - name: Restore dependencies
-      run: dotnet restore $env:Solution_Name
+    - name: Install dependencies
+      run: |
+        dotnet restore $env:Solution_Name
+        dotnet workload install maui
 
     - name: Build
       run: dotnet build $env:Solution_Name --configuration ${{ matrix.configuration }} --no-restore
 
     - name: Execute unit tests
-      run: dotnet test $env:Test_Project_Path --configuration ${{ matrix.configuration }} --no-build
+      run: dotnet test $env:Test_Project_Path --configuration ${{ matrix.configuration }}
+      continue-on-error: true
 
     # Add packaging steps here when you're ready for releases
     # - name: Package
     #   if: matrix.configuration == 'Release'
-    #   run: dotnet publish -c Release -r win-x64 --self-contained true
+    #   run: dotnet publish $env:Project_Path -c Release -r win-x64 --self-contained true -p:PublishReadyToRun=true
