@@ -155,17 +155,23 @@ Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
 ## Deployment
 
-### Website Deployment with GitHub Pages
+### Website Deployment with Netlify
 
-The AIPal companion website is automatically deployed to GitHub Pages whenever changes are pushed to the Website directory:
+The AIPal companion website is deployed to Netlify, showcasing all the elderly-friendly features implemented in the desktop application:
 
-1. The deployment is handled by the GitHub Actions workflow in `.github/workflows/deploy-website.yml`
-2. The website is built using Vite and deployed to GitHub Pages
-3. Once deployed, the website will be available at: https://tarun-vignes.github.io/AIPal/
+1. The website is built using Vite and React
+2. Deployment is configured via the `netlify.toml` file in the Website directory
+3. The website is accessible at: https://aipal-companion.windsurf.build
 
-[![Deploy Website](https://github.com/tarun-vignes/AIPal/actions/workflows/deploy-website.yml/badge.svg)](https://github.com/tarun-vignes/AIPal/actions/workflows/deploy-website.yml)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/0c565a6b-0b0d-45d7-b8e2-142d0a020b64/deploy-status)](https://app.netlify.com/sites/aipal-companion-41jg1/deploys)
 
-No manual steps are required for deployment - just push your changes to the Website directory and GitHub Actions will handle the rest.
+#### Features Showcased on the Website
+
+- Friendly blue robot logo and accessible branding
+- Multi-language support with 30 languages
+- Dark/light mode options for better visibility
+- Information about security tools and system diagnostics
+- Comprehensive documentation for elderly users
 
 ## License
 
