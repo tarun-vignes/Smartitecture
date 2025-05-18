@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- AIPal blue robot/chat bubble logo with antennas -->
-  <g>
-    <!-- Chat bubble body -->
-    <path d="M100 160C100 126.863 126.863 100 160 100H352C385.137 100 412 126.863 412 160V280C412 313.137 385.137 340 352 340H280L256 400L232 340H160C126.863 340 100 313.137 100 280V160Z" fill="#0078D7"/>
-    
-    <!-- Lighter blue inner area -->
-    <path d="M120 160C120 137.909 137.909 120 160 120H352C374.091 120 392 137.909 392 160V280C392 302.091 374.091 320 352 320H240L256 360L272 320H160C137.909 320 120 302.091 120 280V160Z" fill="#1E88E5"/>
-    
-    <!-- Eyes -->
-    <circle cx="200" cy="220" r="30" fill="white"/>
-    <circle cx="312" cy="220" r="30" fill="white"/>
-    
-    <!-- Smile -->
-    <path d="M200 280C200 280 228 300 256 300C284 300 312 280 312 280" stroke="white" stroke-width="12" stroke-linecap="round"/>
-    
-    <!-- Antennas -->
-    <circle cx="200" cy="80" r="20" fill="#0078D7"/>
-    <path d="M200 80L220 120" stroke="#0078D7" stroke-width="16" stroke-linecap="round"/>
-    
-    <circle cx="312" cy="80" r="20" fill="#0078D7"/>
-    <path d="M312 80L292 120" stroke="#0078D7" stroke-width="16" stroke-linecap="round"/>
-  </g>
+  <!-- WisdomLink bridge icon -->
+  <circle cx="256" cy="256" r="230" fill="#4682B4"/>
+  
+  <!-- Bridge arch -->
+  <path d="M102 358C102 358 256 102 410 358" stroke="white" stroke-width="40" stroke-linecap="round"/>
+  
+  <!-- Bridge supports -->
+  <line x1="179" y1="230" x2="179" y2="358" stroke="white" stroke-width="30" stroke-linecap="round"/>
+  <line x1="256" y1="179" x2="256" y2="358" stroke="white" stroke-width="30" stroke-linecap="round"/>
+  <line x1="333" y1="230" x2="333" y2="358" stroke="white" stroke-width="30" stroke-linecap="round"/>
+  
+  <!-- Digital element -->
+  <circle cx="256" cy="128" r="50" fill="#FF6347"/>
+  <path d="M230 128L282 128" stroke="white" stroke-width="15" stroke-linecap="round"/>
+  <path d="M256 102L256 154" stroke="white" stroke-width="15" stroke-linecap="round"/>
 </svg>

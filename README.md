@@ -1,8 +1,8 @@
-# AIPal - Your Windows AI Companion
+# WisdomLink - Your Windows AI Companion
 
-[![AIPal CI](https://github.com/tarun-vignes/AIPal/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/tarun-vignes/AIPal/actions/workflows/dotnet-desktop.yml)
+[![WisdomLink CI](https://github.com/tarun-vignes/AIPal/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/tarun-vignes/AIPal/actions/workflows/dotnet-desktop.yml)
 
-AIPal is a modern Windows desktop application designed specifically to help elderly and less tech-savvy users understand their computers, avoid scams, and optimize performance. With its AI-powered assistant, AIPal provides natural conversation and system task automation in a simple, accessible interface.
+WisdomLink is a modern Windows desktop application designed specifically to help elderly and less tech-savvy users understand their computers, avoid scams, and optimize performance. With its AI-powered assistant, WisdomLink provides natural conversation and system task automation in a simple, accessible interface.
 
 ## Key Features
 
