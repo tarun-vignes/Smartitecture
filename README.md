@@ -1,5 +1,7 @@
 # AIPal - Your Windows AI Companion
 
+[![AIPal CI](https://github.com/tarun-vignes/AIPal/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/tarun-vignes/AIPal/actions/workflows/dotnet-desktop.yml)
+
 AIPal is a modern Windows desktop application designed specifically to help elderly and less tech-savvy users understand their computers, avoid scams, and optimize performance. With its AI-powered assistant, AIPal provides natural conversation and system task automation in a simple, accessible interface.
 
 ## Key Features
@@ -150,6 +152,24 @@ We welcome contributions to make AIPal better for elderly users:
 5. Open a Pull Request
 
 Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+## Deployment
+
+### Website Deployment with Vercel
+
+The AIPal companion website can be easily deployed using Vercel:
+
+1. Visit [Vercel's Import page](https://vercel.com/new/import?s=https%3A%2F%2Fgithub.com%2Ftarun-vignes%2FAIPal)
+2. Connect your GitHub account if not already connected
+3. Select the AIPal repository
+4. Configure the project with these settings:
+   - Framework Preset: Vite
+   - Root Directory: Website
+   - Build Command: npm run build
+   - Output Directory: dist
+5. Click "Deploy"
+
+The configuration is already set up in the `vercel.json` file at the root of the repository.
 
 ## License
 
