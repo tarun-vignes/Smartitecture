@@ -23,8 +23,15 @@
     <PackageReference Include="Moq" Version="4.20.69" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(SkipMainProjectBuild)' != 'true'">
     <ProjectReference Include="..\AIPal.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(SkipMainProjectBuild)' == 'true'">
+    <Reference Include="AIPal">
+      <HintPath>..\bin\Debug\net8.0-windows10.0.19041.0\AIPal.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
