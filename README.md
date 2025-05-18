@@ -155,21 +155,17 @@ Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
 ## Deployment
 
-### Website Deployment with Vercel
+### Website Deployment with GitHub Pages
 
-The AIPal companion website can be easily deployed using Vercel:
+The AIPal companion website is automatically deployed to GitHub Pages whenever changes are pushed to the Website directory:
 
-1. Visit [Vercel's Import page](https://vercel.com/new/import?s=https%3A%2F%2Fgithub.com%2Ftarun-vignes%2FAIPal)
-2. Connect your GitHub account if not already connected
-3. Select the AIPal repository
-4. The project should be automatically configured with these settings:
-   - Framework Preset: Vite
-   - Root Directory: Website (set in vercel.json)
-   - Build Command: npm install && npm run build
-   - Output Directory: dist
-5. Click "Deploy"
+1. The deployment is handled by the GitHub Actions workflow in `.github/workflows/deploy-website.yml`
+2. The website is built using Vite and deployed to GitHub Pages
+3. Once deployed, the website will be available at: https://tarun-vignes.github.io/AIPal/
 
-The configuration is already set up in the `vercel.json` file at the root of the repository.
+[![Deploy Website](https://github.com/tarun-vignes/AIPal/actions/workflows/deploy-website.yml/badge.svg)](https://github.com/tarun-vignes/AIPal/actions/workflows/deploy-website.yml)
+
+No manual steps are required for deployment - just push your changes to the Website directory and GitHub Actions will handle the rest.
 
 ## License
 
