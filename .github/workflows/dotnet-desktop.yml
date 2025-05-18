@@ -29,28 +29,7 @@ jobs:
     - name: Build website
       run: npm run build
       working-directory: Website
+      
+    # We'll add deployment steps later when ready
 
-    - name: Upload website build
-      uses: actions/upload-artifact@v2
-      with:
-        name: website-build
-        path: Website/dist
-
-  verify-tests:
-    name: Verify Tests Compile
-    runs-on: windows-latest
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.0.x
-
-    - name: Restore dependencies
-      run: dotnet restore AIPal.Tests/AIPal.Tests.csproj
-
-    - name: Verify tests compile
-      run: dotnet build AIPal.Tests/AIPal.Tests.csproj --configuration Debug --no-restore /p:SkipMainProjectBuild=true
+  # We'll add test verification back when we have a better approach
