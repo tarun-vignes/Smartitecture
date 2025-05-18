@@ -9,7 +9,7 @@ using System.Management;
 using System.Linq;
 using System.Net;
 
-namespace AIPal.Application.Network.Tools
+namespace Smartitecture.Network.Tools
 {
     /// <summary>
     /// Provides tools for analyzing and securing Wi-Fi networks.

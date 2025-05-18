@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace AIPal.ViewModels
+namespace Smartitecture.ViewModels
 {
     /// <summary>
     /// Base class for view models that implements INotifyPropertyChanged.

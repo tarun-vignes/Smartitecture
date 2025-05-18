@@ -12,8 +12,8 @@ function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1>About AIPal</h1>
-            <p>Learn about our mission to make technology accessible for everyone</p>
+            <h1>About Smartitecture</h1>
+            <p>Learn about our mission to make computer systems understandable for everyone</p>
           </motion.div>
         </div>
       </section>
@@ -29,13 +29,13 @@ function AboutPage() {
           >
             <h2>Our Mission</h2>
             <p>
-              At AIPal, we believe that technology should be accessible to everyone, regardless of age or technical expertise. 
-              Our mission is to bridge the digital divide by providing a friendly, patient AI companion that helps elderly and 
-              less tech-savvy users navigate their computers with confidence.
+              At Smartitecture, we believe that technology should be accessible to everyone, regardless of technical expertise. 
+              Our mission is to bridge the digital divide by providing an intelligent assistant that helps users understand 
+              and navigate their computer systems with confidence.
             </p>
             <p>
-              We understand that technology can be intimidating, especially for those who didn't grow up with computers. 
-              That's why we've created AIPal - to provide clear, jargon-free explanations and step-by-step guidance 
+              We understand that technology can be complex and sometimes intimidating. 
+              That's why we've created Smartitecture - to provide clear, accessible explanations and step-by-step guidance 
               that empowers users to solve problems independently.
             </p>
           </motion.div>

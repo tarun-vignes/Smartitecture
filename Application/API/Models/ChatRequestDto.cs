@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace AIPal.API.Models
+namespace Smartitecture.API.Models
 {
     /// <summary>
     /// Data transfer object for chat requests coming from external applications.

@@ -3,15 +3,15 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Media;
-using AIPal.ViewModels;
-using AIPal.Services;
+using Smartitecture.ViewModels;
+using Smartitecture.Services;
 using System;
 using System.Threading.Tasks;
 
-namespace AIPal.UI
+namespace Smartitecture.UI
 {
     /// <summary>
-    /// Main window of the AIPal application.
+    /// Main window of the Smartitecture application.
     /// Implements a modern interface with Windows 11 design language.
     /// Features:
     /// - Navigation between chat and agent interfaces

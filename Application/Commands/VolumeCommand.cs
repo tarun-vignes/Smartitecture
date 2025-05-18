@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Windows.Media.Control;
 
-namespace AIPal.Application.Commands
+namespace Smartitecture.Commands
 {
     /// <summary>
     /// Command for controlling the system volume.

@@ -66,7 +66,7 @@ function ContactPage() {
             >
               <h2>Get in Touch</h2>
               <p>
-                Have questions about AIPal? Need help with installation or troubleshooting? 
+                Have questions about Smartitecture? Need help with installation or troubleshooting? 
                 Our support team is ready to assist you. Fill out the form or use one of the 
                 contact methods below.
               </p>
@@ -76,7 +76,7 @@ function ContactPage() {
                   <div className="method-icon">✉️</div>
                   <div className="method-details">
                     <h3>Email</h3>
-                    <p>support@aipal.app</p>
+                    <p>support@smartitecture.app</p>
                   </div>
                 </div>
                 

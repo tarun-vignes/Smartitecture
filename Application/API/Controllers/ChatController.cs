@@ -1,13 +1,13 @@
 using System;
 using System.Threading.Tasks;
-using AIPal.API.Models;
-using AIPal.Services;
+using Smartitecture.API.Models;
+using Smartitecture.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AIPal.API.Controllers
+namespace Smartitecture.API.Controllers
 {
     /// <summary>
-    /// API controller for handling chat interactions with AIPal.
+    /// API controller for handling chat interactions with Smartitecture.
     /// Provides endpoints for sending messages and receiving responses.
     /// </summary>
     [ApiController]

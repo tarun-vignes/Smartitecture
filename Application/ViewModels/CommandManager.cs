@@ -1,6 +1,6 @@
 using System;
 
-namespace AIPal.Application.ViewModels
+namespace Smartitecture.ViewModels
 {
     /// <summary>
     /// Provides a way to invalidate command execution status.

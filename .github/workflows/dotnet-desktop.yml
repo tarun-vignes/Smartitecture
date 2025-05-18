@@ -1,4 +1,4 @@
-name: AIPal CI
+name: Smartitecture CI
 
 on:
   push:

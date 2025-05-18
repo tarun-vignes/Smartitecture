@@ -4,10 +4,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Security.Authorization.AppCapabilityAccess;
 
-namespace AIPal.Application.Security
+namespace Smartitecture.Security
 {
     /// <summary>
-    /// Manages security permissions and access control for the AIPal application.
+    /// Manages security permissions and access control for the Smartitecture application.
     /// Handles UAC elevation checks, capability requests, and command validation.
     /// </summary>
     public class PermissionManager : IPermissionManager

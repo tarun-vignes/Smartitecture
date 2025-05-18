@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 
-namespace AIPal.Application.Commands
+namespace Smartitecture.Commands
 {
     /// <summary>
-    /// Defines the contract for all system commands in AIPal.
+    /// Defines the contract for all system commands in Smartitecture.
     /// Each command represents a specific system operation that can be executed.
     /// </summary>
     public interface ISystemCommand

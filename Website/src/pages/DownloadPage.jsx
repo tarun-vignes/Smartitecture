@@ -12,8 +12,8 @@ function DownloadPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1>Download AIPal</h1>
-            <p>Get your friendly AI companion today</p>
+            <h1>Download Smartitecture</h1>
+            <p>Get your intelligent system assistant today</p>
           </motion.div>
         </div>
       </section>
@@ -27,12 +27,12 @@ function DownloadPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <h2>AIPal for Windows</h2>
+              <h2>Smartitecture for Windows</h2>
               <p className="version">Version 1.0.0</p>
               <p className="release-date">Released: May 15, 2025</p>
               <p className="description">
-                AIPal is designed to help elderly and less tech-savvy users navigate their computers with confidence. 
-                With simple explanations, security protection, and friendly assistance, AIPal makes technology 
+                Smartitecture is designed to help users understand their computer systems with confidence. 
+                With clear explanations, security protection, and intelligent assistance, Smartitecture makes technology 
                 accessible to everyone.
               </p>
               

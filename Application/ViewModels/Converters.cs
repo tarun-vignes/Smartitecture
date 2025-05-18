@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace AIPal.Application.ViewModels
+namespace Smartitecture.ViewModels
 {
     /// <summary>
     /// Converts a boolean value to a Visibility value.

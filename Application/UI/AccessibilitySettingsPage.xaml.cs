@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Windows.Media.SpeechSynthesis;
 
-namespace AIPal.UI
+namespace Smartitecture.UI
 {
     /// <summary>
     /// Accessibility settings page for elderly and less tech-savvy users.
@@ -76,7 +76,7 @@ namespace AIPal.UI
             // For now, we'll just show a message
             if (HighContrastToggle.IsOn)
             {
-                ShowSettingChangedMessage("High contrast mode will be applied when you restart AIPal.");
+                ShowSettingChangedMessage("High contrast mode will be applied when you restart Smartitecture.");
             }
         }
 
@@ -89,7 +89,7 @@ namespace AIPal.UI
             // For now, we'll just show a message
             if (ReduceMotionToggle.IsOn)
             {
-                ShowSettingChangedMessage("Animations will be reduced when you restart AIPal.");
+                ShowSettingChangedMessage("Animations will be reduced when you restart Smartitecture.");
             }
         }
 
@@ -125,7 +125,7 @@ namespace AIPal.UI
             try
             {
                 // Create a test message
-                string testMessage = "This is a test of how AIPal will read messages to you.";
+                string testMessage = "This is a test of how Smartitecture will read messages to you.";
                 
                 // Set the speech rate
                 _speechSynthesizer.Options.SpeakingRate = SpeechRateSlider.Value;
@@ -152,7 +152,7 @@ namespace AIPal.UI
             // For now, we'll just show a message
             if (SimplifiedModeToggle.IsOn)
             {
-                ShowSettingChangedMessage("Simplified mode will be applied when you restart AIPal.");
+                ShowSettingChangedMessage("Simplified mode will be applied when you restart Smartitecture.");
             }
         }
 
@@ -167,7 +167,7 @@ namespace AIPal.UI
             ContentDialog saveDialog = new ContentDialog
             {
                 Title = "Settings Saved",
-                Content = "Your accessibility settings have been saved. Some changes will take effect after restarting AIPal.",
+                Content = "Your accessibility settings have been saved. Some changes will take effect after restarting Smartitecture.",
                 CloseButtonText = "OK",
                 DefaultButton = ContentDialogButton.Close,
                 XamlRoot = this.XamlRoot

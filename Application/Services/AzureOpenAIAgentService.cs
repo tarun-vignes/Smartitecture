@@ -7,7 +7,7 @@ using Azure.AI.OpenAI;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace AIPal.Services
+namespace Smartitecture.Services
 {
     /// <summary>
     /// Implementation of the IAgentService using Azure OpenAI's function calling capabilities.

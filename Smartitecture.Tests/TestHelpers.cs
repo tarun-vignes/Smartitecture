@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AIPal.Tests
+namespace Smartitecture.Tests
 {
     /// <summary>
     /// Provides helper methods and utilities for testing

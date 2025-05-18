@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using AIPal.API.Models;
-using AIPal.Services;
+using Smartitecture.API.Models;
+using Smartitecture.Services;
 
-namespace AIPal.API.Services
+namespace Smartitecture.API.Services
 {
     /// <summary>
     /// Implementation of the API service that handles chat interactions.

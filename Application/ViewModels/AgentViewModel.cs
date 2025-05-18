@@ -2,11 +2,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AIPal.Application.API.Models;
-using AIPal.Application.Services;
+using Smartitecture.API.Models;
+using Smartitecture.Services;
 using Microsoft.UI.Dispatching;
 
-namespace AIPal.Application.ViewModels
+namespace Smartitecture.ViewModels
 {
     /// <summary>
     /// ViewModel for the agent interaction UI.

@@ -1,8 +1,8 @@
-using AIPal.Commands;
+using Smartitecture.Commands;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AIPal.Tests.Commands
+namespace Smartitecture.Tests.Commands
 {
     public class VolumeCommandTests
     {

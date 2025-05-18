@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Page
-    x:Class="AIPal.UI.AgentPage"
+    x:Class="Smartitecture.UI.AgentPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodels="using:AIPal.ViewModels"
+    xmlns:viewmodels="using:Smartitecture.ViewModels"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -90,7 +90,7 @@
 
         <!-- Header -->
         <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-            <TextBlock Text="AIPal Agent" Style="{StaticResource TitleTextBlockStyle}" VerticalAlignment="Center"/>
+            <TextBlock Text="Smartitecture Agent" Style="{StaticResource TitleTextBlockStyle}" VerticalAlignment="Center"/>
             <Button Content="Clear Conversation" 
                     Command="{x:Bind ViewModel.ClearConversationCommand}" 
                     Margin="16,0,0,0"/>

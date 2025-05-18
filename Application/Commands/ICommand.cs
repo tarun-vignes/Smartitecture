@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace AIPal.Application.Commands
+namespace Smartitecture.Commands
 {
     /// <summary>
     /// Interface for command pattern implementation.

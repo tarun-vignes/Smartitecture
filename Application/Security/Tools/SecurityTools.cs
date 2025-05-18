@@ -9,9 +9,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Win32;
-using AIPal.Services.AgentTools;
+using Smartitecture.Services.AgentTools;
 
-namespace AIPal.Application.Security.Tools
+namespace Smartitecture.Security.Tools
 {
     /// <summary>
     /// Provides security and malware detection tools with simple explanations for users.

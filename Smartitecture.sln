@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIPal", "AIPal.csproj", "{F9C05104-6DA5-4ECB-A883-43606D5488A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartitecture", "Smartitecture.csproj", "{F9C05104-6DA5-4ECB-A883-43606D5488A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIPal.Tests", "AIPal.Tests\AIPal.Tests.csproj", "{A8C7B3D5-F9E2-4D1C-B6A7-1E2D4F6B9C0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartitecture.Tests", "Smartitecture.Tests\Smartitecture.Tests.csproj", "{A8C7B3D5-F9E2-4D1C-B6A7-1E2D4F6B9C0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

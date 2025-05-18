@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Application
-    x:Class="AIPal.App"
+    x:Class="Smartitecture.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:AIPal">
+    xmlns:local="using:Smartitecture">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
                 <!-- Logo resources -->
-                <ResourceDictionary Source="ms-appx:///Assets/Logo/AIPalLogo.xaml" />
+                <ResourceDictionary Source="ms-appx:///Assets/Logo/SmartitectureLogo.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <!-- App colors -->
-            <SolidColorBrush x:Key="AIPalPrimaryBrush" Color="#3584D9"/>
-            <SolidColorBrush x:Key="AIPalSecondaryBrush" Color="#4D9FF3"/>
-            <SolidColorBrush x:Key="AIPalAccentBrush" Color="#FF5A5A"/>
+            <SolidColorBrush x:Key="SmartitecturePrimaryBrush" Color="#3584D9"/>
+            <SolidColorBrush x:Key="SmartitectureSecondaryBrush" Color="#4D9FF3"/>
+            <SolidColorBrush x:Key="SmartitectureAccentBrush" Color="#FF5A5A"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,12 +1,12 @@
-using AIPal.Commands;
-using AIPal.Security;
-using AIPal.Services;
+using Smartitecture.Commands;
+using Smartitecture.Security;
+using Smartitecture.Services;
 using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AIPal.Tests.Services
+namespace Smartitecture.Tests.Services
 {
     public class CommandMapperTests
     {

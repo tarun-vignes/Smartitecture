@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace AIPal.Application.Security
+namespace Smartitecture.Security
 {
     /// <summary>
     /// Interface for the permission manager to allow for dependency injection and mocking in tests

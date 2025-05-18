@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace AIPal.Application.ViewModels
+namespace Smartitecture.ViewModels
 {
     /// <summary>
     /// A command implementation that relays its functionality to the provided delegates.

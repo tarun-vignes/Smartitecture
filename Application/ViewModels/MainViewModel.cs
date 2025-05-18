@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using AIPal.Services;
+using Smartitecture.Services;
 
-namespace AIPal.ViewModels
+namespace Smartitecture.ViewModels
 {
     /// <summary>
     /// View model for the main chat interface.

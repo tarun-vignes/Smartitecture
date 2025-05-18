@@ -8,15 +8,15 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="AIPal"
-    Publisher="CN=AIPal"
+    Name="Smartitecture"
+    Publisher="CN=Smartitecture"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="4b0c1a7a-5c3e-4b0c-8d8a-7a5c3e4b0c8d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>AIPal</DisplayName>
-    <PublisherDisplayName>AIPal</PublisherDisplayName>
+    <DisplayName>Smartitecture</DisplayName>
+    <PublisherDisplayName>Smartitecture</PublisherDisplayName>
     <Logo>Assets\Logo\StoreLogo.png</Logo>
   </Properties>
 
@@ -34,8 +34,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="AIPal"
-        Description="Your Windows AI Companion for Elderly Users"
+        DisplayName="Smartitecture"
+        Description="Your Windows AI Companion for Understanding Computer Architecture"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Logo\Logo150x150.png"
         Square44x44Logo="Assets\Logo\Logo44x44.png">

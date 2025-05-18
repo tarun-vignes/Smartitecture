@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace AIPal.Services
+namespace Smartitecture.Services
 {
     /// <summary>
     /// Interface for Language Learning Model (LLM) services.

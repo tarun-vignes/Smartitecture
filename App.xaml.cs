@@ -1,7 +1,7 @@
 using System;
-using AIPal.API;
-using AIPal.Services;
-using AIPal.ViewModels;
+using Smartitecture.API;
+using Smartitecture.Services;
+using Smartitecture.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.UI.Xaml;
 using Windows.ApplicationModel;
 
-namespace AIPal
+namespace Smartitecture
 {
     /// <summary>
     /// Main application class that provides application-specific behavior to supplement the default Application class.

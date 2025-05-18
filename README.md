@@ -1,8 +1,8 @@
-# WisdomLink - Your Windows AI Companion
+# Smartitecture - Your Windows AI Companion
 
-[![WisdomLink CI](https://github.com/tarun-vignes/AIPal/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/tarun-vignes/AIPal/actions/workflows/dotnet-desktop.yml)
+[![Smartitecture CI](https://github.com/tarun-vignes/Smartitecture/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/tarun-vignes/Smartitecture/actions/workflows/dotnet-desktop.yml)
 
-WisdomLink is a modern Windows desktop application designed specifically to help elderly and less tech-savvy users understand their computers, avoid scams, and optimize performance. With its AI-powered assistant, WisdomLink provides natural conversation and system task automation in a simple, accessible interface.
+Smartitecture is a modern Windows desktop application designed to help everyone better understand their computers, avoid scams, and optimize performance. With its AI-powered assistant, Smartitecture provides natural conversation and system task automation in a simple, accessible interface.
 
 ## Key Features
 
@@ -63,15 +63,15 @@ WisdomLink is a modern Windows desktop application designed specifically to help
 
 ### Installation
 
-1. Download the latest installer from the [Releases](https://github.com/tarun-vignes/AIPal/releases) page
+1. Download the latest installer from the [Releases](https://github.com/tarun-vignes/Smartitecture/releases) page
 2. Run the installer and follow the on-screen instructions
-3. Launch AIPal from the Start menu or desktop shortcut
+3. Launch Smartitecture from the Start menu or desktop shortcut
 4. Complete the initial setup wizard designed for elderly users
 
 ### For Developers
 
-1. Clone the repository: `git clone https://github.com/tarun-vignes/AIPal.git`
-2. Open `AIPal.sln` in Visual Studio 2022
+1. Clone the repository: `git clone https://github.com/tarun-vignes/Smartitecture.git`
+2. Open `Smartitecture.sln` in Visual Studio 2022
 3. Install required workloads if prompted:
    - Windows App SDK
    - .NET Desktop Development
@@ -83,7 +83,7 @@ WisdomLink is a modern Windows desktop application designed specifically to help
 
 ### First-Time Setup
 
-When you first launch AIPal, you'll be guided through a simple setup process:
+When you first launch Smartitecture, you'll be guided through a simple setup process:
 
 1. **Language Selection**: Choose from 30 supported languages
 2. **Accessibility Preferences**: Set text size, contrast, and other accessibility options
@@ -103,17 +103,17 @@ When you first launch AIPal, you'll be guided through a simple setup process:
 1. When you encounter a confusing screen or message
 2. Navigate to the "Screen Help" tab
 3. Click "Analyze Current Screen"
-4. AIPal will explain what you're seeing and suggest actions
+4. Smartitecture will explain what you're seeing and suggest actions
 
 #### Wi-Fi Troubleshooting
 
 1. If you're having internet problems
-2. Ask AIPal about your Wi-Fi in the chat interface
+2. Ask Smartitecture about your Wi-Fi in the chat interface
 3. Follow the step-by-step troubleshooting guidance
 
 ## Technology
 
-AIPal is built using modern technologies to provide a seamless, accessible experience:
+Smartitecture is built using modern technologies to provide a seamless, accessible experience:
 
 - **Frontend**: WinUI 3 with XAML for a modern, accessible interface
 - **Backend**: .NET 7 for robust performance and security
@@ -123,7 +123,7 @@ AIPal is built using modern technologies to provide a seamless, accessible exper
 
 ## Security & Privacy
 
-AIPal prioritizes the security and privacy of elderly users:
+Smartitecture prioritizes the security and privacy of elderly users:
 
 - **Local Processing**: Screen analysis and system diagnostics happen locally on your device
 - **Minimal Data Collection**: Only essential data is sent to AI services
@@ -137,13 +137,13 @@ AIPal prioritizes the security and privacy of elderly users:
 
 ## Support & Community
 
-- **Documentation**: [Full User Guide](https://github.com/tarun-vignes/AIPal/wiki)
-- **Issue Reporting**: [GitHub Issues](https://github.com/tarun-vignes/AIPal/issues)
-- **Discussion**: [Community Forum](https://github.com/tarun-vignes/AIPal/discussions)
+- **Documentation**: [Full User Guide](https://github.com/tarun-vignes/Smartitecture/wiki)
+- **Issue Reporting**: [GitHub Issues](https://github.com/tarun-vignes/Smartitecture/issues)
+- **Discussion**: [Community Forum](https://github.com/tarun-vignes/Smartitecture/discussions)
 
 ## Contributing
 
-We welcome contributions to make AIPal better for elderly users:
+We welcome contributions to make Smartitecture better for elderly users:
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
@@ -157,11 +157,11 @@ Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
 ### Website Deployment with Netlify
 
-The AIPal companion website is deployed to Netlify, showcasing all the elderly-friendly features implemented in the desktop application:
+The Smartitecture companion website is deployed to Netlify, showcasing all the elderly-friendly features implemented in the desktop application:
 
 1. The website is built using Vite and React
 2. Deployment is configured via the `netlify.toml` file in the Website directory
-3. The website is accessible at: https://aipal-companion.windsurf.build
+3. The website is accessible at: https://wisdomlink-companion.windsurf.build
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/0c565a6b-0b0d-45d7-b8e2-142d0a020b64/deploy-status)](https://app.netlify.com/sites/aipal-companion-41jg1/deploys)
 
@@ -181,4 +181,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Microsoft for Windows App SDK and Azure OpenAI Service
 - The open source community for various libraries and tools
-- All contributors who have helped make AIPal more accessible for elderly users
+- All contributors who have helped make Smartitecture more accessible for elderly users

@@ -1,15 +1,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AIPal.Application.API.Services;
-using AIPal.Application.Services;
+using Smartitecture.Application.API.Services;
+using Smartitecture.Application.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace AIPal.Application.API
+namespace Smartitecture.Application.API
 {
     /// <summary>
     /// Service responsible for hosting the API within the WinUI desktop application.

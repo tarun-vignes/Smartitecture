@@ -4,7 +4,7 @@ using Azure;
 using Azure.AI.OpenAI;
 using Microsoft.Extensions.Options;
 
-namespace AIPal.Services
+namespace Smartitecture.Services
 {
     /// <summary>
     /// Configuration class for Azure OpenAI service settings.

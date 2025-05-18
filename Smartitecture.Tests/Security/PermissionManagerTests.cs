@@ -1,8 +1,8 @@
-using AIPal.Security;
+using Smartitecture.Security;
 using System;
 using Xunit;
 
-namespace AIPal.Tests.Security
+namespace Smartitecture.Tests.Security
 {
     public class PermissionManagerTests
     {

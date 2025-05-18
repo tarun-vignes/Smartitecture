@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Page
-    x:Class="AIPal.UI.ChatPage"
+    x:Class="Smartitecture.UI.ChatPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodels="using:AIPal.ViewModels"
+    xmlns:viewmodels="using:Smartitecture.ViewModels"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <TextBlock Text="AIPal Chat" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,16"/>
+        <TextBlock Text="Smartitecture Chat" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,16"/>
 
         <!-- Scrollable chat message area with message bubbles -->
         <ScrollViewer Grid.Row="1" Padding="0,0,0,16">

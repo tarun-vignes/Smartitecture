@@ -1,15 +1,15 @@
 using System;
 using System.Threading.Tasks;
-using AIPal.Application.Network.Tools;
+using Smartitecture.Network.Tools;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AIPal.Application.Commands;
-using AIPal.Application.Network.Services;
-using AIPal.Application.Security.Services;
+using Smartitecture.Commands;
+using Smartitecture.Network.Services;
+using Smartitecture.Security.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AIPal.Application.Services
+namespace Smartitecture.Services
 {
     /// <summary>
     /// Central service for coordinating application components and processing user requests.

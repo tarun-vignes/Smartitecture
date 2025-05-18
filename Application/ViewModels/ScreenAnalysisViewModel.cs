@@ -1,10 +1,10 @@
 using System;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AIPal.Application.Services;
-using AIPal.Application.Services.AgentTools;
+using Smartitecture.Services;
+using Smartitecture.Services.AgentTools;
 
-namespace AIPal.Application.ViewModels
+namespace Smartitecture.ViewModels
 {
     /// <summary>
     /// ViewModel for the screen analysis features.

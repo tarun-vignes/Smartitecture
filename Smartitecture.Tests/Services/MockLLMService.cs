@@ -1,7 +1,7 @@
-using AIPal.Services;
+using Smartitecture.Services;
 using System.Threading.Tasks;
 
-namespace AIPal.Tests.Services
+namespace Smartitecture.Tests.Services
 {
     /// <summary>
     /// Mock implementation of ILLMService for testing purposes

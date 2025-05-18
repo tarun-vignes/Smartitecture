@@ -2,7 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 
-namespace AIPal.UI
+namespace Smartitecture.UI
 {
     /// <summary>
     /// Getting started page with simplified guidance for elderly and less tech-savvy users.

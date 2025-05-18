@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AIPal.Services.AgentTools
+namespace Smartitecture.Services.AgentTools
 {
     /// <summary>
     /// Provides tools for capturing and analyzing screen content.

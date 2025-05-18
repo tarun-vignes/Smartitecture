@@ -1,11 +1,11 @@
-using AIPal.Services;
+using Smartitecture.Services;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AIPal.Tests.Services
+namespace Smartitecture.Tests.Services
 {
     public class AzureOpenAIServiceTests
     {

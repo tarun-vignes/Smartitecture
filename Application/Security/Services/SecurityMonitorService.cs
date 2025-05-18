@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 
-namespace AIPal.Application.Security.Services
+namespace Smartitecture.Security.Services
 {
     /// <summary>
     /// Service for monitoring system security and providing security information.

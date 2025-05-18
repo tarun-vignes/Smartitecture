@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AIPal.API.Models;
-using AIPal.Commands;
-using AIPal.Services;
+using Smartitecture.API.Models;
+using Smartitecture.Commands;
+using Smartitecture.Services;
 
-namespace AIPal.API.Services
+namespace Smartitecture.API.Services
 {
     /// <summary>
     /// Implementation of the query service that handles structured queries to the AI assistant.

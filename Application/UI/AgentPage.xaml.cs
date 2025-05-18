@@ -1,10 +1,10 @@
-using AIPal.ViewModels;
+using Smartitecture.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using System;
 
-namespace AIPal.UI
+namespace Smartitecture.UI
 {
     /// <summary>
     /// Page for interacting with the AI agent.

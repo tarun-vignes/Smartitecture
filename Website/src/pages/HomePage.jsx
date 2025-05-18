@@ -35,11 +35,11 @@ function HomePage() {
             variants={staggerContainer}
           >
             <motion.h1 variants={fadeIn}>
-              Your Friendly Computer Helper
+              Intelligent System Understanding
             </motion.h1>
             <motion.p variants={fadeIn}>
-              AIPal helps elderly and less tech-savvy users understand their computers, 
-              avoid scams, and solve problems with simple, jargon-free explanations.
+              Smartitecture helps users understand their computer systems, 
+              avoid scams, and solve problems with clear, accessible explanations.
             </motion.p>
             <motion.div className="hero-buttons" variants={fadeIn}>
               <Link to="/download" className="button large">
@@ -52,7 +52,7 @@ function HomePage() {
             <motion.div className="hero-image" variants={fadeIn}>
               <img 
                 src="/src/assets/images/hero-image.png" 
-                alt="AIPal interface showing a friendly conversation with an elderly user" 
+                alt="Smartitecture interface showing a friendly conversation with a user" 
               />
             </motion.div>
           </motion.div>
@@ -139,7 +139,7 @@ function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            How AIPal Works
+            How Smartitecture Works
           </motion.h2>
           
           <motion.div 
@@ -211,7 +211,7 @@ function HomePage() {
           >
             <motion.div className="testimonial-card" variants={fadeIn}>
               <p className="testimonial-quote">
-                "AIPal has been a lifesaver for me. I used to call my grandchildren whenever I had computer problems, but now I can solve most issues myself. The simple explanations make technology much less intimidating."
+                "Smartitecture has been a lifesaver for me. I used to call my grandchildren whenever I had computer problems, but now I can solve most issues myself. The simple explanations make technology much less intimidating."
               </p>
               <div className="testimonial-author">
                 <div className="testimonial-avatar"></div>
@@ -224,7 +224,7 @@ function HomePage() {
             
             <motion.div className="testimonial-card" variants={fadeIn}>
               <p className="testimonial-quote">
-                "I almost fell for an online scam, but AIPal warned me about the suspicious website. The security features have given me confidence to use my computer without worrying about making a mistake."
+                "I almost fell for an online scam, but Smartitecture warned me about the suspicious website. The security features have given me confidence to use my computer without worrying about making a mistake."
               </p>
               <div className="testimonial-author">
                 <div className="testimonial-avatar"></div>
@@ -237,13 +237,13 @@ function HomePage() {
             
             <motion.div className="testimonial-card" variants={fadeIn}>
               <p className="testimonial-quote">
-                "I bought AIPal for my mother who was struggling with her new laptop. Now she's sending emails, joining video calls, and even shopping online with confidence. The screen analysis feature is particularly helpful."
+                "I bought Smartitecture for my mother who was struggling with her new laptop. Now she's sending emails, joining video calls, and even shopping online with confidence. The screen analysis feature is particularly helpful."
               </p>
               <div className="testimonial-author">
                 <div className="testimonial-avatar"></div>
                 <div>
                   <p className="author-name">Sarah, 45</p>
-                  <p className="author-location">Daughter of AIPal User</p>
+                  <p className="author-location">Daughter of Smartitecture User</p>
                 </div>
               </div>
             </motion.div>
@@ -262,7 +262,7 @@ function HomePage() {
             transition={{ duration: 0.6 }}
           >
             <h2>Ready to Get Started?</h2>
-            <p>Download AIPal today and experience a more accessible computing experience.</p>
+            <p>Download Smartitecture today and experience a more accessible computing experience.</p>
             <div className="download-buttons">
               <Link to="/download" className="button large">
                 Download Now

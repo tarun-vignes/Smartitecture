@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Page
-    x:Class="AIPal.UI.AccessibilitySettingsPage"
+    x:Class="Smartitecture.UI.AccessibilitySettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -22,11 +22,11 @@
             <StackPanel Spacing="24" MaxWidth="800">
                 <!-- Introduction -->
                 <StackPanel Spacing="8">
-                    <TextBlock Text="Make AIPal Work Better For You" 
+                    <TextBlock Text="Make Smartitecture Work Better For You" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="24"/>
                     <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
-                        These settings help make AIPal easier to use. Adjust them to fit your needs.
+                        These settings help make Smartitecture easier to use. Adjust them to fit your needs.
                     </TextBlock>
                 </StackPanel>
 
@@ -53,7 +53,7 @@
                         </StackPanel>
                         
                         <TextBlock x:Name="SampleText" 
-                                   Text="This is how text will appear in AIPal." 
+                                   Text="This is how text will appear in Smartitecture." 
                                    FontSize="16" 
                                    TextWrapping="Wrap"
                                    Margin="0,16,0,0"/>
@@ -104,7 +104,7 @@
                                      OffContent="Off"
                                      Toggled="ReadAloudToggle_Toggled"/>
                         
-                        <TextBlock Text="AIPal will read its responses out loud to you." 
+                        <TextBlock Text="Smartitecture will read its responses out loud to you." 
                                    FontSize="16" 
                                    TextWrapping="Wrap"/>
                         
@@ -149,7 +149,7 @@
                             IsOpen="True"
                             Severity="Informational"
                             Title="Restart Required"
-                            Message="Some settings will take effect after restarting AIPal."
+                            Message="Some settings will take effect after restarting Smartitecture."
                             IsClosable="False"/>
                     </StackPanel>
                 </StackPanel>
@@ -164,7 +164,7 @@
                 
                 <!-- Footer -->
                 <TextBlock TextWrapping="Wrap" FontSize="14" Opacity="0.7" Margin="0,16,0,0">
-                    These settings help make AIPal easier to use. If you need more help, ask a question in the Chat section.
+                    These settings help make Smartitecture easier to use. If you need more help, ask a question in the Chat section.
                 </TextBlock>
             </StackPanel>
         </ScrollViewer>
