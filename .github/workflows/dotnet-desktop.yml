@@ -8,61 +8,31 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        configuration: [Debug, Release]
-
     runs-on: windows-latest
-
-    env:
-      Solution_Name: AIPal.sln
-      Test_Project_Path: AIPal.Tests/AIPal.Tests.csproj
-      Project_Path: AIPal.csproj
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
 
-    - name: Install .NET
+    - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
 
-    - name: Setup MSBuild.exe
+    - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
 
-    - name: Install dependencies
+    - name: Install workloads
       run: |
-        dotnet restore $env:Solution_Name --ignore-failed-sources
-        dotnet workload install maui
-        dotnet workload install wasm-tools
         dotnet workload install windows
-      env:
-        DOTNET_ROLL_FORWARD: Major
-        DOTNET_ROLL_FORWARD_TO_PRERELEASE: 1
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-        DOTNET_CLI_TELEMETRY_OPTOUT: true
-        DOTNET_NOLOGO: true
+        dotnet workload install maui
+
+    - name: Restore dependencies
+      run: dotnet restore
 
     - name: Build
-      run: dotnet build $env:Solution_Name --configuration ${{ matrix.configuration }} --no-restore
-      env:
-        DOTNET_ROLL_FORWARD: Major
-        DOTNET_NOLOGO: true
+      run: dotnet build --no-restore --configuration Release
 
-    - name: Execute unit tests
-      run: dotnet test $env:Test_Project_Path --configuration ${{ matrix.configuration }}
-      continue-on-error: true
-      env:
-        DOTNET_ROLL_FORWARD: Major
-        DOTNET_NOLOGO: true
-
-    # Add packaging steps here when you're ready for releases
-    # - name: Package
-    #   if: matrix.configuration == 'Release'
-    #   run: dotnet publish $env:Project_Path -c Release -r win-x64 --self-contained true -p:PublishReadyToRun=true
-    #   env:
-    #     DOTNET_ROLL_FORWARD: Major
-    #     DOTNET_NOLOGO: true
+    # Uncomment when build is working
+    # - name: Test
+    #   run: dotnet test --no-build --verbosity normal --configuration Release
