@@ -162,10 +162,10 @@ The AIPal companion website can be easily deployed using Vercel:
 1. Visit [Vercel's Import page](https://vercel.com/new/import?s=https%3A%2F%2Fgithub.com%2Ftarun-vignes%2FAIPal)
 2. Connect your GitHub account if not already connected
 3. Select the AIPal repository
-4. Configure the project with these settings:
+4. The project should be automatically configured with these settings:
    - Framework Preset: Vite
-   - Root Directory: Website
-   - Build Command: npm run build
+   - Root Directory: Website (set in vercel.json)
+   - Build Command: npm install && npm run build
    - Output Directory: dist
 5. Click "Deploy"
 
