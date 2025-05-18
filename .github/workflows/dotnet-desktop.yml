@@ -39,7 +39,7 @@ jobs:
       run: nuget restore AIPal.sln
 
     - name: Build with MSBuild
-      run: msbuild AIPal.sln /p:Configuration=Release /p:Platform=x64
+      run: msbuild AIPal.sln /p:Configuration=Release /p:Platform="Any CPU"
 
     # Uncomment when build is working
     # - name: Test
