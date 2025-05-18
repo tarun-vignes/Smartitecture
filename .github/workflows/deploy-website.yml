@@ -8,7 +8,7 @@ on:
       - '.github/workflows/deploy-website.yml'
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -42,6 +42,9 @@ jobs:
         uses: actions/upload-pages-artifact@v2
         with:
           path: Website/dist
+          
+      - name: Debug - List build output
+        run: ls -la Website/dist
           
   deploy:
     needs: build
