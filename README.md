@@ -88,7 +88,7 @@ When you first launch Smartitecture, you'll be guided through a simple setup pro
 1. **Language Selection**: Choose from 30 supported languages
 2. **Accessibility Preferences**: Set text size, contrast, and other accessibility options
 3. **Theme Selection**: Choose between light, dark, or system theme
-4. **Getting Started Tour**: A brief introduction to AIPal's features
+4. **Getting Started Tour**: A brief introduction to Smartitecture's features
 
 ### Common Tasks
 
@@ -163,7 +163,7 @@ The Smartitecture companion website is deployed to Netlify, showcasing all the e
 2. Deployment is configured via the `netlify.toml` file in the Website directory
 3. The website is accessible at: https://wisdomlink-companion.windsurf.build
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/0c565a6b-0b0d-45d7-b8e2-142d0a020b64/deploy-status)](https://app.netlify.com/sites/aipal-companion-41jg1/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/0c565a6b-0b0d-45d7-b8e2-142d0a020b64/deploy-status)](https://app.netlify.com/sites/smartitecture-companion/deploys)
 
 #### Features Showcased on the Website
 
