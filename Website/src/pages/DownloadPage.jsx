@@ -12,8 +12,8 @@ function DownloadPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1>Download AIPal</h1>
-            <p>Get your friendly AI companion today</p>
+            <h1>Download Smartitecture</h1>
+            <p>Get your intelligent system assistant today</p>
           </motion.div>
         </div>
       </section>
@@ -27,12 +27,12 @@ function DownloadPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <h2>AIPal for Windows</h2>
+              <h2>Smartitecture for Windows</h2>
               <p className="version">Version 1.0.0</p>
               <p className="release-date">Released: May 15, 2025</p>
               <p className="description">
-                AIPal is designed to help elderly and less tech-savvy users navigate their computers with confidence. 
-                With simple explanations, security protection, and friendly assistance, AIPal makes technology 
+                Smartitecture is designed to help users understand their computer systems with confidence. 
+                With clear explanations, security protection, and intelligent assistance, Smartitecture makes technology 
                 accessible to everyone.
               </p>
               
@@ -56,7 +56,7 @@ function DownloadPage() {
             >
               <div className="download-logo">
                 <div className="logo-icon"></div>
-                <span className="logo-text">AIPal</span>
+                <span className="logo-text">Smartitecture</span>
               </div>
               
               <div className="download-buttons">
@@ -64,7 +64,7 @@ function DownloadPage() {
                   <span className="download-icon">⬇️</span>
                   Download for Windows
                 </a>
-                <p className="file-info">AIPal_Setup.exe (45 MB)</p>
+                <p className="file-info">Smartitecture_Setup.exe (45 MB)</p>
               </div>
               
               <div className="alternative-downloads">
@@ -141,8 +141,8 @@ function DownloadPage() {
             <div className="installation-step">
               <div className="step-number">4</div>
               <div className="step-content">
-                <h3>Launch AIPal</h3>
-                <p>Once installation is complete, you can launch AIPal from your desktop or Start menu.</p>
+                <h3>Launch Smartitecture</h3>
+                <p>Once installation is complete, you can launch Smartitecture from your desktop or Start menu.</p>
                 <div className="step-image"></div>
               </div>
             </div>
@@ -150,7 +150,7 @@ function DownloadPage() {
           
           <div className="installation-help">
             <h3>Need Help?</h3>
-            <p>If you're having trouble installing AIPal, you can:</p>
+            <p>If you're having trouble installing Smartitecture, you can:</p>
             <ul>
               <li>View our <a href="#">detailed installation guide</a></li>
               <li>Watch our <a href="#">installation video tutorial</a></li>
@@ -180,23 +180,23 @@ function DownloadPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="faq-item">
-              <h3>Is AIPal free to use?</h3>
-              <p>Yes, AIPal is completely free for personal use. There are no hidden fees or subscriptions required.</p>
+              <h3>Is Smartitecture free to use?</h3>
+              <p>Yes, Smartitecture is completely free for personal use. There are no hidden fees or subscriptions required.</p>
             </div>
             
             <div className="faq-item">
-              <h3>Does AIPal work offline?</h3>
-              <p>AIPal requires an internet connection for most features, but basic functionality is available offline.</p>
+              <h3>Does Smartitecture work offline?</h3>
+              <p>Smartitecture requires an internet connection for most features, but basic functionality is available offline.</p>
             </div>
             
             <div className="faq-item">
-              <h3>Is my data secure with AIPal?</h3>
-              <p>Yes, AIPal prioritizes your privacy and security. All data is processed locally when possible, and any data sent to our servers is encrypted and never shared with third parties.</p>
+              <h3>Is my data secure with Smartitecture?</h3>
+              <p>Yes, Smartitecture prioritizes your privacy and security. All data is processed locally when possible, and any data sent to our servers is encrypted and never shared with third parties.</p>
             </div>
             
             <div className="faq-item">
-              <h3>Can I uninstall AIPal if needed?</h3>
-              <p>Yes, you can easily uninstall AIPal through the Windows Control Panel or Settings app like any other program.</p>
+              <h3>Can I uninstall Smartitecture if needed?</h3>
+              <p>Yes, you can easily uninstall Smartitecture through the Windows Control Panel or Settings app like any other program.</p>
             </div>
           </motion.div>
           

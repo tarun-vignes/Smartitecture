@@ -66,7 +66,7 @@ function ContactPage() {
             >
               <h2>Get in Touch</h2>
               <p>
-                Have questions about AIPal? Need help with installation or troubleshooting? 
+                Have questions about Smartitecture? Need help with installation or troubleshooting? 
                 Our support team is ready to assist you. Fill out the form or use one of the 
                 contact methods below.
               </p>
@@ -76,7 +76,7 @@ function ContactPage() {
                   <div className="method-icon">✉️</div>
                   <div className="method-details">
                     <h3>Email</h3>
-                    <p>support@aipal.app</p>
+                    <p>support@smartitecture.app</p>
                   </div>
                 </div>
                 
@@ -119,7 +119,7 @@ function ContactPage() {
                       <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                     </svg>
                   </a>
-                  <a href="https://github.com/tarun-vignes/AIPal" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                  <a href="https://github.com/tarun-vignes/Smartitecture" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                     </svg>
@@ -220,18 +220,18 @@ function ContactPage() {
             </p>
             <div className="faq-preview-items">
               <div className="faq-preview-item">
-                <h3>Is AIPal free to use?</h3>
-                <p>Yes, AIPal is completely free for personal use. There are no hidden fees or subscriptions required.</p>
+                <h3>Is Smartitecture free to use?</h3>
+                <p>Yes, Smartitecture is completely free for personal use. There are no hidden fees or subscriptions required.</p>
               </div>
               
               <div className="faq-preview-item">
-                <h3>How do I install AIPal?</h3>
+                <h3>How do I install Smartitecture?</h3>
                 <p>Download the installer from our website, double-click the downloaded file, and follow the installation wizard. The process is simple and takes less than 5 minutes.</p>
               </div>
               
               <div className="faq-preview-item">
-                <h3>Is my data secure with AIPal?</h3>
-                <p>Yes, AIPal prioritizes your privacy and security. All data is processed locally when possible, and any data sent to our servers is encrypted and never shared with third parties.</p>
+                <h3>Is my data secure with Smartitecture?</h3>
+                <p>Yes, Smartitecture prioritizes your privacy and security. All data is processed locally when possible, and any data sent to our servers is encrypted and never shared with third parties.</p>
               </div>
             </div>
             <a href="/faq" className="button secondary">View All FAQs</a>

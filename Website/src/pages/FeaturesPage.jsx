@@ -12,8 +12,8 @@ function FeaturesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1>AIPal Features</h1>
-            <p>Discover how AIPal can help you navigate technology with confidence</p>
+            <h1>Smartitecture Features</h1>
+            <p>Discover how Smartitecture can help you understand your computer system with confidence</p>
           </motion.div>
         </div>
       </section>
@@ -27,10 +27,10 @@ function FeaturesPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2>Designed for Simplicity</h2>
+            <h2>Designed for Understanding</h2>
             <p>
-              AIPal is designed with elderly and less tech-savvy users in mind. Our features focus on making 
-              technology accessible through clear explanations, step-by-step guidance, and proactive protection.
+              Smartitecture is designed with all users in mind. Our features focus on making 
+              computer systems understandable through clear explanations, step-by-step guidance, and proactive protection.
             </p>
           </motion.div>
         </div>
@@ -48,7 +48,7 @@ function FeaturesPage() {
             >
               <h2>Security & Privacy Protection</h2>
               <p>
-                AIPal helps protect you from online scams, suspicious websites, and potential security threats. 
+                Smartitecture helps protect you from online scams, suspicious websites, and potential security threats. 
                 With simple explanations and alerts, you'll understand what's happening and how to stay safe.
               </p>
               <ul className="feature-list">
@@ -80,7 +80,7 @@ function FeaturesPage() {
             >
               <h2>Wi-Fi & Network Assistance</h2>
               <p>
-                Having trouble with your internet connection? AIPal can help you understand and solve common 
+                Having trouble with your internet connection? Smartitecture can help you understand and solve common 
                 Wi-Fi problems with simple, jargon-free explanations and step-by-step troubleshooting.
               </p>
               <ul className="feature-list">
@@ -112,7 +112,7 @@ function FeaturesPage() {
             >
               <h2>System Optimization</h2>
               <p>
-                Is your computer running slowly? AIPal can help you understand why and provide simple solutions 
+                Is your computer running slowly? Smartitecture can help you understand why and provide simple solutions 
                 to improve performance without technical jargon.
               </p>
               <ul className="feature-list">
@@ -144,7 +144,7 @@ function FeaturesPage() {
             >
               <h2>Screen Analysis & Guidance</h2>
               <p>
-                Confused by what you're seeing on screen? AIPal can analyze what's on your screen and provide 
+                Confused by what you're seeing on screen? Smartitecture can analyze what's on your screen and provide 
                 clear explanations and guidance without you needing to take screenshots or describe the problem.
               </p>
               <ul className="feature-list">
@@ -176,7 +176,7 @@ function FeaturesPage() {
             >
               <h2>Accessibility Features</h2>
               <p>
-                AIPal is designed to be accessible to users of all abilities, with features that make it easier 
+                Smartitecture is designed to be accessible to users of all abilities, with features that make it easier 
                 to interact with your computer regardless of visual, hearing, or motor limitations.
               </p>
               <ul className="feature-list">
@@ -208,7 +208,7 @@ function FeaturesPage() {
             >
               <h2>Multi-Language Support</h2>
               <p>
-                AIPal speaks your language! With support for 30 languages, you can communicate with AIPal 
+                Smartitecture speaks your language! With support for 30 languages, you can communicate with Smartitecture 
                 in the language you're most comfortable with.
               </p>
               <ul className="feature-list">
@@ -241,7 +241,7 @@ function FeaturesPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            AIPal vs. Other Assistants
+            Smartitecture vs. Other Assistants
           </motion.h2>
           
           <motion.div 
@@ -254,7 +254,7 @@ function FeaturesPage() {
             <div className="comparison-table">
               <div className="comparison-header">
                 <div className="comparison-cell header-cell">Features</div>
-                <div className="comparison-cell header-cell">AIPal</div>
+                <div className="comparison-cell header-cell">Smartitecture</div>
                 <div className="comparison-cell header-cell">Generic Assistants</div>
               </div>
               
@@ -313,7 +313,7 @@ function FeaturesPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2>Ready to Experience AIPal?</h2>
+            <h2>Ready to Experience Smartitecture?</h2>
             <p>Download today and start navigating technology with confidence.</p>
             <a href="/download" className="button large">Download Now</a>
           </motion.div>

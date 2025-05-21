@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="60" viewBox="0 0 300 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Smartitecture Logo (Light version for dark backgrounds) -->
+  <g>
+    <!-- Brain + Building Structure Icon -->
+    <g>
+      <!-- Building Structure -->
+      <rect x="10" y="20" width="40" height="30" rx="2" ry="2" fill="#4169E1"/>
+      
+      <!-- Windows/Structure Elements -->
+      <rect x="15" y="25" width="6" height="6" rx="1" ry="1" fill="white"/>
+      <rect x="25" y="25" width="6" height="6" rx="1" ry="1" fill="white"/>
+      <rect x="35" y="25" width="6" height="6" rx="1" ry="1" fill="white"/>
+      <rect x="15" y="35" width="6" height="6" rx="1" ry="1" fill="white"/>
+      <rect x="25" y="35" width="6" height="6" rx="1" ry="1" fill="white"/>
+      <rect x="35" y="35" width="6" height="6" rx="1" ry="1" fill="white"/>
+      
+      <!-- Brain Circuit Elements -->
+      <circle cx="30" cy="15" r="10" fill="#4169E1"/>
+      <path d="M25 12C25 12 27 10 30 10C33 10 35 12 35 12" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M25 18C25 18 27 20 30 20C33 20 35 18 35 18" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M25 12L25 18" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M30 10L30 20" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M35 12L35 18" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      
+      <!-- Connection Lines -->
+      <path d="M30 25L30 20" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Text "Smartitecture" -->
+    <path d="M65 30C65 30 67 25 72 25C77 25 79 30 79 30L79 45H74V32C74 32 73 30 72 30C71 30 70 32 70 32V45H65V30Z" fill="white"/>
+    <path d="M82 25H87L92 35L97 25H102V45H97V32L92 42L87 32V45H82V25Z" fill="white"/>
+    <path d="M105 35C105 29 109 24 115 24C121 24 125 29 125 35C125 41 121 46 115 46C109 46 105 41 105 35ZM110 35C110 38 112 41 115 41C118 41 120 38 120 35C120 32 118 29 115 29C112 29 110 32 110 35Z" fill="white"/>
+    <path d="M127 25H132V40H142V45H127V25Z" fill="white"/>
+    <path d="M144 25H149V30H154V25H159V45H154V35H149V45H144V25Z" fill="white"/>
+    <path d="M161 25H176V30H166V32H174V37H166V40H176V45H161V25Z" fill="white"/>
+    <path d="M178 25H183V40H193V45H178V25Z" fill="white"/>
+    <path d="M195 25H200V45H195V25Z" fill="white"/>
+    <path d="M202 25H207V30H212V25H217V45H212V35H207V45H202V25Z" fill="white"/>
+    <path d="M219 25H234V30H224V32H232V37H224V40H234V45H219V25Z" fill="white"/>
+    <path d="M236 35C236 29 240 24 246 24C252 24 256 29 256 35C256 41 252 46 246 46C240 46 236 41 236 35ZM241 35C241 38 243 41 246 41C249 41 251 38 251 35C251 32 249 29 246 29C243 29 241 32 241 35Z" fill="white"/>
+    <path d="M258 25H263V30H268V25H273V45H268V35H263V45H258V25Z" fill="white"/>
+    <path d="M275 25H290V30H280V32H288V37H280V40H290V45H275V25Z" fill="white"/>
+  </g>
+</svg>

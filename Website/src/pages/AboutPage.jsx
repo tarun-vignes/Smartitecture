@@ -12,8 +12,8 @@ function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1>About AIPal</h1>
-            <p>Learn about our mission to make technology accessible for everyone</p>
+            <h1>About Smartitecture</h1>
+            <p>Learn about our mission to make computer systems understandable for everyone</p>
           </motion.div>
         </div>
       </section>
@@ -29,13 +29,13 @@ function AboutPage() {
           >
             <h2>Our Mission</h2>
             <p>
-              At AIPal, we believe that technology should be accessible to everyone, regardless of age or technical expertise. 
-              Our mission is to bridge the digital divide by providing a friendly, patient AI companion that helps elderly and 
-              less tech-savvy users navigate their computers with confidence.
+              At Smartitecture, we believe that technology should be accessible to everyone, regardless of technical expertise. 
+              Our mission is to bridge the digital divide by providing an intelligent assistant that helps users understand 
+              and navigate their computer systems with confidence.
             </p>
             <p>
-              We understand that technology can be intimidating, especially for those who didn't grow up with computers. 
-              That's why we've created AIPal - to provide clear, jargon-free explanations and step-by-step guidance 
+              We understand that technology can be complex and sometimes intimidating. 
+              That's why we've created Smartitecture - to provide clear, accessible explanations and step-by-step guidance 
               that empowers users to solve problems independently.
             </p>
           </motion.div>
@@ -53,13 +53,13 @@ function AboutPage() {
           >
             <h2>Our Story</h2>
             <p>
-              AIPal was born from a personal experience. Our founder watched as his grandmother struggled to use her new 
+              Smartitecture was born from a personal experience. Our founder watched as his grandmother struggled to use her new 
               computer, often feeling frustrated and calling family members for help with even simple tasks. He realized 
               there was a need for a solution that could provide immediate, patient assistance without making users feel 
               inadequate.
             </p>
             <p>
-              After months of development and testing with elderly users, AIPal was created as a compassionate AI assistant 
+              After months of development and testing with elderly users, Smartitecture was created as a compassionate AI assistant 
               that specializes in explaining technology in simple terms, helping with common tasks, and protecting users 
               from online threats.
             </p>
@@ -92,7 +92,7 @@ function AboutPage() {
               <p className="member-role">Founder & CEO</p>
               <p className="member-bio">
                 With a background in AI and a passion for making technology accessible, 
-                John founded AIPal after seeing his grandmother struggle with her computer.
+                John founded Smartitecture after seeing his grandmother struggle with her computer.
               </p>
             </div>
             
@@ -112,7 +112,7 @@ function AboutPage() {
               <p className="member-role">Lead AI Engineer</p>
               <p className="member-bio">
                 Michael has over 10 years of experience in natural language processing and 
-                conversational AI, making him perfect for developing AIPal's friendly communication style.
+                conversational AI, making him perfect for developing Smartitecture's friendly communication style.
               </p>
             </div>
             
@@ -121,7 +121,7 @@ function AboutPage() {
               <h3>Emma Rodriguez</h3>
               <p className="member-role">Security Specialist</p>
               <p className="member-bio">
-                Emma ensures that AIPal provides the best security advice and protection 
+                Emma ensures that Smartitecture provides the best security advice and protection 
                 for elderly users who may be vulnerable to online scams.
               </p>
             </div>

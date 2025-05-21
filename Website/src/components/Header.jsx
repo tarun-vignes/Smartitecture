@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import wisdomLinkLogoLight from '../assets/images/wisdomlink-logo-light.svg'
-import wisdomLinkLogoDark from '../assets/images/wisdomlink-logo-dark.svg'
+import smartitectureLogoLight from '../assets/images/smartitecture-logo-light.svg'
+import smartitectureLogoDark from '../assets/images/smartitecture-logo-dark.svg'
 import './Header.css'
 
 function Header({ darkMode, toggleDarkMode }) {
@@ -18,8 +18,8 @@ function Header({ darkMode, toggleDarkMode }) {
           <Link to="/" className="logo-link">
             <div className="logo">
               <img 
-                src={darkMode ? wisdomLinkLogoDark : wisdomLinkLogoLight} 
-                alt="WisdomLink Logo" 
+                src={darkMode ? smartitectureLogoDark : smartitectureLogoLight} 
+                alt="Smartitecture Logo" 
                 className="logo-full" 
                 style={{ height: '30px', width: 'auto' }}
               />

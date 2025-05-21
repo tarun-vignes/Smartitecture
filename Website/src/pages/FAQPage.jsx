@@ -26,163 +26,163 @@ function FAQPage() {
     general: [
       {
         id: 'general-1',
-        question: 'What is AIPal?',
-        answer: 'AIPal is a friendly AI companion designed to help elderly and less tech-savvy users navigate their computers with confidence. It provides simple, jargon-free explanations and step-by-step guidance for common computer tasks and problems.'
+        question: 'What is Smartitecture?',
+        answer: 'Smartitecture is an intelligent system assistant designed to help users understand their computer systems with confidence. It provides clear, accessible explanations and step-by-step guidance for common computer tasks and problems.'
       },
       {
         id: 'general-2',
-        question: 'Is AIPal free to use?',
-        answer: 'Yes, AIPal is completely free for personal use. There are no hidden fees or subscriptions required.'
+        question: 'Is Smartitecture free to use?',
+        answer: 'Yes, Smartitecture is completely free for personal use. There are no hidden fees or subscriptions required.'
       },
       {
         id: 'general-3',
-        question: 'What operating systems does AIPal support?',
-        answer: 'Currently, AIPal is available for Windows 10 and Windows 11. We are working on versions for macOS and mobile devices in the future.'
+        question: 'What operating systems does Smartitecture support?',
+        answer: 'Currently, Smartitecture is available for Windows 10 and Windows 11. We are working on versions for macOS and mobile devices in the future.'
       },
       {
         id: 'general-4',
-        question: 'Does AIPal require an internet connection?',
-        answer: 'AIPal requires an internet connection for most features, but basic functionality is available offline. For the best experience, we recommend having a stable internet connection.'
+        question: 'Does Smartitecture require an internet connection?',
+        answer: 'Smartitecture requires an internet connection for most features, but basic functionality is available offline. For the best experience, we recommend having a stable internet connection.'
       },
       {
         id: 'general-5',
-        question: 'How do I get started with AIPal?',
-        answer: 'Simply download AIPal from our website, run the installer, and follow the on-screen instructions. Once installed, you can launch AIPal from your desktop or Start menu and start asking questions or requesting help.'
+        question: 'How do I get started with Smartitecture?',
+        answer: 'Simply download Smartitecture from our website, run the installer, and follow the on-screen instructions. Once installed, you can launch Smartitecture from your desktop or Start menu and start asking questions or requesting help.'
       }
     ],
     installation: [
       {
         id: 'installation-1',
-        question: 'How do I install AIPal?',
+        question: 'How do I install Smartitecture?',
         answer: 'Download the installer from our website, double-click the downloaded file, and follow the installation wizard. The process is simple and takes less than 5 minutes.'
       },
       {
         id: 'installation-2',
-        question: 'Can I install AIPal on multiple computers?',
-        answer: 'Yes, you can install AIPal on multiple computers for personal use. There are no restrictions on the number of installations.'
+        question: 'Can I install Smartitecture on multiple computers?',
+        answer: 'Yes, you can install Smartitecture on multiple computers for personal use. There are no restrictions on the number of installations.'
       },
       {
         id: 'installation-3',
-        question: 'What are the system requirements for AIPal?',
-        answer: 'AIPal requires Windows 10 or Windows 11, a 1.6 GHz or faster processor, 4 GB RAM, 500 MB of available storage space, and a broadband internet connection.'
+        question: 'What are the system requirements for Smartitecture?',
+        answer: 'Smartitecture requires Windows 10 or Windows 11, a 1.6 GHz or faster processor, 4 GB RAM, 500 MB of available storage space, and a broadband internet connection.'
       },
       {
         id: 'installation-4',
-        question: 'How do I uninstall AIPal if needed?',
-        answer: 'You can uninstall AIPal through the Windows Control Panel or Settings app like any other program. Go to "Add or Remove Programs," find AIPal in the list, and click "Uninstall."'
+        question: 'How do I uninstall Smartitecture if needed?',
+        answer: 'You can uninstall Smartitecture through the Windows Control Panel or Settings app like any other program. Go to "Add or Remove Programs," find Smartitecture in the list, and click "Uninstall."'
       },
       {
         id: 'installation-5',
-        question: 'Will AIPal automatically update?',
-        answer: 'Yes, AIPal will check for updates when you launch the application and prompt you when updates are available. You can also check for updates manually through the settings menu.'
+        question: 'Will Smartitecture automatically update?',
+        answer: 'Yes, Smartitecture will check for updates when you launch the application and prompt you when updates are available. You can also check for updates manually through the settings menu.'
       }
     ],
     security: [
       {
         id: 'security-1',
-        question: 'Is my data secure with AIPal?',
-        answer: 'Yes, AIPal prioritizes your privacy and security. All data is processed locally when possible, and any data sent to our servers is encrypted and never shared with third parties.'
+        question: 'Is my data secure with Smartitecture?',
+        answer: 'Yes, Smartitecture prioritizes your privacy and security. All data is processed locally when possible, and any data sent to our servers is encrypted and never shared with third parties.'
       },
       {
         id: 'security-2',
-        question: 'Can AIPal help me identify scams?',
-        answer: 'Yes, AIPal can help identify potential scams, suspicious websites, and phishing attempts. It provides clear explanations about why something might be suspicious and how to protect yourself.'
+        question: 'Can Smartitecture help me identify scams?',
+        answer: 'Yes, Smartitecture can help identify potential scams, suspicious websites, and phishing attempts. It provides clear explanations about why something might be suspicious and how to protect yourself.'
       },
       {
         id: 'security-3',
-        question: 'Does AIPal have access to my personal files?',
-        answer: 'AIPal only accesses files and information that you explicitly share with it during your interaction. It does not scan or access your personal files without your permission.'
+        question: 'Does Smartitecture have access to my personal files?',
+        answer: 'Smartitecture only accesses files and information that you explicitly share with it during your interaction. It does not scan or access your personal files without your permission.'
       },
       {
         id: 'security-4',
-        question: 'How does AIPal protect my privacy?',
-        answer: 'AIPal processes data locally whenever possible, minimizes data collection, and encrypts any data that needs to be processed on our servers. We do not sell or share your data with third parties.'
+        question: 'How does Smartitecture protect my privacy?',
+        answer: 'Smartitecture processes data locally whenever possible, minimizes data collection, and encrypts any data that needs to be processed on our servers. We do not sell or share your data with third parties.'
       },
       {
         id: 'security-5',
-        question: 'Can AIPal help me create strong passwords?',
-        answer: 'Yes, AIPal can provide guidance on creating strong, memorable passwords and can help you understand password managers and other security best practices.'
+        question: 'Can Smartitecture help me create strong passwords?',
+        answer: 'Yes, Smartitecture can provide guidance on creating strong, memorable passwords and can help you understand password managers and other security best practices.'
       }
     ],
     network: [
       {
         id: 'network-1',
-        question: 'How can AIPal help with Wi-Fi issues?',
-        answer: 'AIPal can help troubleshoot common Wi-Fi connection problems, explain network terminology in simple language, assess your Wi-Fi security, and provide step-by-step guidance for improving your connection.'
+        question: 'How can Smartitecture help with Wi-Fi issues?',
+        answer: 'Smartitecture can help troubleshoot common Wi-Fi connection problems, explain network terminology in simple language, assess your Wi-Fi security, and provide step-by-step guidance for improving your connection.'
       },
       {
         id: 'network-2',
-        question: 'Can AIPal check if my Wi-Fi is secure?',
-        answer: 'Yes, AIPal can assess your current Wi-Fi connection security and provide recommendations for improvements if needed. It can explain different security types (WEP, WPA, WPA2, WPA3) in simple terms.'
+        question: 'Can Smartitecture check if my Wi-Fi is secure?',
+        answer: 'Yes, Smartitecture can assess your current Wi-Fi connection security and provide recommendations for improvements if needed. It can explain different security types (WEP, WPA, WPA2, WPA3) in simple terms.'
       },
       {
         id: 'network-3',
-        question: 'Will AIPal help me set up a new Wi-Fi network?',
-        answer: 'Yes, AIPal can provide step-by-step guidance for setting up a new Wi-Fi network, including router placement, security settings, and connecting devices.'
+        question: 'Will Smartitecture help me set up a new Wi-Fi network?',
+        answer: 'Yes, Smartitecture can provide step-by-step guidance for setting up a new Wi-Fi network, including router placement, security settings, and connecting devices.'
       },
       {
         id: 'network-4',
-        question: 'Can AIPal explain why my internet is slow?',
-        answer: 'Yes, AIPal can help diagnose potential causes of slow internet, run speed tests, and provide recommendations for improving your connection speed.'
+        question: 'Can Smartitecture explain why my internet is slow?',
+        answer: 'Yes, Smartitecture can help diagnose potential causes of slow internet, run speed tests, and provide recommendations for improving your connection speed.'
       },
       {
         id: 'network-5',
-        question: 'Does AIPal help with other network issues besides Wi-Fi?',
-        answer: 'Yes, AIPal can help with various network issues including wired connections, Bluetooth pairing problems, and general connectivity troubleshooting.'
+        question: 'Does Smartitecture help with other network issues besides Wi-Fi?',
+        answer: 'Yes, Smartitecture can help with various network issues including wired connections, Bluetooth pairing problems, and general connectivity troubleshooting.'
       }
     ],
     accessibility: [
       {
         id: 'accessibility-1',
-        question: 'What accessibility features does AIPal have?',
-        answer: 'AIPal includes adjustable text size, high contrast mode, voice interaction, screen reader compatibility, and keyboard navigation support to accommodate users with different abilities.'
+        question: 'What accessibility features does Smartitecture have?',
+        answer: 'Smartitecture includes adjustable text size, high contrast mode, voice interaction, screen reader compatibility, and keyboard navigation support to accommodate users with different abilities.'
       },
       {
         id: 'accessibility-2',
-        question: 'Can I interact with AIPal using my voice?',
-        answer: 'Yes, AIPal supports voice interaction. You can speak your questions or commands, and AIPal will respond with both text and optional voice output.'
+        question: 'Can I interact with Smartitecture using my voice?',
+        answer: 'Yes, Smartitecture supports voice interaction. You can speak your questions or commands, and Smartitecture will respond with both text and optional voice output.'
       },
       {
         id: 'accessibility-3',
-        question: 'Does AIPal work with screen readers?',
-        answer: 'Yes, AIPal is designed to be compatible with popular screen readers to ensure accessibility for users with visual impairments.'
+        question: 'Does Smartitecture work with screen readers?',
+        answer: 'Yes, Smartitecture is designed to be compatible with popular screen readers to ensure accessibility for users with visual impairments.'
       },
       {
         id: 'accessibility-4',
-        question: 'Can I adjust the text size in AIPal?',
-        answer: 'Yes, you can easily adjust the text size in AIPal through the settings menu to make it more comfortable to read.'
+        question: 'Can I adjust the text size in Smartitecture?',
+        answer: 'Yes, you can easily adjust the text size in Smartitecture through the settings menu to make it more comfortable to read.'
       },
       {
         id: 'accessibility-5',
-        question: 'What languages does AIPal support?',
-        answer: 'AIPal currently supports 30 languages, including English, Spanish, French, German, Italian, Chinese, Japanese, and many more. We are continuously adding support for additional languages.'
+        question: 'What languages does Smartitecture support?',
+        answer: 'Smartitecture currently supports 30 languages, including English, Spanish, French, German, Italian, Chinese, Japanese, and many more. We are continuously adding support for additional languages.'
       }
     ],
     troubleshooting: [
       {
         id: 'troubleshooting-1',
-        question: 'What should I do if AIPal is not responding?',
-        answer: 'If AIPal is not responding, try closing and reopening the application. If the issue persists, restart your computer. If you still experience problems, check our support page for more troubleshooting steps.'
+        question: 'What should I do if Smartitecture is not responding?',
+        answer: 'If Smartitecture is not responding, try closing and reopening the application. If the issue persists, restart your computer. If you still experience problems, check our support page for more troubleshooting steps.'
       },
       {
         id: 'troubleshooting-2',
-        question: 'How do I report a problem with AIPal?',
-        answer: 'You can report problems through the "Help & Feedback" section in the AIPal application or by contacting our support team through the Contact page on our website.'
+        question: 'How do I report a problem with Smartitecture?',
+        answer: 'You can report problems through the "Help & Feedback" section in the Smartitecture application or by contacting our support team through the Contact page on our website.'
       },
       {
         id: 'troubleshooting-3',
-        question: 'AIPal didn\'t understand my question. What should I do?',
-        answer: 'Try rephrasing your question using simpler language. If AIPal still doesn\'t understand, you can provide feedback through the application to help us improve.'
+        question: 'Smartitecture didn\'t understand my question. What should I do?',
+        answer: 'Try rephrasing your question using simpler language. If Smartitecture still doesn\'t understand, you can provide feedback through the application to help us improve.'
       },
       {
         id: 'troubleshooting-4',
-        question: 'Can AIPal help with printer problems?',
-        answer: 'Yes, AIPal can help troubleshoot common printer issues, explain error messages, and provide step-by-step guidance for setting up or fixing printer connections.'
+        question: 'Can Smartitecture help with printer problems?',
+        answer: 'Yes, Smartitecture can help troubleshoot common printer issues, explain error messages, and provide step-by-step guidance for setting up or fixing printer connections.'
       },
       {
         id: 'troubleshooting-5',
-        question: 'What if AIPal gives me incorrect information?',
-        answer: 'While we strive for accuracy, if you believe AIPal has provided incorrect information, please let us know through the feedback option in the application. This helps us improve AIPal for everyone.'
+        question: 'What if Smartitecture gives me incorrect information?',
+        answer: 'While we strive for accuracy, if you believe Smartitecture has provided incorrect information, please let us know through the feedback option in the application. This helps us improve Smartitecture for everyone.'
       }
     ]
   }
@@ -198,7 +198,7 @@ function FAQPage() {
             transition={{ duration: 0.6 }}
           >
             <h1>Frequently Asked Questions</h1>
-            <p>Find answers to common questions about AIPal</p>
+            <p>Find answers to common questions about Smartitecture</p>
           </motion.div>
         </div>
       </section>
