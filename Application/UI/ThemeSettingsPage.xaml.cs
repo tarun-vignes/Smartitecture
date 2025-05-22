@@ -1,4 +1,4 @@
-using AIPal.Services;
+using Smartitecture.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI;
 
-namespace AIPal.UI
+namespace Smartitecture.UI
 {
     /// <summary>
     /// Page for theme and appearance settings.

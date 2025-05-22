@@ -1,12 +1,12 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
-using AIPal.Services;
+using Smartitecture.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AIPal.UI
+namespace Smartitecture.UI
 {
     /// <summary>
     /// Page for selecting the application language.
