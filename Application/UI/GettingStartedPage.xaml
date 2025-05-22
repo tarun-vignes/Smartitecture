@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- MODIFIED: Rebranded from AIPal to Smartitecture -->
 <Page
-    x:Class="AIPal.UI.GettingStartedPage"
+    x:Class="Smartitecture.UI.GettingStartedPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -17,19 +18,19 @@
 
         <!-- Logo and Header -->
         <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,20,0,30">
-            <!-- AIPal Logo -->
+            <!-- Smartitecture Logo -->
             <Rectangle Width="120" Height="120" 
-                       Fill="{StaticResource AIPalLogoBrush}" 
+                       Fill="{StaticResource SmartitectureLogoBrush}" 
                        Margin="0,0,0,16"/>
             
             <!-- Welcome Text -->
-            <TextBlock Text="Welcome to AIPal" 
+            <TextBlock Text="Welcome to Smartitecture" 
                        Style="{StaticResource TitleTextBlockStyle}" 
                        FontSize="32"
                        HorizontalAlignment="Center"/>
             
             <!-- Tagline -->
-            <TextBlock Text="Your Friendly Computer Helper" 
+            <TextBlock Text="Intelligent System Understanding" 
                        Style="{StaticResource SubtitleTextBlockStyle}" 
                        FontSize="20"
                        Opacity="0.8"
@@ -50,7 +51,7 @@
                        LineHeight="28" 
                        HorizontalAlignment="Center" 
                        TextAlignment="Center">
-                AIPal is designed to help you use your computer more easily.
+                Smartitecture is designed to help you use your computer more easily.
                 <LineBreak/>
                 <LineBreak/>
                 Think of me as a friendly helper who's always ready to assist you
@@ -64,7 +65,7 @@
 
                 <!-- How to Use -->
                 <StackPanel Spacing="16">
-                    <TextBlock Text="How to Use AIPal" 
+                    <TextBlock Text="How to Use Smartitecture" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
                     
@@ -188,7 +189,7 @@
 
                 <!-- Footer -->
                 <TextBlock TextWrapping="Wrap" FontSize="14" Opacity="0.7" Margin="0,16,0,0">
-                    AIPal is here to help you use your computer with confidence. If you ever feel confused or stuck, just ask me for help!
+                    Smartitecture is here to help you use your computer with confidence. If you ever feel confused or stuck, just ask me for help!
                 </TextBlock>
             </StackPanel>
         </ScrollViewer>
