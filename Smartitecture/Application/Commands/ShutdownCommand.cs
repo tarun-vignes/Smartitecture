@@ -1,21 +1,24 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Smartitecture.Commands;
 
-namespace AIPal.Application.Commands
+namespace Smartitecture.Application.Commands
 {
     /// <summary>
     /// Command implementation for shutting down the Windows system.
     /// Requires administrative privileges to execute.
     /// </summary>
+    public class ShutdownCommand : ICommand<string[], bool>
+    {
         /// <summary>Gets the name of the command</summary>
-        public string CommandName => "Shutdown";
+        public static string CommandName => "Shutdown";
 
         /// <summary>Gets the description of what the command does</summary>
-        public string Description => "Shuts down the computer";
+        public static string Description => "Shuts down the computer";
 
         /// <summary>Indicates whether the command requires administrative elevation</summary>
-        public bool RequiresElevation => true;
+        public static bool RequiresElevation => true;
 
         /// <summary>
         /// Executes the shutdown command with the specified parameters

@@ -1,21 +1,24 @@
 using System;
 using System.Threading.Tasks;
 using Windows.System;
+using Smartitecture.Commands;
 
-namespace AIPal.Application.Commands
+namespace Smartitecture.Application.Commands
 {
     /// <summary>
     /// Command implementation for launching Windows applications.
     /// Supports both Microsoft Store apps and traditional desktop applications.
     /// </summary>
+    public class LaunchAppCommand : ICommand<string[], bool>
+    {
         /// <summary>Gets the name of the command</summary>
-        public string CommandName => "LaunchApp";
+        public static string CommandName => "LaunchApp";
 
         /// <summary>Gets the description of what the command does</summary>
-        public string Description => "Launches a Windows application";
+        public static string Description => "Launches a Windows application";
 
         /// <summary>Indicates whether the command requires administrative elevation</summary>
-        public bool RequiresElevation => false;
+        public static bool RequiresElevation => false;
 
         /// <summary>
         /// Attempts to launch a Windows application using the provided application name
