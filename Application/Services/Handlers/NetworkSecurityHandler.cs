@@ -1,9 +1,9 @@
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AIPal.Services.AgentTools;
+using Smartitecture.Services.AgentTools;
 
-namespace AIPal.Services.Handlers
+namespace Smartitecture.Services.Handlers
 {
     /// <summary>
     /// Handler for network security related requests.

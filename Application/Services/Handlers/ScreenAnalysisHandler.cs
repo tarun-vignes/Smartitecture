@@ -1,9 +1,9 @@
 using System;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AIPal.Services.AgentTools;
+using Smartitecture.Services.AgentTools;
 
-namespace AIPal.Services.Handlers
+namespace Smartitecture.Services.Handlers
 {
     /// <summary>
     /// Handler for screen capture and analysis requests.

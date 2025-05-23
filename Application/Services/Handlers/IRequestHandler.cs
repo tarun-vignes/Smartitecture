@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace AIPal.Services.Handlers
+namespace Smartitecture.Services.Handlers
 {
     /// <summary>
     /// Interface for request handlers that process specific types of requests.

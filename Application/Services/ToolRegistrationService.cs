@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using AIPal.Services.AgentTools;
+using Smartitecture.Services.AgentTools;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace AIPal.Services
+namespace Smartitecture.Services
 {
     /// <summary>
     /// Service for registering and managing tools for the AI agent.

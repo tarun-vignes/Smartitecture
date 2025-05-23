@@ -1,4 +1,4 @@
-using AIPal.Services.Handlers;
+using Smartitecture.Services.Handlers;
 using Azure;
 using Azure.AI.OpenAI;
 using Microsoft.Extensions.Configuration;
@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace AIPal.Services
+namespace Smartitecture.Services
 {
     /// <summary>
     /// Extension methods for configuring services in the dependency injection container.

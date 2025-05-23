@@ -10,7 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 
-namespace AIPal.Services.AgentTools
+namespace Smartitecture.Services.AgentTools
 {
     /// <summary>
     /// Provides system diagnostic tools for monitoring and analyzing PC performance.

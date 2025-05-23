@@ -23,8 +23,8 @@
   </g>
   
   <!-- Text for light mode (dark text) -->
-  <text x="350" y="170" font-family="Arial, sans-serif" font-weight="bold" font-size="120" fill="#212121" class="logo-text-light">AIPal</text>
+  <text x="350" y="170" font-family="Arial, sans-serif" font-weight="bold" font-size="120" fill="#212121" class="logo-text-light">Smartitecture</text>
   
   <!-- Text for dark mode (white text) -->
-  <text x="350" y="170" font-family="Arial, sans-serif" font-weight="bold" font-size="120" fill="#FFFFFF" class="logo-text-dark">AIPal</text>
+  <text x="350" y="170" font-family="Arial, sans-serif" font-weight="bold" font-size="120" fill="#FFFFFF" class="logo-text-dark">Smartitecture</text>
 </svg>

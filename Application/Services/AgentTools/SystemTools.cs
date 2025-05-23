@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace AIPal.Services.AgentTools
+namespace Smartitecture.Services.AgentTools
 {
     /// <summary>
     /// Provides system-related tools for the AI agent to use.

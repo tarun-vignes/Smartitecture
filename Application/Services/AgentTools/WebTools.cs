@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace AIPal.Services.AgentTools
+namespace Smartitecture.Services.AgentTools
 {
     /// <summary>
     /// Provides web-related tools for the AI agent to use.
