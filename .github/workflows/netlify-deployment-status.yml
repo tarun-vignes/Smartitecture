@@ -21,7 +21,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: production
-          description: 'AIPal Companion Website'
+          description: 'Smartitecture Companion Website'
           
       - name: Update Deployment Status (Success)
         uses: chrnorm/deployment-status@v2
@@ -29,5 +29,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           state: "success"
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          environment-url: https://aipal-companion.windsurf.build
-          description: 'AIPal Companion Website deployed to Netlify'
+          environment-url: https://smartitecture-companion.windsurf.build
+          description: 'Smartitecture Companion Website deployed to Netlify'
