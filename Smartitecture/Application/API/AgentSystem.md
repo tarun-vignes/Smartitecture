@@ -1,8 +1,8 @@
-# AIPal Agent System Documentation
+# Smartitecture Agent System Documentation
 
 ## Overview
 
-The AIPal Agent System extends the existing AI assistant with more powerful agent capabilities inspired by OpenAI's agent framework. Unlike the simpler query and chat interfaces, agents can use tools, perform multi-step reasoning, and autonomously complete complex tasks.
+The Smartitecture Agent System extends the existing AI assistant with more powerful agent capabilities inspired by OpenAI's agent framework. Unlike the simpler query and chat interfaces, agents can use tools, perform multi-step reasoning, and autonomously complete complex tasks.
 
 ## Key Components
 

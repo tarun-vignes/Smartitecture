@@ -76,9 +76,7 @@
         <viewmodels:ObjectToStringConverter x:Key="ObjectToStringConverter"/>
         <viewmodels:BoolToErrorBrushConverter x:Key="BoolToErrorBrushConverter"/>
         
-        <DataTemplateSelector x:Key="MessageTemplateSelector" 
-                             UserTemplate="{StaticResource UserMessageTemplate}"
-                             AgentTemplate="{StaticResource AgentMessageTemplate}"/>
+        <viewmodels:MessageTemplateSelector x:Key="MessageTemplateSelector"/>
     </Page.Resources>
 
     <Grid Padding="16">

@@ -26,6 +26,14 @@ namespace Smartitecture.UI
             // Get the view model from the dependency injection container
             ViewModel = App.Current.Services.GetService(typeof(AgentViewModel)) as AgentViewModel;
             
+            // Set up the message template selector
+            var templateSelector = Resources["MessageTemplateSelector"] as MessageTemplateSelector;
+            if (templateSelector != null)
+            {
+                templateSelector.UserTemplate = Resources["UserMessageTemplate"] as DataTemplate;
+                templateSelector.AgentTemplate = Resources["AgentMessageTemplate"] as DataTemplate;
+            }
+            
             // Subscribe to messages collection changes to auto-scroll
             ViewModel.Messages.CollectionChanged += Messages_CollectionChanged;
         }

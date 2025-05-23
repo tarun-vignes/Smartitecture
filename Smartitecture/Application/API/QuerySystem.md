@@ -1,8 +1,8 @@
-# AIPal Query System Documentation
+# Smartitecture Query System Documentation
 
 ## Overview
 
-The AIPal Query System provides a structured approach to interacting with the AI assistant. Unlike simple chat messages, queries offer a more powerful way to request information and actions with specific parameters, context management, and structured responses.
+The Smartitecture Query System provides a structured approach to interacting with the AI assistant. Unlike simple chat messages, queries offer a more powerful way to request information and actions with specific parameters, context management, and structured responses.
 
 ## Key Components
 

@@ -1,8 +1,8 @@
-# AIPal Handler System Documentation
+# Smartitecture Handler System Documentation
 
 ## Overview
 
-The AIPal Handler System provides a structured approach to processing different types of requests, similar to how web frameworks handle different HTTP methods (GET, POST, PUT, etc.). This system routes incoming requests to specialized handlers based on the request content, allowing for more organized and maintainable code.
+The Smartitecture Handler System provides a structured approach to processing different types of requests, similar to how web frameworks handle different HTTP methods (GET, POST, PUT, etc.). This system routes incoming requests to specialized handlers based on the request content, allowing for more organized and maintainable code.
 
 ## Key Components
 
