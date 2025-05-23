@@ -1,3 +1,4 @@
+// MODIFIED: Rebranded from AIPal to Smartitecture
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -5,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 
-namespace AIPal.Services
+namespace Smartitecture.Services
 {
     /// <summary>
     /// Service for managing application language and localization.

@@ -1,7 +1,8 @@
+// MODIFIED: Rebranded from AIPal to Smartitecture
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AIPal.Services
+namespace Smartitecture.Services
 {
     /// <summary>
     /// Interface for AI Agent services that extend basic LLM capabilities.

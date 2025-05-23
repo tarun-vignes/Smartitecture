@@ -1,9 +1,10 @@
 using Microsoft.UI.Xaml;
+// MODIFIED: Rebranded from AIPal to Smartitecture
 using System;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace AIPal.Services
+namespace Smartitecture.Services
 {
     /// <summary>
     /// Theme options for the application.

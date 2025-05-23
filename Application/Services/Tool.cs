@@ -2,7 +2,7 @@ using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace AIPal.Application.Services
+namespace Smartitecture.Application.Services
 {
     /// <summary>
     /// Represents a tool that can be executed by the agent.
