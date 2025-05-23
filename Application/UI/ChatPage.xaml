@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- MODIFIED: Rebranded from AIPal to Smartitecture -->
 <Page
     x:Class="Smartitecture.UI.ChatPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

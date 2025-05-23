@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- MODIFIED: Rebranded from AIPal to Smartitecture -->
 <Page
     x:Class="Smartitecture.UI.GettingStartedPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -50,7 +51,7 @@
                        LineHeight="28" 
                        HorizontalAlignment="Center" 
                        TextAlignment="Center">
-                AIPal is designed to help you use your computer more easily.
+                Smartitecture is designed to help you use your computer more easily.
                 <LineBreak/>
                 <LineBreak/>
                 Think of me as a friendly helper who's always ready to assist you
@@ -64,7 +65,7 @@
 
                 <!-- How to Use -->
                 <StackPanel Spacing="16">
-                    <TextBlock Text="How to Use AIPal" 
+                    <TextBlock Text="How to Use Smartitecture" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
                     
@@ -188,7 +189,7 @@
 
                 <!-- Footer -->
                 <TextBlock TextWrapping="Wrap" FontSize="14" Opacity="0.7" Margin="0,16,0,0">
-                    AIPal is here to help you use your computer with confidence. If you ever feel confused or stuck, just ask me for help!
+                    Smartitecture is here to help you use your computer with confidence. If you ever feel confused or stuck, just ask me for help!
                 </TextBlock>
             </StackPanel>
         </ScrollViewer>

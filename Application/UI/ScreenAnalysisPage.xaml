@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- MODIFIED: Rebranded from AIPal to Smartitecture -->
 <Page
-    x:Class="AIPal.UI.ScreenAnalysisPage"
+    x:Class="Smartitecture.UI.ScreenAnalysisPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodels="using:AIPal.ViewModels"
-    xmlns:converters="using:AIPal.ViewModels.Converters"
+    xmlns:viewmodels="using:Smartitecture.ViewModels"
+    xmlns:converters="using:Smartitecture.ViewModels.Converters"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -31,7 +32,7 @@
                     IsOpen="True"
                     Severity="Informational"
                     Title="Screen Analysis Feature"
-                    Message="AIPal can analyze what's on your screen without taking screenshots. This helps you understand content, identify security issues, or get help with navigation."
+                    Message="Smartitecture can analyze what's on your screen without taking screenshots. This helps you understand content, identify security issues, or get help with navigation."
                     IsClosable="False"/>
 
                 <!-- Capture options -->
@@ -101,7 +102,7 @@
 
         <!-- Footer with help text -->
         <StackPanel Grid.Row="2" Margin="0,16,0,0">
-            <TextBlock Text="You can also ask AIPal to analyze your screen directly in the chat." 
+            <TextBlock Text="You can also ask Smartitecture to analyze your screen directly in the chat." 
                        TextWrapping="Wrap" 
                        Opacity="0.7"
                        HorizontalAlignment="Center"/>
