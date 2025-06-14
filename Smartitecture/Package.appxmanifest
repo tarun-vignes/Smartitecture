@@ -2,31 +2,37 @@
 
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  IgnorableNamespaces="uap rescap">
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:uap4="http://schemas.microsoft.com/appx/manifest/uap/windows10/4"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+  xmlns:uap6="http://schemas.microsoft.com/appx/manifest/uap/windows10/6"
+  xmlns:uap7="http://schemas.microsoft.com/appx/manifest/uap/windows10/7"
+  xmlns:uap8="http://schemas.microsoft.com/appx/manifest/uap/windows10/8"
+  xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+  IgnorableNamespaces="uap uap4 uap5 uap6 uap7 uap8 uap10 rescap desktop">
 
   <Identity
     Name="Smartitecture"
     Publisher="CN=Smartitecture"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="4b0c1a7a-5c3e-4b0c-8d8a-7a5c3e4b0c8d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
-
   <Properties>
     <DisplayName>Smartitecture</DisplayName>
     <PublisherDisplayName>Smartitecture</PublisherDisplayName>
     <Logo>Assets\Logo\StoreLogo.png</Logo>
+    <Description>Your Windows AI Companion for Understanding Computer Architecture</Description>
+    <Framework>true</Framework>
   </Properties>
 
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
-    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0" />
   </Dependencies>
 
   <Resources>
-    <Resource Language="x-generate"/>
+    <Resource Language="en-US" />
   </Resources>
 
   <Applications>
@@ -52,6 +58,14 @@
         <uap:SplashScreen Image="Assets\Logo\SplashScreen620x300.png" />
         <uap:LockScreen BadgeLogo="Assets\Logo\BadgeLogo.png" Notification="badge"/>
       </uap:VisualElements>
+      
+      <Extensions>
+        <desktop:Extension Category="windows.appExecutionAlias" Executable="Smartitecture.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:AppExecutionAlias>
+            <desktop:ExecutionAlias Alias="Smartitecture.exe" />
+          </desktop:AppExecutionAlias>
+        </desktop:Extension>
+      </Extensions>
     </Application>
   </Applications>
 

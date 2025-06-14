@@ -161,7 +161,7 @@ The Smartitecture companion website is deployed to Netlify, showcasing all the e
 
 1. The website is built using Vite and React
 2. Deployment is configured via the `netlify.toml` file in the Website directory
-3. The website is accessible at: https://wisdomlink-companion.windsurf.build
+3. The website is accessible at: https://aipal-companion.windsurf.build
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/0c565a6b-0b0d-45d7-b8e2-142d0a020b64/deploy-status)](https://app.netlify.com/sites/smartitecture-companion/deploys)
 

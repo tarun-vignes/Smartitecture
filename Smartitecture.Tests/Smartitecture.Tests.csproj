@@ -24,12 +24,12 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(SkipMainProjectBuild)' != 'true'">
-    <ProjectReference Include="..\Smartitecture.csproj" />
+    <ProjectReference Include="..\Smartitecture\Smartitecture.csproj" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(SkipMainProjectBuild)' == 'true'">
     <Reference Include="Smartitecture">
-      <HintPath>..\bin\Debug\net8.0-windows10.0.19041.0\Smartitecture.dll</HintPath>
+      <HintPath>..\Smartitecture\bin\Debug\net8.0-windows10.0.19041.0\Smartitecture.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

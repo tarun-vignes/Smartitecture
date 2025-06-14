@@ -15,7 +15,7 @@ namespace Smartitecture
     /// Main application class that provides application-specific behavior to supplement the default Application class.
     /// Handles initialization of services, API hosting, and UI components.
     /// </summary>
-    public partial class App : Application
+    public partial class App : Microsoft.UI.Xaml.Application
     {
         private Window _window;
         private IServiceProvider _serviceProvider;
