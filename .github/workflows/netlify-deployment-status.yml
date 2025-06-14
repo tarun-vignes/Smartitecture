@@ -29,5 +29,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           state: "success"
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          environment-url: https://smartitecture-companion.windsurf.build
+          environment-url: https://aipal-companion.windsurf.build
           description: 'Smartitecture Companion Website deployed to Netlify'
