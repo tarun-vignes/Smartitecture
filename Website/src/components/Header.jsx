@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import smartitectureLogoLight from '../assets/images/smartitecture-logo-light.svg'
-import smartitectureLogoDark from '../assets/images/smartitecture-logo-dark.svg'
+import smartitectureLogoLight from '../assets/images/smartitecture-logo-light-new.svg'
+import smartitectureLogoDark from '../assets/images/smartitecture-logo-dark-new.svg'
 import './Header.css'
 
 function Header({ darkMode, toggleDarkMode }) {

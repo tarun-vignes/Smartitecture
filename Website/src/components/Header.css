@@ -31,13 +31,15 @@
 }
 
 .logo-full {
-  height: 30px;
+  height: 40px;
   width: auto;
   display: block;
   transition: transform 0.3s ease;
   /* Ensure the logo matches exactly what's in the screenshots */
   object-fit: contain;
   margin: 0;
+  /* Ensure logo is visible in both light and dark modes */
+  filter: none;
 }
 
 .logo-link:hover .logo-full {
