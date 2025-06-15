@@ -4,42 +4,49 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
   color: var(--text-color);
+  min-height: 60px;
 }
 
 .header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;
+  min-height: 48px;
 }
 
 .logo-container {
   display: flex;
   align-items: center;
+  height: 100%;
 }
 
 .logo-link {
   text-decoration: none;
   color: inherit;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  height: 100%;
 }
 
 .logo-full {
-  height: 40px;
+  height: 36px;
   width: auto;
   display: block;
   transition: transform 0.3s ease;
-  /* Ensure the logo matches exactly what's in the screenshots */
   object-fit: contain;
   margin: 0;
-  /* Ensure logo is visible in both light and dark modes */
   filter: none;
+  vertical-align: middle;
 }
 
 .logo-link:hover .logo-full {

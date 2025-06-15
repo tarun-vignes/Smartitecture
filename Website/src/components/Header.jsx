@@ -20,8 +20,7 @@ function Header({ darkMode, toggleDarkMode }) {
               <img 
                 src={darkMode ? smartitectureLogoDark : smartitectureLogoLight} 
                 alt="Smartitecture Logo" 
-                className="logo-full" 
-                style={{ height: '30px', width: 'auto' }}
+                className="logo-full"
               />
             </div>
           </Link>
