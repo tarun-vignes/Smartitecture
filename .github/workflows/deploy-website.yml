@@ -3,7 +3,7 @@ name: Deploy Website
 on:
   workflow_dispatch:
   push:
-    branches: [ "gh-pages" ]
+    branches: [ "master" ]
     paths:
       - 'Website/**'
       - '.github/workflows/deploy-website.yml'
