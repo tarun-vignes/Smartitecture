@@ -71,7 +71,7 @@ function DownloadPage() {
                 <h3>Alternative Downloads</h3>
                 <ul>
                   <li>
-                    <a href="#" className="alt-download-link">
+                    <a href="https://www.microsoft.com/store/search?q=Smartitecture" className="alt-download-link" target="_blank" rel="noopener noreferrer">
                       Microsoft Store
                     </a>
                   </li>
