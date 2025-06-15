@@ -1,4 +1,6 @@
-import { motion } from 'framer-motion'
+import React from 'react';
+import { motion } from 'framer-motion';
+import HandIcon from '../components/HandIcon';
 import './FeaturesPage.css'
 
 function FeaturesPage() {
@@ -66,7 +68,9 @@ function FeaturesPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="image-placeholder"></div>
+              <div className="feature-image-container">
+                <HandIcon size={300} className="feature-hand-icon" />
+              </div>
             </motion.div>
           </div>
           
@@ -98,7 +102,9 @@ function FeaturesPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="image-placeholder"></div>
+              <div className="feature-image-container">
+                <HandIcon size={300} className="feature-hand-icon" />
+              </div>
             </motion.div>
           </div>
           
@@ -130,7 +136,9 @@ function FeaturesPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="image-placeholder"></div>
+              <div className="feature-image-container">
+                <HandIcon size={300} className="feature-hand-icon" />
+              </div>
             </motion.div>
           </div>
           
@@ -162,7 +170,9 @@ function FeaturesPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="image-placeholder"></div>
+              <div className="feature-image-container">
+                <HandIcon size={300} className="feature-hand-icon" />
+              </div>
             </motion.div>
           </div>
           
@@ -194,7 +204,9 @@ function FeaturesPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="image-placeholder"></div>
+              <div className="feature-image-container">
+                <HandIcon size={300} className="feature-hand-icon" />
+              </div>
             </motion.div>
           </div>
           
@@ -226,7 +238,9 @@ function FeaturesPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="image-placeholder"></div>
+              <div className="feature-image-container">
+                <HandIcon size={300} className="feature-hand-icon" />
+              </div>
             </motion.div>
           </div>
         </div>
