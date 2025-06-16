@@ -39,11 +39,12 @@
 }
 
 .logo-full {
-  height: 36px;
+  height: 40px;
   width: auto;
+  max-width: none;
+  object-fit: contain;
   display: block;
   transition: transform 0.3s ease;
-  object-fit: contain;
   margin: 0;
   filter: none;
   vertical-align: middle;

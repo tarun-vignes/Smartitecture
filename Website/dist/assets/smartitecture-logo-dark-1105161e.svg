@@ -1,0 +1,60 @@
+<svg width="200" height="40" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="handGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6ee7b7;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4ade80;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Hand exactly like the user's image -->
+  <g transform="translate(2, 4) scale(1.2)">
+    <!-- Palm base -->
+    <path d="M4 20 Q4 16 8 16 L16 16 Q20 16 20 20 L20 26 Q20 30 16 30 L8 30 Q4 30 4 26 Z" 
+          fill="url(#handGradient)" stroke="#059669" stroke-width="1"/>
+    
+    <!-- Index finger -->
+    <rect x="6" y="4" width="3" height="16" rx="1.5" 
+          fill="url(#handGradient)" stroke="#059669" stroke-width="1"/>
+    
+    <!-- Middle finger (tallest) -->
+    <rect x="10" y="2" width="3" height="18" rx="1.5" 
+          fill="url(#handGradient)" stroke="#059669" stroke-width="1"/>
+    
+    <!-- Ring finger -->
+    <rect x="14" y="4" width="3" height="16" rx="1.5" 
+          fill="url(#handGradient)" stroke="#059669" stroke-width="1"/>
+    
+    <!-- Pinky finger -->
+    <rect x="18" y="8" width="3" height="12" rx="1.5" 
+          fill="url(#handGradient)" stroke="#059669" stroke-width="1"/>
+    
+    <!-- Thumb -->
+    <ellipse cx="2" cy="18" rx="2" ry="4" transform="rotate(-20 2 18)" 
+             fill="url(#handGradient)" stroke="#059669" stroke-width="1"/>
+    
+    <!-- Circuit lines on fingers -->
+    <line x1="7.5" y1="6" x2="7.5" y2="18" stroke="#34d399" stroke-width="1.5"/>
+    <line x1="11.5" y1="4" x2="11.5" y2="18" stroke="#34d399" stroke-width="1.5"/>
+    <line x1="15.5" y1="6" x2="15.5" y2="18" stroke="#34d399" stroke-width="1.5"/>
+    <line x1="19.5" y1="10" x2="19.5" y2="18" stroke="#34d399" stroke-width="1.5"/>
+    
+    <!-- Circuit nodes -->
+    <circle cx="7.5" cy="10" r="1.2" fill="#10b981"/>
+    <circle cx="11.5" cy="8" r="1.2" fill="#10b981"/>
+    <circle cx="15.5" cy="10" r="1.2" fill="#10b981"/>
+    <circle cx="19.5" cy="14" r="1.2" fill="#10b981"/>
+    
+    <!-- Connecting lines -->
+    <path d="M7.5 10 L11.5 8 L15.5 10 L19.5 14" stroke="#6ee7b7" stroke-width="1" fill="none"/>
+    
+    <!-- Palm circuits -->
+    <circle cx="8" cy="24" r="1" fill="#10b981"/>
+    <circle cx="12" cy="24" r="1" fill="#10b981"/>
+    <circle cx="16" cy="24" r="1" fill="#10b981"/>
+    <path d="M8 24 L12 24 L16 24" stroke="#6ee7b7" stroke-width="1" fill="none"/>
+  </g>
+  
+  <!-- Text for dark mode -->
+  <text x="32" y="26" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">Smartitecture</text>
+</svg>
