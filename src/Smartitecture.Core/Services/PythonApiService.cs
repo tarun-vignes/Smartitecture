@@ -1,69 +1,262 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Smartitecture.Core.Services.Base;
+using Microsoft.Extensions.Options;
+using Polly;
+using Polly.CircuitBreaker;
+using Polly.Retry;
+using Smartitecture.Core.Models;
+using Smartitecture.Core.Options;
 
 namespace Smartitecture.Core.Services
 {
-    public class PythonApiService : BaseService
+    public class PythonApiService : IPythonApiService, IDisposable
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<PythonApiService> _logger;
-        private readonly string _baseUrl;
+        private readonly PythonApiOptions _options;
+        private readonly AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
+        private readonly AsyncCircuitBreakerPolicy<HttpResponseMessage> _circuitBreakerPolicy;
+        private bool _disposed;
 
-        public PythonApiService(HttpClient httpClient, ILogger<PythonApiService> logger)
+        public PythonApiService(
+            HttpClient httpClient,
+            IOptions<PythonApiOptions> options,
+            ILogger<PythonApiService> logger)
         {
-            _httpClient = httpClient;
-            _logger = logger;
-            _baseUrl = "http://127.0.0.1:8000";
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            // Configure retry policy
+            _retryPolicy = Policy<HttpResponseMessage>
+                .Handle<HttpRequestException>()
+                .OrResult(r => (int)r.StatusCode >= 500 || r.StatusCode == HttpStatusCode.TooManyRequests)
+                .WaitAndRetryAsync(
+                    retryCount: _options.RetryCount,
+                    sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+                    onRetry: (outcome, delay, retryCount, context) =>
+                    {
+                        _logger.LogWarning(
+                            "Retry {RetryCount} after {Delay}ms due to: {Exception}",
+                            retryCount,
+                            delay.TotalMilliseconds,
+                            outcome.Exception?.Message ?? outcome.Result?.StatusCode.ToString());
+                    });
+
+            // Configure circuit breaker policy
+            _circuitBreakerPolicy = Policy<HttpResponseMessage>
+                .Handle<HttpRequestException>()
+                .OrResult(r => (int)r.StatusCode >= 500)
+                .CircuitBreakerAsync(
+                    handledEventsAllowedBeforeBreaking: 5,
+                    durationOfBreak: TimeSpan.FromSeconds(30),
+                    onBreak: (outcome, breakDelay) =>
+                    {
+                        _logger.LogError(
+                            "Circuit broken! Will remain open for {BreakDelay}ms due to: {Exception}",
+                            breakDelay.TotalMilliseconds,
+                            outcome.Exception?.Message ?? outcome.Result?.StatusCode.ToString());
+                    },
+                    onReset: () => _logger.LogInformation("Circuit breaker reset"),
+                    onHalfOpen: () => _logger.LogInformation("Circuit breaker half-open"));
         }
 
-        public async Task<bool> IsHealthyAsync()
+        public async Task<bool> CheckHealthAsync()
         {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/health");
-                return response.IsSuccessStatusCode;
+                var response = await ExecuteWithResilienceAsync(
+                    () => _httpClient.GetAsync("health", cts.Token),
+                    cts.Token);
+                
+                var isHealthy = response.IsSuccessStatusCode;
+                _logger.LogDebug("Health check {Status} with status code {StatusCode}", 
+                    isHealthy ? "succeeded" : "failed", response.StatusCode);
+                    
+                return isHealthy;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to check Python API health");
+                _logger.LogError(ex, "Health check failed");
                 return false;
             }
         }
 
-        public async Task<T> GetAsync<T>(string endpoint)
+        public async Task<AgentStateResponse> GetAgentStateAsync()
         {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(_options.TimeoutSeconds));
+            
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseUrl}{endpoint}");
+                var response = await ExecuteWithResilienceAsync(
+                    () => _httpClient.GetAsync("agent/state", cts.Token),
+                    cts.Token);
+
                 response.EnsureSuccessStatusCode();
-                
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<T>(content);
+                
+                var result = JsonSerializer.Deserialize<AgentStateResponse>(
+                    content, 
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                
+                _logger.LogDebug("Retrieved agent state: {State}", result?.State);
+                return result;
+            }
+            catch (BrokenCircuitException ex)
+            {
+                _logger.LogError(ex, "Circuit is open. Service is unavailable.");
+                throw new ServiceUnavailableException("Service is currently unavailable. Please try again later.", ex);
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode.HasValue)
+            {
+                _logger.LogError(ex, "HTTP error {StatusCode} while getting agent state", ex.StatusCode);
+                throw;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to GET from Python API: {Endpoint}", endpoint);
-                throw;
+                _logger.LogError(ex, "Unexpected error getting agent state");
+                throw new PythonApiException("An error occurred while getting agent state", ex);
             }
         }
 
-        public async Task<T> PostAsync<T>(string endpoint, object data)
+        public async Task<AgentRunResponse> RunAgentAsync(string input, int? maxIterations = null)
         {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                throw new ArgumentException("Input cannot be null or whitespace", nameof(input));
+            }
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(_options.TimeoutSeconds));
+            
             try
             {
-                var json = JsonConvert.SerializeObject(data);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                
-                var response = await _httpClient.PostAsync($"{_baseUrl}{endpoint}", content);
+                var request = new AgentRunRequest
+                {
+                    Input = input,
+                    MaxIterations = maxIterations
+                };
+
+                var content = new StringContent(
+                    JsonSerializer.Serialize(request),
+                    Encoding.UTF8,
+                    "application/json");
+
+                var response = await ExecuteWithResilienceAsync(
+                    () => _httpClient.PostAsync("agent/run", content, cts.Token),
+                    cts.Token);
+
                 response.EnsureSuccessStatusCode();
                 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<T>(responseContent);
+                var result = JsonSerializer.Deserialize<AgentRunResponse>(
+                    responseContent,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                
+                _logger.LogInformation("Agent run completed in {Iterations} iterations", result?.Iterations);
+                return result;
+            }
+            catch (BrokenCircuitException ex)
+            {
+                _logger.LogError(ex, "Circuit is open. Service is unavailable.");
+                throw new ServiceUnavailableException("Service is currently unavailable. Please try again later.", ex);
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode.HasValue)
+            {
+                _logger.LogError(ex, "HTTP error {StatusCode} while running agent", ex.StatusCode);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error running agent with input: {Input}", input);
+                throw new PythonApiException("An error occurred while running the agent", ex);
+            }
+        }
+
+        private async Task<HttpResponseMessage> ExecuteWithResilienceAsync(
+            Func<Task<HttpResponseMessage>> action,
+            CancellationToken cancellationToken)
+        {
+            // Combine retry and circuit breaker policies
+            var policy = Policy.WrapAsync(_retryPolicy, _circuitBreakerPolicy);
+            
+            return await policy.ExecuteAsync(async (ct) =>
+            {
+                var response = await action();
+                
+                // Log rate limiting headers if present
+                if (response.Headers.TryGetValues("X-RateLimit-Limit", out var limitValues) &&
+                    response.Headers.TryGetValues("X-RateLimit-Remaining", out var remainingValues))
+                {
+                    _logger.LogDebug("Rate limit: {Remaining}/{Limit} requests remaining",
+                        string.Join(",", remainingValues),
+                        string.Join(",", limitValues));
+                }
+                
+                return response;
+            }, cancellationToken);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _httpClient?.Dispose();
+                }
+                _disposed = true;
+            }
+        }
+
+        public async Task<AgentRunResponse> RunAgentAsync(string input, int? maxIterations = null)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                throw new ArgumentException("Input cannot be null or whitespace", nameof(input));
+            }
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(_options.TimeoutSeconds));
+            
+            try
+            {
+                var request = new AgentRunRequest
+                {
+                    Input = input,
+                    MaxIterations = maxIterations
+                };
+
+                var content = new StringContent(
+                    JsonSerializer.Serialize(request),
+                    Encoding.UTF8,
+                    "application/json");
+
+                var response = await ExecuteWithResilienceAsync(
+                    () => _httpClient.PostAsync("agent/run", content, cts.Token),
+                    cts.Token);
+
+                response.EnsureSuccessStatusCode();
+                
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<AgentRunResponse>(
+                    responseContent,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                
+                _logger.LogInformation("Agent run completed in {Iterations} iterations", result?.Iterations);
+                return result;
             }
             catch (Exception ex)
             {
