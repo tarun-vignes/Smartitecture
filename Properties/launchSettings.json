@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Smartitecture": {
+      "commandName": "Project",
+      "nativeDebugging": false,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

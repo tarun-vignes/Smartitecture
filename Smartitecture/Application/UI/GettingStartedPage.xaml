@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Smartitecture.UI.GettingStartedPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Padding="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Logo and Header -->
+        <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,20,0,30">
+            <!-- Smartitecture Logo -->
+            <Rectangle Width="120" Height="120" 
+                       Fill="{StaticResource SmartitectureLogoBrush}" 
+                       Margin="0,0,0,16"/>
+            
+            <!-- Welcome Text -->
+            <TextBlock Text="Welcome to Smartitecture" 
+                       Style="{StaticResource TitleTextBlockStyle}" 
+                       FontSize="32"
+                       HorizontalAlignment="Center"/>
+            
+            <!-- Tagline -->
+            <TextBlock Text="Intelligent System Understanding" 
+                       Style="{StaticResource SubtitleTextBlockStyle}" 
+                       FontSize="20"
+                       Opacity="0.8"
+                       HorizontalAlignment="Center"
+                       Margin="0,8,0,0"/>
+        </StackPanel>
+
+        <!-- Introduction -->
+        <Border Grid.Row="1" 
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                BorderThickness="1" 
+                CornerRadius="8" 
+                Padding="20" 
+                Margin="0,0,0,24">
+            <TextBlock TextWrapping="Wrap" 
+                       FontSize="18" 
+                       LineHeight="28" 
+                       HorizontalAlignment="Center" 
+                       TextAlignment="Center">
+                AIPal is designed to help you use your computer more easily.
+                <LineBreak/>
+                <LineBreak/>
+                Think of me as a friendly helper who's always ready to assist you
+                with your computer questions and problems.
+            </TextBlock>
+        </Border>
+
+        <!-- Main content area -->
+        <ScrollViewer Grid.Row="2">
+            <StackPanel Spacing="24" MaxWidth="800">
+
+                <!-- How to Use -->
+                <StackPanel Spacing="16">
+                    <TextBlock Text="How to Use AIPal" 
+                               Style="{StaticResource SubtitleTextBlockStyle}" 
+                               FontSize="20"/>
+                    
+                    <!-- Chat Feature -->
+                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                                BorderThickness="1" CornerRadius="8" Padding="16">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE8BD;" FontSize="24"/>
+                            <TextBlock Text="Ask Any Question" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
+                            Click on "Chat" and type any computer question. For example:
+                            <LineBreak/><LineBreak/>
+                            • "How do I print a document?"
+                            <LineBreak/>
+                            • "Why is my computer slow?"
+                            <LineBreak/>
+                            • "How do I send an email with a photo?"
+                            <LineBreak/><LineBreak/>
+                            I'll give you simple, easy-to-follow answers.
+                        </TextBlock>
+                        <Button Content="Go to Chat" Click="GoToChat_Click" Style="{StaticResource AccentButtonStyle}"/>
+                    </StackPanel>
+                    
+                    <!-- Security Feature -->
+                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                                BorderThickness="1" CornerRadius="8" Padding="16">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE72E;" FontSize="24"/>
+                            <TextBlock Text="Keep Your Computer Safe" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
+                            I can help protect you from scams and keep your computer running well:
+                            <LineBreak/><LineBreak/>
+                            • Check if a popup or message is a scam
+                            <LineBreak/>
+                            • Make your computer run faster
+                            <LineBreak/>
+                            • Explain what security messages mean
+                        </TextBlock>
+                        <Button Content="Computer Security" Click="GoToSecurity_Click" Style="{StaticResource AccentButtonStyle}"/>
+                    </StackPanel>
+                    
+                    <!-- Screen Analysis Feature -->
+                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                                BorderThickness="1" CornerRadius="8" Padding="16">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE7F4;" FontSize="24"/>
+                            <TextBlock Text="Understand What You See" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
+                            If you see something confusing on your screen, I can help explain it:
+                            <LineBreak/><LineBreak/>
+                            • Explain what a message or popup means
+                            <LineBreak/>
+                            • Help you find the right button to click
+                            <LineBreak/>
+                            • Read text that's hard to see
+                        </TextBlock>
+                        <Button Content="Screen Help" Click="GoToScreenAnalysis_Click" Style="{StaticResource AccentButtonStyle}"/>
+                    </StackPanel>
+                    
+                    <!-- Agent Feature -->
+                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                                BorderThickness="1" CornerRadius="8" Padding="16">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <FontIcon Glyph="&#xE77B;" FontSize="24"/>
+                            <TextBlock Text="Let Me Help You Directly" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
+                            I can take actions to help you with your computer:
+                            <LineBreak/><LineBreak/>
+                            • Find files for you
+                            <LineBreak/>
+                            • Get information from the internet
+                            <LineBreak/>
+                            • Check the weather or news
+                        </TextBlock>
+                        <Button Content="Computer Assistant" Click="GoToAgent_Click" Style="{StaticResource AccentButtonStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Common Tasks -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Common Computer Tasks" 
+                               Style="{StaticResource SubtitleTextBlockStyle}" 
+                               FontSize="20"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
+                        Click on any of these common tasks for help:
+                    </TextBlock>
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Button Content="Email Help" Grid.Column="0" Grid.Row="0" Margin="4" HorizontalAlignment="Stretch" Click="CommonTask_Click" Tag="email"/>
+                        <Button Content="Printing Help" Grid.Column="1" Grid.Row="0" Margin="4" HorizontalAlignment="Stretch" Click="CommonTask_Click" Tag="printing"/>
+                        <Button Content="Internet Help" Grid.Column="0" Grid.Row="1" Margin="4" HorizontalAlignment="Stretch" Click="CommonTask_Click" Tag="internet"/>
+                        <Button Content="Photos Help" Grid.Column="1" Grid.Row="1" Margin="4" HorizontalAlignment="Stretch" Click="CommonTask_Click" Tag="photos"/>
+                        <Button Content="Files Help" Grid.Column="0" Grid.Row="2" Margin="4" HorizontalAlignment="Stretch" Click="CommonTask_Click" Tag="files"/>
+                        <Button Content="Video Calls" Grid.Column="1" Grid.Row="2" Margin="4" HorizontalAlignment="Stretch" Click="CommonTask_Click" Tag="video calls"/>
+                    </Grid>
+                </StackPanel>
+
+                <!-- Emergency Help -->
+                <StackPanel Spacing="8" Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}" Padding="16" CornerRadius="8">
+                    <TextBlock Text="Need Urgent Help?" 
+                               Style="{StaticResource SubtitleTextBlockStyle}" 
+                               FontSize="20"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
+                        If you think you might have been scammed or if your computer is not working properly:
+                    </TextBlock>
+                    <Button Content="Get Emergency Help" Click="EmergencyHelp_Click" Style="{StaticResource AccentButtonStyle}" Margin="0,8,0,0"/>
+                </StackPanel>
+
+                <!-- Footer -->
+                <TextBlock TextWrapping="Wrap" FontSize="14" Opacity="0.7" Margin="0,16,0,0">
+                    AIPal is here to help you use your computer with confidence. If you ever feel confused or stuck, just ask me for help!
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
