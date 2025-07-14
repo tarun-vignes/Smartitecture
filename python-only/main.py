@@ -1,6 +1,7 @@
 import sys
 import asyncio
-from PyQt5.QtWidgets import QApplication
+import os
+from PyQt6.QtWidgets import QApplication
 from smartitecture.core.startup import configure_services
 from smartitecture.ui.main_window import SmartitectureMainWindow
 
