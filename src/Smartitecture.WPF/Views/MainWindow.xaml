@@ -1,0 +1,164 @@
+<Window x:Class="Smartitecture.WPF.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Smartitecture - AI-Powered Computer Interface" 
+        Height="800" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="#FF1A1A1A">
+    
+    <Window.Resources>
+        <Style x:Key="ModernTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#FF2D2D2D"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FF404040"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+        
+        <Style x:Key="ModernButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF007ACC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF005A9E"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF004578"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="StatusTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FFCCCCCC"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#FF2D2D2D" Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Smartitecture" 
+                             FontSize="24" 
+                             FontWeight="Bold" 
+                             Foreground="White"/>
+                    <TextBlock Text="AI-Powered Computer Interface" 
+                             FontSize="14" 
+                             Foreground="#FFCCCCCC"/>
+                </StackPanel>
+                
+                <TextBlock Grid.Column="1" 
+                         Text="{Binding StatusMessage}" 
+                         Style="{StaticResource StatusTextStyle}"
+                         VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Input Section -->
+            <TextBlock Grid.Row="0" 
+                     Text="Tell me what you want to do:" 
+                     FontSize="16" 
+                     FontWeight="SemiBold" 
+                     Foreground="White" 
+                     Margin="0,0,0,10"/>
+
+            <Border Grid.Row="1" 
+                  Background="#FF2D2D2D" 
+                  BorderBrush="#FF404040" 
+                  BorderThickness="1" 
+                  CornerRadius="5" 
+                  Margin="0,0,0,20">
+                <TextBox Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"
+                       Style="{StaticResource ModernTextBoxStyle}"
+                       TextWrapping="Wrap"
+                       AcceptsReturn="True"
+                       VerticalScrollBarVisibility="Auto"
+                       BorderThickness="0"
+                       Background="Transparent"/>
+            </Border>
+
+            <!-- Action Buttons -->
+            <StackPanel Grid.Row="2" 
+                      Orientation="Horizontal" 
+                      HorizontalAlignment="Right" 
+                      Margin="0,0,0,20">
+                <Button Content="Clear" 
+                      Command="{Binding ClearCommand}"
+                      Style="{StaticResource ModernButtonStyle}"
+                      Background="#FF666666"
+                      Margin="0,0,10,0"/>
+                <Button Content="Process" 
+                      Command="{Binding ProcessCommand}"
+                      Style="{StaticResource ModernButtonStyle}"
+                      IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBooleanConverter}}"/>
+            </StackPanel>
+
+            <!-- Output Section -->
+            <Border Grid.Row="3" 
+                  Background="#FF2D2D2D" 
+                  BorderBrush="#FF404040" 
+                  BorderThickness="1" 
+                  CornerRadius="5">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <TextBlock Text="{Binding OutputText}"
+                             Foreground="White"
+                             FontSize="14"
+                             FontFamily="Consolas"
+                             Padding="15"
+                             TextWrapping="Wrap"/>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- Progress Indicator -->
+        <ProgressBar Grid.Row="2" 
+                   Height="3" 
+                   Background="#FF404040"
+                   Foreground="#FF007ACC"
+                   IsIndeterminate="{Binding IsProcessing}"
+                   Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    </Grid>
+</Window>
