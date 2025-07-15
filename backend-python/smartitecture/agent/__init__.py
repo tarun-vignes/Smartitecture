@@ -1,4 +1,4 @@
-""
+"""
 Agent module for the Smartitecture application.
 
 This module contains the implementation of the ReAct agent framework
