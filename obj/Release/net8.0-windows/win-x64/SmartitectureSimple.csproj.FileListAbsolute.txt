@@ -478,3 +478,4 @@ C:\projects\SmartitectureSimple\obj\Release\net8.0-windows\win-x64\refint\Smarti
 C:\projects\SmartitectureSimple\obj\Release\net8.0-windows\win-x64\SmartitectureSimple.pdb
 C:\projects\SmartitectureSimple\obj\Release\net8.0-windows\win-x64\SmartitectureSimple.genruntimeconfig.cache
 C:\projects\SmartitectureSimple\obj\Release\net8.0-windows\win-x64\ref\SmartitectureSimple.dll
+C:\projects\SmartitectureSimple\obj\Release\net8.0-windows\win-x64\SmartitectureSimple.sourcelink.json

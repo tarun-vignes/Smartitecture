@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartitectureSimple")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae8773abc0453b20495bdb40155336381373a9a6")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartitectureSimple")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartitectureSimple")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
