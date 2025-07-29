@@ -1,0 +1,8 @@
+C:\projects\SmartitectureSimple\output\SmartitectureSimple.pdb
+C:\projects\SmartitectureSimple\output\minimal_server.py
+C:\projects\SmartitectureSimple\output\D3DCompiler_47_cor3.dll
+C:\projects\SmartitectureSimple\output\PenImc_cor3.dll
+C:\projects\SmartitectureSimple\output\PresentationNative_cor3.dll
+C:\projects\SmartitectureSimple\output\vcruntime140_cor3.dll
+C:\projects\SmartitectureSimple\output\wpfgfx_cor3.dll
+C:\projects\SmartitectureSimple\output\SmartitectureSimple.exe
