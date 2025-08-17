@@ -1,0 +1,259 @@
+<Window x:Class="SmartitectureSimple.WorkflowDesignerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Workflow Designer - Smartitecture" 
+        Height="800" Width="1200"
+        WindowStartupLocation="CenterOwner"
+        Background="#FF2D2D30">
+    
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+        
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#007ACC"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1F8AD4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#005A9E"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="#FF3F3F46"/>
+            <Setter Property="BorderBrush" Value="#FF686868"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="3"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF007ACC"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#FF0E639C"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Toolbar -->
+        <ToolBar Grid.Row="0" Background="#FF3F3F46" BorderBrush="#FF686868">
+            <Button Name="NewWorkflowButton" Content="🆕 New" Click="NewWorkflowButton_Click" ToolTip="Create new workflow"/>
+            <Button Name="OpenWorkflowButton" Content="📂 Open" Click="OpenWorkflowButton_Click" ToolTip="Open existing workflow"/>
+            <Button Name="SaveWorkflowButton" Content="💾 Save" Click="SaveWorkflowButton_Click" ToolTip="Save current workflow"/>
+            <Separator/>
+            <Button Name="RunWorkflowButton" Content="▶️ Run" Click="RunWorkflowButton_Click" ToolTip="Execute workflow"/>
+            <Button Name="StopWorkflowButton" Content="⏹️ Stop" Click="StopWorkflowButton_Click" ToolTip="Stop execution" IsEnabled="False"/>
+            <Separator/>
+            <Button Name="ValidateWorkflowButton" Content="✅ Validate" Click="ValidateWorkflowButton_Click" ToolTip="Validate workflow"/>
+            <Separator/>
+            <TextBlock Text="Zoom:" VerticalAlignment="Center" Margin="10,0,5,0"/>
+            <Slider Name="ZoomSlider" Width="100" Minimum="0.25" Maximum="2.0" Value="1.0" 
+                    VerticalAlignment="Center" ValueChanged="ZoomSlider_ValueChanged"/>
+            <TextBlock Name="ZoomLabel" Text="100%" VerticalAlignment="Center" Margin="5,0,0,0"/>
+        </ToolBar>
+        
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Node Toolbox -->
+            <Border Grid.Column="0" Background="#FF252526" BorderBrush="#FF686868" BorderThickness="0,0,1,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Text="🧰 Toolbox" FontSize="16" FontWeight="Bold" 
+                               Margin="10" HorizontalAlignment="Center"/>
+                    
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="Action Nodes" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <ListBox Name="ActionNodesListBox" BorderThickness="0" Background="Transparent">
+                                <ListBoxItem Content="📸 Screenshot" Tag="Screenshot"/>
+                                <ListBoxItem Content="🧮 Calculator" Tag="Calculator"/>
+                                <ListBoxItem Content="💻 System Info" Tag="SystemInfo"/>
+                                <ListBoxItem Content="⏱️ Delay" Tag="Delay"/>
+                            </ListBox>
+                            
+                            <TextBlock Text="Control Nodes" FontWeight="Bold" Margin="0,20,0,5"/>
+                            <ListBox Name="ControlNodesListBox" BorderThickness="0" Background="Transparent">
+                                <ListBoxItem Content="🔀 Decision" Tag="Decision"/>
+                                <ListBoxItem Content="🔄 Loop" Tag="Loop"/>
+                                <ListBoxItem Content="📥 Input" Tag="Input"/>
+                                <ListBoxItem Content="📤 Output" Tag="Output"/>
+                            </ListBox>
+                            
+                            <TextBlock Text="Coming Soon..." FontStyle="Italic" Foreground="Gray" 
+                                       Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+            
+            <GridSplitter Grid.Column="1" Width="5" Background="#FF686868" HorizontalAlignment="Stretch"/>
+            
+            <!-- Workflow Canvas -->
+            <Border Grid.Column="2" Background="#FF1E1E1E" BorderBrush="#FF686868" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Name="WorkflowNameLabel" Text="📋 New Workflow" 
+                               FontSize="16" FontWeight="Bold" Margin="10,5" HorizontalAlignment="Center"/>
+                    
+                    <ScrollViewer Grid.Row="1" Name="CanvasScrollViewer" 
+                                  HorizontalScrollBarVisibility="Auto" 
+                                  VerticalScrollBarVisibility="Auto">
+                        <Canvas Name="WorkflowCanvas" 
+                                Width="2000" Height="2000"
+                                AllowDrop="True"
+                                Drop="WorkflowCanvas_Drop"
+                                DragOver="WorkflowCanvas_DragOver"
+                                MouseLeftButtonDown="WorkflowCanvas_MouseLeftButtonDown">
+                            
+                            <!-- Grid background -->
+                            <Canvas.Background>
+                                <DrawingBrush TileMode="Tile" Viewport="0,0,20,20" ViewportUnits="Absolute">
+                                    <DrawingBrush.Drawing>
+                                        <GeometryDrawing>
+                                            <GeometryDrawing.Geometry>
+                                                <RectangleGeometry Rect="0,0,20,20"/>
+                                            </GeometryDrawing.Geometry>
+                                            <GeometryDrawing.Pen>
+                                                <Pen Brush="#FF333333" Thickness="0.5"/>
+                                            </GeometryDrawing.Pen>
+                                        </GeometryDrawing>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Canvas.Background>
+                            
+                        </Canvas>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+            
+            <GridSplitter Grid.Column="3" Width="5" Background="#FF686868" HorizontalAlignment="Stretch"/>
+            
+            <!-- Properties Panel -->
+            <Border Grid.Column="4" Background="#FF252526" BorderBrush="#FF686868" BorderThickness="1,0,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="200"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Text="⚙️ Properties" FontSize="16" FontWeight="Bold" 
+                               Margin="10" HorizontalAlignment="Center"/>
+                    
+                    <ScrollViewer Grid.Row="1" Name="PropertiesScrollViewer" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Name="PropertiesPanel" Margin="10">
+                            <TextBlock Text="Select a node to view properties" 
+                                       FontStyle="Italic" Foreground="Gray" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                    
+                    <GridSplitter Grid.Row="2" Height="5" Background="#FF686868" HorizontalAlignment="Stretch"/>
+                    
+                    <!-- Execution Log -->
+                    <Grid Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Grid.Row="0" Text="📋 Execution Log" FontSize="14" FontWeight="Bold" 
+                                   Margin="10,5" HorizontalAlignment="Center"/>
+                        
+                        <ScrollViewer Grid.Row="1" Name="LogScrollViewer" VerticalScrollBarVisibility="Auto">
+                            <TextBlock Name="ExecutionLogTextBlock" 
+                                       Background="#FF1E1E1E" 
+                                       Foreground="#FFCCCCCC"
+                                       FontFamily="Consolas"
+                                       FontSize="11"
+                                       Padding="10"
+                                       TextWrapping="Wrap"
+                                       Text="Ready to execute workflow..."/>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="2" Background="#FF007ACC" Height="25">
+            <StatusBarItem>
+                <TextBlock Name="StatusLabel" Text="Ready" Foreground="White"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Name="NodeCountLabel" Text="Nodes: 0" Foreground="White" Margin="0,0,10,0"/>
+                    <TextBlock Name="ConnectionCountLabel" Text="Connections: 0" Foreground="White"/>
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
