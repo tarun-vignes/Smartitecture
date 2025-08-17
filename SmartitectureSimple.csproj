@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <Nullable>enable</Nullable>
+    
+    <!-- Professional Product Metadata -->
+    <AssemblyName>Smartitecture</AssemblyName>
+    <Product>Smartitecture</Product>
+    <AssemblyTitle>Smartitecture - AI Agent Desktop Application</AssemblyTitle>
+    <AssemblyDescription>Professional AI agent for Windows automation and intelligent task execution</AssemblyDescription>
+    <AssemblyCompany>Smartitecture Technologies</AssemblyCompany>
+    <AssemblyCopyright>Copyright 2025 Smartitecture Technologies</AssemblyCopyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="minimal_server.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
