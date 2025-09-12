@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="Smartitecture.UI.GettingStartedPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -6,9 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="#FF1A1A1A">
 
-    <Grid Padding="16">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -39,8 +39,8 @@
 
         <!-- Introduction -->
         <Border Grid.Row="1" 
-                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
-                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                Background="#FF2D2D30" 
+                BorderBrush="#FF3F3F46" 
                 BorderThickness="1" 
                 CornerRadius="8" 
                 Padding="20" 
@@ -60,19 +60,19 @@
 
         <!-- Main content area -->
         <ScrollViewer Grid.Row="2">
-            <StackPanel Spacing="24" MaxWidth="800">
+            <StackPanel MaxWidth="800">
 
                 <!-- How to Use -->
-                <StackPanel Spacing="16">
+                <StackPanel>
                     <TextBlock Text="How to Use AIPal" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
                     
                     <!-- Chat Feature -->
-                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                BorderThickness="1" CornerRadius="8" Padding="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE8BD;" FontSize="24"/>
+                    <StackPanel 
+                                Margin="16">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8BD;" FontSize="24"/>
                             <TextBlock Text="Ask Any Question" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
                         </StackPanel>
                         <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
@@ -90,10 +90,10 @@
                     </StackPanel>
                     
                     <!-- Security Feature -->
-                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                BorderThickness="1" CornerRadius="8" Padding="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE72E;" FontSize="24"/>
+                    <StackPanel 
+                                Margin="16">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE72E;" FontSize="24"/>
                             <TextBlock Text="Keep Your Computer Safe" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
                         </StackPanel>
                         <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
@@ -109,10 +109,10 @@
                     </StackPanel>
                     
                     <!-- Screen Analysis Feature -->
-                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                BorderThickness="1" CornerRadius="8" Padding="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE7F4;" FontSize="24"/>
+                    <StackPanel 
+                                Margin="16">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE7F4;" FontSize="24"/>
                             <TextBlock Text="Understand What You See" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
                         </StackPanel>
                         <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
@@ -128,10 +128,10 @@
                     </StackPanel>
                     
                     <!-- Agent Feature -->
-                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                BorderThickness="1" CornerRadius="8" Padding="16">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <FontIcon Glyph="&#xE77B;" FontSize="24"/>
+                    <StackPanel 
+                                Margin="16">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE77B;" FontSize="24"/>
                             <TextBlock Text="Let Me Help You Directly" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
                         </StackPanel>
                         <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
@@ -148,7 +148,7 @@
                 </StackPanel>
 
                 <!-- Common Tasks -->
-                <StackPanel Spacing="8">
+                <StackPanel>
                     <TextBlock Text="Common Computer Tasks" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
@@ -176,7 +176,7 @@
                 </StackPanel>
 
                 <!-- Emergency Help -->
-                <StackPanel Spacing="8" Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}" Padding="16" CornerRadius="8">
+                <StackPanel Background="#FFFF4444" Margin="16">
                     <TextBlock Text="Need Urgent Help?" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
@@ -194,3 +194,5 @@
         </ScrollViewer>
     </Grid>
 </Page>
+
+

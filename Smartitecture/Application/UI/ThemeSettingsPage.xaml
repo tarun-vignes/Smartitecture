@@ -6,9 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="#FF1A1A1A">
 
-    <Grid Padding="16">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -19,9 +19,9 @@
 
         <!-- Main content area -->
         <ScrollViewer Grid.Row="1">
-            <StackPanel Spacing="24" MaxWidth="800">
+            <StackPanel MaxWidth="800">
                 <!-- Introduction -->
-                <StackPanel Spacing="8">
+                <StackPanel>
                     <TextBlock Text="Customize AIPal's Look" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="24"/>
@@ -31,19 +31,19 @@
                 </StackPanel>
 
                 <!-- Theme Selection -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <StackPanel 
+                            Margin="16">
                     <TextBlock Text="Color Theme" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
                     
-                    <StackPanel Spacing="16">
+                    <StackPanel>
                         <!-- Theme Options -->
-                        <RadioButtons x:Name="ThemeRadioButtons" SelectionChanged="ThemeRadioButtons_SelectionChanged">
+                        <StackPanel x:Name="ThemeRadioButtons">
                             <RadioButton x:Name="SystemThemeRadioButton" Content="Use System Setting" Tag="System">
                                 <RadioButton.ContentTemplate>
                                     <DataTemplate>
-                                        <StackPanel Spacing="4">
+                                        <StackPanel>
                                             <TextBlock Text="Use System Setting" FontWeight="SemiBold" FontSize="16"/>
                                             <TextBlock Text="AIPal will match your Windows theme setting" 
                                                        FontSize="14" Opacity="0.8" TextWrapping="Wrap"/>
@@ -55,7 +55,7 @@
                             <RadioButton x:Name="LightThemeRadioButton" Content="Light Mode" Tag="Light">
                                 <RadioButton.ContentTemplate>
                                     <DataTemplate>
-                                        <StackPanel Spacing="4">
+                                        <StackPanel>
                                             <TextBlock Text="Light Mode" FontWeight="SemiBold" FontSize="16"/>
                                             <TextBlock Text="Bright background with dark text (good for daytime)" 
                                                        FontSize="14" Opacity="0.8" TextWrapping="Wrap"/>
@@ -67,7 +67,7 @@
                             <RadioButton x:Name="DarkThemeRadioButton" Content="Dark Mode" Tag="Dark">
                                 <RadioButton.ContentTemplate>
                                     <DataTemplate>
-                                        <StackPanel Spacing="4">
+                                        <StackPanel>
                                             <TextBlock Text="Dark Mode" FontWeight="SemiBold" FontSize="16"/>
                                             <TextBlock Text="Dark background with light text (easier on the eyes at night)" 
                                                        FontSize="14" Opacity="0.8" TextWrapping="Wrap"/>
@@ -75,7 +75,7 @@
                                     </DataTemplate>
                                 </RadioButton.ContentTemplate>
                             </RadioButton>
-                        </RadioButtons>
+                        </StackPanel>
                         
                         <!-- Theme Preview -->
                         <Grid Margin="0,16,0,0">
@@ -87,12 +87,12 @@
                             <!-- Light Theme Preview -->
                             <Border Grid.Column="0" 
                                     Background="White" 
-                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                                    BorderBrush="#FF3F3F46" 
                                     BorderThickness="1" 
                                     CornerRadius="8" 
                                     Margin="0,0,8,0"
                                     Padding="12">
-                                <StackPanel Spacing="8">
+                                <StackPanel>
                                     <TextBlock Text="Light Mode" Foreground="Black" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                                     <Rectangle Height="1" Fill="#E0E0E0"/>
                                     <TextBlock Text="Sample text in light mode" Foreground="Black" TextWrapping="Wrap"/>
@@ -103,12 +103,12 @@
                             <!-- Dark Theme Preview -->
                             <Border Grid.Column="1" 
                                     Background="#202020" 
-                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                                    BorderBrush="#FF3F3F46" 
                                     BorderThickness="1" 
                                     CornerRadius="8" 
                                     Margin="8,0,0,0"
                                     Padding="12">
-                                <StackPanel Spacing="8">
+                                <StackPanel>
                                     <TextBlock Text="Dark Mode" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                                     <Rectangle Height="1" Fill="#505050"/>
                                     <TextBlock Text="Sample text in dark mode" Foreground="White" TextWrapping="Wrap"/>
@@ -120,22 +120,21 @@
                 </StackPanel>
                 
                 <!-- Quick Theme Toggle -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <StackPanel 
+                            Margin="16">
                     <TextBlock Text="Quick Theme Toggle" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
                     
-                    <StackPanel Spacing="16">
+                    <StackPanel>
                         <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
                             You can quickly switch between light and dark mode using this toggle:
                         </TextBlock>
                         
-                        <ToggleSwitch x:Name="ThemeToggleSwitch" 
-                                     Header="Dark Mode" 
-                                     OnContent="On" 
-                                     OffContent="Off"
-                                     Toggled="ThemeToggleSwitch_Toggled"/>
+                        <CheckBox x:Name="ThemeToggleSwitch" 
+                                     Content="Dark Mode" 
+                                     Checked="ThemeToggleSwitch_Toggled"
+                                     Unchecked="ThemeToggleSwitch_Toggled"/>
                         
                         <TextBlock TextWrapping="Wrap" FontSize="14" Opacity="0.8">
                             Tip: Dark mode is often easier on the eyes, especially in low light.
@@ -144,22 +143,21 @@
                 </StackPanel>
                 
                 <!-- Color Accent -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <StackPanel 
+                            Margin="16">
                     <TextBlock Text="Color Accent" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
                     
-                    <StackPanel Spacing="16">
+                    <StackPanel>
                         <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
                             Choose a color accent for buttons and highlights:
                         </TextBlock>
                         
-                        <GridView x:Name="AccentColorGridView" 
-                                 SelectionMode="Single"
+                        <ListBox x:Name="AccentColorGridView" 
                                  SelectionChanged="AccentColorGridView_SelectionChanged"
                                  HorizontalAlignment="Center">
-                            <GridView.ItemTemplate>
+                            <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Margin="8">
                                         <Ellipse Width="40" Height="40" Fill="{Binding Color}"/>
@@ -167,13 +165,13 @@
                                                  Visibility="{Binding IsSelected}"/>
                                     </Grid>
                                 </DataTemplate>
-                            </GridView.ItemTemplate>
-                            <GridView.ItemsPanel>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <ItemsWrapGrid MaximumRowsOrColumns="5" Orientation="Horizontal"/>
+                                    <WrapPanel Orientation="Horizontal"/>
                                 </ItemsPanelTemplate>
-                            </GridView.ItemsPanel>
-                        </GridView>
+                            </ListBox.ItemsPanel>
+                        </ListBox>
                         
                         <TextBlock TextWrapping="Wrap" FontSize="14" Opacity="0.8">
                             Note: Accent color changes will take effect after restarting AIPal.
@@ -197,3 +195,8 @@
         </ScrollViewer>
     </Grid>
 </Page>
+
+
+
+
+

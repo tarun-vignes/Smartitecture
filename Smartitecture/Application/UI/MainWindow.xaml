@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
 MainWindow.xaml
 Main window of the Smartitecture application.
@@ -10,7 +10,7 @@ Implements a modern interface with navigation between:
     x:Class="Smartitecture.UI.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Smartitecture.UI"
+    xmlns:local="clr-namespace:Smartitecture.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -53,80 +53,32 @@ Implements a modern interface with navigation between:
                          VerticalAlignment="Center"
                          Click="ThemeToggleButton_Click"
                          ToolTipService.ToolTip="Toggle Light/Dark Mode">
-                <FontIcon x:Name="ThemeIcon" Glyph="&#xE793;"/> <!-- Moon icon -->
+                <TextBlock x:Name="ThemeIcon" Text="🌙" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/> <!-- Moon icon -->
             </ToggleButton>
         </Grid>
 
-        <!-- Navigation view for switching between chat and agent interfaces -->
-        <NavigationView x:Name="NavView" 
-                         Grid.Row="1"
-                         IsSettingsVisible="False"
-                         IsBackButtonVisible="Collapsed"
-                         SelectionChanged="NavView_SelectionChanged"
-                         PaneDisplayMode="Top">
+        <!-- Simple TabControl for navigation -->
+        <TabControl x:Name="MainTabControl" Grid.Row="1">
+            <TabItem Header="🏠 Getting Started" Tag="GettingStartedPage">
+                <Frame x:Name="GettingStartedFrame" NavigationUIVisibility="Hidden"/>
+            </TabItem>
             
-            <!-- Navigation menu items -->
-            <NavigationView.MenuItems>
-                <NavigationViewItem Content="Getting Started" Tag="GettingStartedPage" IsSelected="True">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE80F;"/> <!-- Home icon -->
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                
-                <NavigationViewItem Content="Chat" Tag="ChatPage">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE8BD;"/> <!-- Chat icon -->
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                
-                <NavigationViewItem Content="Agent" Tag="AgentPage">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE9D9;"/> <!-- Robot/Agent icon -->
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                
-                <NavigationViewItem Content="Security" Tag="SecurityPage">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE72E;"/> <!-- Shield icon -->
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                
-                <NavigationViewItem Content="Screen Help" Tag="ScreenAnalysisPage">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE7F4;"/> <!-- Screen icon -->
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-            </NavigationView.MenuItems>
+            <TabItem Header="💬 Chat" Tag="ChatPage">
+                <Frame x:Name="ChatFrame" NavigationUIVisibility="Hidden"/>
+            </TabItem>
             
-            <!-- Settings menu items -->
-            <NavigationView.FooterMenuItems>
-                <NavigationViewItem Content="Appearance" Tag="ThemeSettingsPage">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE790;"/> <!-- Color icon -->
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                
-                <NavigationViewItem Content="Language" Tag="LanguageSettingsPage">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE774;"/> <!-- Globe icon -->
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                
-                <NavigationViewItem Content="Accessibility" Tag="AccessibilitySettingsPage">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE776;"/> <!-- Accessibility icon -->
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-            </NavigationView.FooterMenuItems>
+            <TabItem Header="🤖 Agent" Tag="AgentPage">
+                <Frame x:Name="AgentFrame" NavigationUIVisibility="Hidden"/>
+            </TabItem>
             
-            <!-- Content frame for page navigation -->
-            <Frame x:Name="ContentFrame" Padding="0,0,0,0">
-                <Frame.ContentTransitions>
-                    <TransitionCollection>
-                        <NavigationThemeTransition/>
-                    </TransitionCollection>
-                </Frame.ContentTransitions>
-            </Frame>
-        </NavigationView>
+            <TabItem Header="🛡️ Security" Tag="SecurityPage">
+                <Frame x:Name="SecurityFrame" NavigationUIVisibility="Hidden"/>
+            </TabItem>
+            
+            <TabItem Header="🖥️ Screen Help" Tag="ScreenAnalysisPage">
+                <Frame x:Name="ScreenAnalysisFrame" NavigationUIVisibility="Hidden"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
+

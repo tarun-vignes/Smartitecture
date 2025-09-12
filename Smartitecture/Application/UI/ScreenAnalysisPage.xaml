@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="AIPal.UI.ScreenAnalysisPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodels="using:AIPal.ViewModels"
-    xmlns:converters="using:AIPal.ViewModels.Converters"
+    xmlns:viewmodels="clr-namespace:Smartitecture.ViewModels"
+    xmlns:converters="clr-namespace:Smartitecture.ViewModels.Converters"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="#FF1A1A1A">
 
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Page.Resources>
 
-    <Grid Padding="16">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -26,22 +26,23 @@
 
         <!-- Main content area -->
         <ScrollViewer Grid.Row="1">
-            <StackPanel Spacing="16">
-                <InfoBar
-                    IsOpen="True"
-                    Severity="Informational"
-                    Title="Screen Analysis Feature"
-                    Message="AIPal can analyze what's on your screen without taking screenshots. This helps you understand content, identify security issues, or get help with navigation."
-                    IsClosable="False"/>
+            <StackPanel>
+                <Border Background="#FF0078D4" CornerRadius="4" Padding="12" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="Screen Analysis Feature" FontWeight="Bold" Foreground="White" Margin="0,0,0,4"/>
+                        <TextBlock Text="AIPal can analyze what's on your screen without taking screenshots. This helps you understand content, identify security issues, or get help with navigation." 
+                                   TextWrapping="Wrap" Foreground="White"/>
+                    </StackPanel>
+                </Border>
 
                 <!-- Capture options -->
-                <StackPanel Spacing="8" Margin="0,8,0,0">
+                <StackPanel Margin="0,8,0,0">
                     <TextBlock Text="What would you like to analyze?" Style="{StaticResource SubtitleTextBlockStyle}"/>
                     
-                    <RadioButtons x:Name="CaptureTypeRadioButtons">
+                    <StackPanel x:Name="CaptureTypeRadioButtons">
                         <RadioButton x:Name="FullScreenRadioButton" Content="Full Screen" IsChecked="True" />
                         <RadioButton x:Name="ActiveWindowRadioButton" Content="Active Window Only" />
-                    </RadioButtons>
+                    </StackPanel>
                     
                     <TextBlock Text="Analysis Type:" Margin="0,8,0,0"/>
                     <ComboBox x:Name="AnalysisTypeComboBox" Width="200" HorizontalAlignment="Left" SelectedIndex="0">
@@ -59,25 +60,25 @@
                 </StackPanel>
 
                 <!-- Results area -->
-                <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.IsAnalysisResultVisible, Mode=OneWay}">
+                <StackPanel Visibility="{Binding ViewModel.IsAnalysisResultVisible, Mode=OneWay}">
                     <TextBlock Text="Analysis Results" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                    <Border Background="#FF2D2D30" 
+                            BorderBrush="#FF3F3F46" 
                             BorderThickness="1" 
                             CornerRadius="8" 
                             Padding="16">
                         <StackPanel>
-                            <TextBlock Text="{x:Bind ViewModel.AnalysisResultTitle, Mode=OneWay}" 
+                            <TextBlock Text="{Binding ViewModel.AnalysisResultTitle, Mode=OneWay}" 
                                        Style="{StaticResource SubtitleTextBlockStyle}" 
                                        Margin="0,0,0,8"/>
-                            <TextBlock Text="{x:Bind ViewModel.AnalysisResultContent, Mode=OneWay}" 
+                            <TextBlock Text="{Binding ViewModel.AnalysisResultContent, Mode=OneWay}" 
                                        TextWrapping="Wrap"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
 
                 <!-- Help and tips -->
-                <StackPanel Spacing="8" Margin="0,16,0,0">
+                <StackPanel Margin="0,16,0,0">
                     <TextBlock Text="Tips for Using Screen Analysis" Style="{StaticResource SubtitleTextBlockStyle}"/>
                     <TextBlock TextWrapping="Wrap">
                         <Run FontWeight="SemiBold">When to use this feature:</Run><LineBreak/>
@@ -88,13 +89,7 @@
                         • Instead of taking and sending screenshots
                     </TextBlock>
                     
-                    <InfoBar
-                        IsOpen="True"
-                        Severity="Success"
-                        Title="Privacy Note"
-                        Message="Screen captures are processed locally on your computer and are not sent to external servers. Temporary files are automatically deleted."
-                        IsClosable="False"
-                        Margin="0,8,0,0"/>
+                    <Border Background="#FF0078D4" CornerRadius="4" Padding="12"><TextBlock Text="Information" Foreground="White"/></Border>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
@@ -108,3 +103,5 @@
         </StackPanel>
     </Grid>
 </Page>
+
+
