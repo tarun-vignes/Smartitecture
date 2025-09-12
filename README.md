@@ -1,23 +1,34 @@
-# Smartitecture - Your Windows AI Companion
+# Smartitecture - Enterprise Workflow Automation Platform
 
 [![Smartitecture CI](https://github.com/tarun-vignes/Smartitecture/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/tarun-vignes/Smartitecture/actions/workflows/dotnet-desktop.yml)
 
-Smartitecture is a modern Windows desktop application designed to help everyone better understand their computers, avoid scams, and optimize performance. With its AI-powered assistant, Smartitecture provides natural conversation and system task automation in a simple, accessible interface.
+Smartitecture is an enterprise-grade workflow automation platform that combines the power of C# WPF for the frontend with a lightweight Python backend. The application features a professional visual workflow designer with drag-and-drop node creation, connection management, and real-time execution visualization.
 
 ## Technical Overview
 
-Smartitecture is built on .NET 8.0 using a hybrid architecture that combines WinUI 3, WPF, and ASP.NET Core technologies. This document provides a comprehensive technical overview of the codebase structure, architecture, and implementation details for developers joining the project.
+Smartitecture uses a modern hybrid architecture:
+- **Frontend**: C# WPF (.NET 8.0) with MVVM pattern
+- **Backend**: Lightweight Python HTTP server (standard library only)
+- **Communication**: REST API between frontend and backend
+- **Deployment**: Self-contained single-file executable for Windows
 
 ## Architecture
 
-Smartitecture follows a clean architecture pattern with clear separation of concerns:
+Smartitecture follows a hybrid architecture that combines the power of C# WPF with Python's flexibility:
 
-### Core Layers
+### Core Components
 
-1. **UI Layer**: WinUI 3 application with XAML-based UI components
-2. **Application Layer**: Business logic, services, and application workflows
-3. **Domain Layer**: Core business entities and interfaces
-4. **Infrastructure Layer**: External service implementations, data access, and platform-specific code
+1. **Frontend (C# WPF)**
+   - Visual Workflow Designer with drag-and-drop interface
+   - Node-based workflow creation and management
+   - Real-time execution visualization
+   - Properties panel for node configuration
+
+2. **Backend (Python)**
+   - Lightweight HTTP server (standard library only)
+   - Workflow execution engine
+   - Plugin system for extensibility
+   - Cross-platform compatibility
 
 ### Key Architectural Patterns
 
@@ -50,16 +61,17 @@ Smartitecture/
 
 ## Key Technologies
 
-### UI Framework
-- **WinUI 3**: Modern native UI framework for Windows applications
-- **Windows App SDK**: Provides access to Windows platform features
-- **WPF Integration**: For compatibility with existing WPF components
-- **Windows Forms Integration**: For specific system integration scenarios
+### Frontend (C# WPF)
+- **.NET 8.0**: Modern, cross-platform .NET runtime
+- **WPF (Windows Presentation Foundation)**: For rich desktop UI
+- **MVVM Pattern**: Clean separation of UI and business logic
+- **XAML**: Declarative UI definition
 
-### Backend Services
-- **ASP.NET Core**: For hosting internal API endpoints
-- **Azure OpenAI SDK**: For AI-powered features and natural language processing
-- **System.Management**: For WMI access to system information
+### Backend (Python)
+- **Python 3.8+**: Lightweight and cross-platform
+- **Standard Library Only**: No external dependencies required
+- **HTTP Server**: Built-in http.server with request routing
+- **JSON-RPC**: Simple and efficient communication protocol
 
 ### Architecture & Patterns
 - **CommunityToolkit.Mvvm**: MVVM implementation with source generators
@@ -159,16 +171,37 @@ The solution uses MSBuild with custom configuration in `Directory.Build.props`:
 ## Development Environment
 
 ### Requirements
-- Visual Studio 2022 (17.8 or later)
-- .NET SDK 8.0 or later
-- Windows App SDK 1.4 or later
-- Windows 10 version 1809 (build 17763) or later
+- **For Frontend Development**:
+  - Visual Studio 2022 (17.8 or later) or VS Code with C# extensions
+  - .NET SDK 8.0 or later
+  - Windows 10/11
 
-### Required Workloads
-- .NET Desktop Development
-- Universal Windows Platform development
-- Windows App SDK C# Templates
-- ASP.NET and web development
+- **For Backend Development**:
+  - Python 3.8 or later
+  - (Optional) Python virtual environment (recommended)
+
+### Quick Start
+
+1. **Clone the repository**:
+   ```powershell
+   git clone https://github.com/tarun-vignes/Smartitecture.git
+   cd Smartitecture
+   ```
+
+2. **Run the application**:
+   ```powershell
+   # Start the Python backend
+   python backend-python/minimal_server.py
+   
+   # In a separate terminal, start the WPF frontend
+   dotnet run --project SmartitectureSimple
+   ```
+
+3. **For production build**:
+   ```powershell
+   # Publish single-file executable
+   dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o "publish"
+   ```
 
 ## Key Features
 

@@ -7,7 +7,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <!-- XamlControlsResources removed for WPF compatibility -->
                 <!-- Logo resources -->
                 <ResourceDictionary Source="ms-appx:///Assets/Logo/SmartitectureLogo.xaml" />
             </ResourceDictionary.MergedDictionaries>

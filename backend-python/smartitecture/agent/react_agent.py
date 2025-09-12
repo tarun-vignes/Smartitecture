@@ -98,11 +98,13 @@ class ReActAgent(BaseAgent):
 async def create_agent() -> ReActAgent:
     """Create a ReAct agent with default tools."""
     from .tools.sample_tools import CalculatorTool, WebSearchTool, GetCurrentTimeTool
-    
+
     tools = [
         CalculatorTool(),
         WebSearchTool(api_key=None),  # In a real app, you'd provide an API key
         GetCurrentTimeTool()
     ]
+    agent = ReActAgent(tools=tools)
+    return agent
     
     return ReActAgent(tools=tools)

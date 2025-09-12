@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Http.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
@@ -18,7 +19,6 @@ using Smartitecture.Core.Exceptions;
 using Smartitecture.Core.Models;
 using Smartitecture.Core.Options;
 using Smartitecture.Core.Services;
-using Smartitecture.Core.Services.Base;
 
 namespace Smartitecture.Core.DependencyInjection
 {
@@ -44,6 +44,9 @@ namespace Smartitecture.Core.DependencyInjection
 
             // Register the Python backend service
             services.AddSingleton<IPythonBackendService, PythonBackendService>();
+
+            // Register the new API service for communicating with the ReAct agent
+            services.AddHttpClient<IPythonApiService, PythonApiService>();
             services.AddHostedService(provider => (PythonBackendService)provider.GetRequiredService<IPythonBackendService>());
             
             // Configure HTTP client with retry and circuit breaker policies
@@ -75,6 +78,54 @@ namespace Smartitecture.Core.DependencyInjection
                 logging.AddSerilog(dispose: true);
             });
             
+            return services;
+        }
+        
+        /// <summary>
+        /// Adds and configures the core services required by the Smartitecture WPF application (without hosted services).
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
+        /// <param name="configuration">The application configuration.</param>
+        /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+        public static IServiceCollection AddSmartitectureCoreForWpf(this IServiceCollection services, IConfiguration configuration)
+        {
+            if (services == null)
+                throw new ArgumentNullException(nameof(services));
+                
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+
+            // Configure options
+            services.Configure<PythonApiOptions>(
+                configuration.GetSection(PythonApiOptions.SectionName));
+
+            // Register the Python backend service (but NOT as hosted service for WPF)
+            services.AddSingleton<IPythonBackendService, PythonBackendService>();
+
+            // Register the new API service for communicating with the ReAct agent
+            services.AddHttpClient<IPythonApiService, PythonApiService>();
+            
+            // Configure HTTP client with retry and circuit breaker policies
+            services.AddHttpClient<IPythonApiService, PythonApiService>((serviceProvider, client) =>
+            {
+                var options = serviceProvider.GetRequiredService<IOptions<PythonApiOptions>>().Value;
+                client.BaseAddress = new Uri(options.BaseUrl);
+                client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                
+                // Add any additional headers from configuration
+                if (options.Headers != null)
+                {
+                    foreach (var header in options.Headers)
+                    client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                }
+            })
+            .AddPolicyHandler((provider, request) => GetRetryPolicy(provider))
+            .AddPolicyHandler((provider, request) => GetCircuitBreakerPolicy(provider))
+            .AddHttpMessageHandler(provider => new LoggingHttpMessageHandler(
+                provider.GetRequiredService<ILogger<PythonApiService>>()));
+
             return services;
         }
 

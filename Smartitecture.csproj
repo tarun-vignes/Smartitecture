@@ -10,6 +10,20 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>AnyCPU;x86;x64;ARM64</Platforms>
     <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    
+    <!-- Single-file deployment configuration -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    
+    <!-- Application metadata -->
+    <AssemblyTitle>Smartitecture Desktop</AssemblyTitle>
+    <AssemblyDescription>AI-powered Windows automation and productivity application</AssemblyDescription>
+    <AssemblyCompany>Smartitecture</AssemblyCompany>
+    <AssemblyProduct>Smartitecture Desktop</AssemblyProduct>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -49,10 +63,32 @@
 
   <PropertyGroup>
     <EnableDefaultPageItems>false</EnableDefaultPageItems>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   
   <ItemGroup>
-    <None Remove="**\*.xaml" />
-    <Page Include="**\*.xaml" />
+    <!-- Only include files from src/ directory -->
+    <Compile Include="src\**\*.cs" />
+    <Page Include="src\**\*.xaml" />
+    
+    <!-- Exclude all legacy directories -->
+    <Compile Remove="Application\**\*.cs" />
+    <Compile Remove="Smartitecture\**\*.cs" />
+    <Compile Remove="*.Tests\**\*.cs" />
+    <None Remove="Application\**\*" />
+    <None Remove="Smartitecture\**\*" />
+    <None Remove="*.Tests\**\*" />
+    
+    <!-- Embed Python backend for single-file deployment -->
+    <EmbeddedResource Include="backend-python\minimal_server.py" />
+    <Content Include="backend-python\minimal_server.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    
+    <!-- Embed configuration files for single-file deployment -->
+    <Content Include="src\Smartitecture.WPF\appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>appsettings.json</TargetPath>
+    </Content>
   </ItemGroup>
 </Project>

@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="AIPal.UI.LanguageSettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:AIPal.UI"
+    xmlns:local="clr-namespace:AIPal.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Padding="20">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -37,7 +37,7 @@
                 SelectionChanged="LanguagesList_SelectionChanged">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="12" MinWidth="300">
+                        <Grid Margin="12" MinWidth="300">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -71,13 +71,16 @@
         <!-- Loading overlay -->
         <Grid x:Name="LoadingOverlay" 
               Grid.RowSpan="3" 
-              Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
+              Background="#FF2D2D30" 
               Opacity="0.7" 
               Visibility="Collapsed">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <ProgressRing IsActive="True" Width="50" Height="50" Margin="0,0,0,20"/>
+                <ProgressBar IsIndeterminate="True" Width="50" Height="50" Margin="0,0,0,20"/>
                 <TextBlock Text="Changing language..." Style="{StaticResource SubtitleTextBlockStyle}"/>
             </StackPanel>
         </Grid>
     </Grid>
 </Page>
+
+
+

@@ -41,4 +41,24 @@ namespace Smartitecture.Core.Exceptions
         {
         }
     }
+
+    /// <summary>
+    /// Exception thrown when a circuit breaker is in the open state
+    /// </summary>
+    public class BrokenCircuitException : Exception
+    {
+        public BrokenCircuitException()
+        {
+        }
+
+        public BrokenCircuitException(string message) 
+            : base(message)
+        {
+        }
+
+        public BrokenCircuitException(string message, Exception innerException) 
+            : base(message, innerException)
+        {
+        }
+    }
 }

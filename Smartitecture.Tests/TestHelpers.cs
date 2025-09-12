@@ -14,7 +14,7 @@ namespace Smartitecture.Tests
         /// </summary>
         /// <param name="initialData">Optional dictionary of configuration values</param>
         /// <returns>IConfiguration instance for testing</returns>
-        public static IConfiguration CreateTestConfiguration(Dictionary<string, string> initialData = null)
+        public static IConfiguration CreateTestConfiguration(Dictionary<string, string>? initialData = null)
         {
             var configBuilder = new ConfigurationBuilder();
             
@@ -26,7 +26,7 @@ namespace Smartitecture.Tests
             }
             
             // Add in-memory collection if provided
-            if (initialData != null)
+            if (initialData is not null)
             {
                 configBuilder.AddInMemoryCollection(initialData);
             }

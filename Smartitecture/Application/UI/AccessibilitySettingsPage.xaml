@@ -6,9 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="#FF1A1A1A">
 
-    <Grid Padding="16">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -19,9 +19,9 @@
 
         <!-- Main content area -->
         <ScrollViewer Grid.Row="1">
-            <StackPanel Spacing="24" MaxWidth="800">
+            <StackPanel MaxWidth="800">
                 <!-- Introduction -->
-                <StackPanel Spacing="8">
+                <StackPanel>
                     <TextBlock Text="Make Smartitecture Work Better For You" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="24"/>
@@ -31,22 +31,21 @@
                 </StackPanel>
 
                 <!-- Text Size Settings -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <StackPanel 
+                            Margin="16">
                     <TextBlock Text="Text Size" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
                     
-                    <StackPanel Spacing="8">
+                    <StackPanel>
                         <TextBlock Text="Make text easier to read by adjusting its size:" FontSize="16"/>
                         
                         <Slider x:Name="TextSizeSlider" 
-                                Minimum="1" Maximum="3" StepFrequency="0.25" 
+                                Minimum="1" Maximum="3" 
                                 Value="1" 
-                                Header="Text Size"
                                 ValueChanged="TextSizeSlider_ValueChanged"/>
                         
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="24">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="A" FontSize="14" VerticalAlignment="Bottom"/>
                             <TextBlock Text="A" FontSize="20" VerticalAlignment="Bottom"/>
                             <TextBlock Text="A" FontSize="26" VerticalAlignment="Bottom"/>
@@ -61,28 +60,27 @@
                 </StackPanel>
                 
                 <!-- High Contrast Settings -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <StackPanel 
+                            Margin="16">
                     <TextBlock Text="Display Settings" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
                     
-                    <StackPanel Spacing="16">
-                        <ToggleSwitch x:Name="HighContrastToggle" 
-                                     Header="High Contrast Mode" 
-                                     OnContent="On" 
-                                     OffContent="Off"
-                                     Toggled="HighContrastToggle_Toggled"/>
+                    <StackPanel>
+                        <CheckBox x:Name="HighContrastToggle" 
+                                     Content="High Contrast Mode" 
+                                     Checked="HighContrastToggle_Toggled"
+                                     Unchecked="HighContrastToggle_Toggled"/>
                         
                         <TextBlock Text="High contrast mode makes text and buttons easier to see." 
                                    FontSize="16" 
                                    TextWrapping="Wrap"/>
                         
-                        <ToggleSwitch x:Name="ReduceMotionToggle" 
-                                     Header="Reduce Motion" 
-                                     OnContent="On" 
-                                     OffContent="Off"
-                                     Toggled="ReduceMotionToggle_Toggled"/>
+                        <CheckBox x:Name="ReduceMotionToggle" 
+                                     Content="Reduce Motion" 
+                                     
+                                    
+                                     Checked="ReduceMotionToggle_Toggled" Unchecked="ReduceMotionToggle_Toggled"/>
                         
                         <TextBlock Text="Reduces animations and movement that might be distracting." 
                                    FontSize="16" 
@@ -91,30 +89,29 @@
                 </StackPanel>
                 
                 <!-- Reading and Speech Settings -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <StackPanel 
+                            Margin="16">
                     <TextBlock Text="Reading and Speech" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
                     
-                    <StackPanel Spacing="16">
-                        <ToggleSwitch x:Name="ReadAloudToggle" 
-                                     Header="Read Messages Aloud" 
-                                     OnContent="On" 
-                                     OffContent="Off"
-                                     Toggled="ReadAloudToggle_Toggled"/>
+                    <StackPanel>
+                        <CheckBox x:Name="ReadAloudToggle" 
+                                     Content="Read Messages Aloud" 
+                                     
+                                    
+                                     Checked="ReadAloudToggle_Toggled" Unchecked="ReadAloudToggle_Toggled"/>
                         
                         <TextBlock Text="Smartitecture will read its responses out loud to you." 
                                    FontSize="16" 
                                    TextWrapping="Wrap"/>
                         
                         <Slider x:Name="SpeechRateSlider" 
-                                Minimum="0.5" Maximum="2" StepFrequency="0.25" 
+                                Minimum="0.5" Maximum="2" 
                                 Value="1" 
-                                Header="Speech Rate"
                                 ValueChanged="SpeechRateSlider_ValueChanged"/>
                         
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="24">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="Slower" FontSize="14"/>
                             <TextBlock Text="Normal" FontSize="14"/>
                             <TextBlock Text="Faster" FontSize="14"/>
@@ -128,29 +125,24 @@
                 </StackPanel>
                 
                 <!-- Simplified Mode -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <StackPanel 
+                            Margin="16">
                     <TextBlock Text="Simplified Mode" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
                     
-                    <StackPanel Spacing="16">
-                        <ToggleSwitch x:Name="SimplifiedModeToggle" 
-                                     Header="Use Simplified Interface" 
-                                     OnContent="On" 
-                                     OffContent="Off"
-                                     Toggled="SimplifiedModeToggle_Toggled"/>
+                    <StackPanel>
+                        <CheckBox x:Name="SimplifiedModeToggle" 
+                                     Content="Use Simplified Interface" 
+                                     
+                                    
+                                     Checked="SimplifiedModeToggle_Toggled" Unchecked="SimplifiedModeToggle_Toggled"/>
                         
                         <TextBlock Text="Shows fewer options and uses simpler language. Best for beginners or those who prefer a cleaner screen." 
                                    FontSize="16" 
                                    TextWrapping="Wrap"/>
                         
-                        <InfoBar
-                            IsOpen="True"
-                            Severity="Informational"
-                            Title="Restart Required"
-                            Message="Some settings will take effect after restarting Smartitecture."
-                            IsClosable="False"/>
+                        <Border Background="#FF0078D4" CornerRadius="4" Padding="12"><TextBlock Text="Information" Foreground="White"/></Border>
                     </StackPanel>
                 </StackPanel>
                 
@@ -170,3 +162,8 @@
         </ScrollViewer>
     </Grid>
 </Page>
+
+
+
+
+

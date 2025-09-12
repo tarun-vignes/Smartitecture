@@ -1,17 +1,15 @@
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Polly;
+using Smartitecture.Core.Exceptions;
+using Smartitecture.Core.Models;
+using Smartitecture.Core.Options;
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Polly;
-using Polly.CircuitBreaker;
-using Polly.Retry;
-using Smartitecture.Core.Models;
-using Smartitecture.Core.Options;
 
 namespace Smartitecture.Core.Services
 {
@@ -20,8 +18,9 @@ namespace Smartitecture.Core.Services
         private readonly HttpClient _httpClient;
         private readonly ILogger<PythonApiService> _logger;
         private readonly PythonApiOptions _options;
-        private readonly AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
-        private readonly AsyncCircuitBreakerPolicy<HttpResponseMessage> _circuitBreakerPolicy;
+        private readonly string _baseUrl;
+        private readonly Polly.Retry.AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
+        private readonly Polly.CircuitBreaker.AsyncCircuitBreakerPolicy<HttpResponseMessage> _circuitBreakerPolicy;
         private bool _disposed;
 
         public PythonApiService(
@@ -32,9 +31,10 @@ namespace Smartitecture.Core.Services
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _baseUrl = _options.BaseUrl ?? "http://127.0.0.1:8001";
 
             // Configure retry policy
-            _retryPolicy = Policy<HttpResponseMessage>
+            _retryPolicy = Polly.Policy<HttpResponseMessage>
                 .Handle<HttpRequestException>()
                 .OrResult(r => (int)r.StatusCode >= 500 || r.StatusCode == HttpStatusCode.TooManyRequests)
                 .WaitAndRetryAsync(
@@ -50,7 +50,7 @@ namespace Smartitecture.Core.Services
                     });
 
             // Configure circuit breaker policy
-            _circuitBreakerPolicy = Policy<HttpResponseMessage>
+            _circuitBreakerPolicy = Polly.Policy<HttpResponseMessage>
                 .Handle<HttpRequestException>()
                 .OrResult(r => (int)r.StatusCode >= 500)
                 .CircuitBreakerAsync(
@@ -185,7 +185,7 @@ namespace Smartitecture.Core.Services
             CancellationToken cancellationToken)
         {
             // Combine retry and circuit breaker policies
-            var policy = Policy.WrapAsync(_retryPolicy, _circuitBreakerPolicy);
+            var policy = Policy.WrapAsync((Polly.IAsyncPolicy)_retryPolicy, (Polly.IAsyncPolicy)_circuitBreakerPolicy);
             
             return await policy.ExecuteAsync(async (ct) =>
             {
@@ -219,49 +219,6 @@ namespace Smartitecture.Core.Services
                     _httpClient?.Dispose();
                 }
                 _disposed = true;
-            }
-        }
-
-        public async Task<AgentRunResponse> RunAgentAsync(string input, int? maxIterations = null)
-        {
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                throw new ArgumentException("Input cannot be null or whitespace", nameof(input));
-            }
-
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(_options.TimeoutSeconds));
-            
-            try
-            {
-                var request = new AgentRunRequest
-                {
-                    Input = input,
-                    MaxIterations = maxIterations
-                };
-
-                var content = new StringContent(
-                    JsonSerializer.Serialize(request),
-                    Encoding.UTF8,
-                    "application/json");
-
-                var response = await ExecuteWithResilienceAsync(
-                    () => _httpClient.PostAsync("agent/run", content, cts.Token),
-                    cts.Token);
-
-                response.EnsureSuccessStatusCode();
-                
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<AgentRunResponse>(
-                    responseContent,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                
-                _logger.LogInformation("Agent run completed in {Iterations} iterations", result?.Iterations);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to POST to Python API: {Endpoint}", endpoint);
-                throw;
             }
         }
 
@@ -311,10 +268,44 @@ namespace Smartitecture.Core.Services
             }
         }
 
-        protected override async Task<bool> ExecuteAsync()
+        private async Task<T> GetAsync<T>(string endpoint)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync(endpoint);
+                response.EnsureSuccessStatusCode();
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to GET from Python API: {Endpoint}", endpoint);
+                throw;
+            }
+        }
+
+        private async Task<T> PostAsync<T>(string endpoint, object data)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(data);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(endpoint, content);
+                response.EnsureSuccessStatusCode();
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<T>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to POST to Python API: {Endpoint}", endpoint);
+                throw;
+            }
+        }
+
+        protected async Task<bool> ExecuteAsync()
         {
             // Check if Python API is running
-            return await IsHealthyAsync();
+            return await CheckHealthAsync();
         }
     }
 }

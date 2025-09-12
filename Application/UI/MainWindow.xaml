@@ -53,7 +53,7 @@ Implements a modern interface with navigation between:
                          VerticalAlignment="Center"
                          Click="ThemeToggleButton_Click"
                          ToolTipService.ToolTip="Toggle Light/Dark Mode">
-                <FontIcon x:Name="ThemeIcon" Glyph="&#xE793;"/> <!-- Moon icon -->
+                <TextBlock x:Name="ThemeIcon" Text="🌙" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/> <!-- Moon icon -->
             </ToggleButton>
         </Grid>
 

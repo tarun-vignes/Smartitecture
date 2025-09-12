@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
 using Smartitecture.Core.Models;
+using System.Threading.Tasks;
 
 namespace Smartitecture.Core.Services
 {

@@ -1,5 +1,5 @@
-using System.Windows;
 using Smartitecture.WPF.ViewModels;
+using System.Windows;
 
 namespace Smartitecture.WPF.Views
 {

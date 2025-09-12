@@ -1,4 +1,78 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+import logging
+import os
+import sys
+import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+# Add the project root to the Python path to allow for correct module imports
+try:
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    if project_root not in sys.path:
+        sys.path.append(project_root)
+    from smartitecture.agent.react_agent import ReActAgent, create_agent, AgentRunRequest, AgentStateResponse, AgentRunResponse
+except ImportError as e:
+    logger.error(f"Error setting up imports: {e}")
+    sys.exit(1)
+
+# Initialize FastAPI app
+app = FastAPI(
+    title="Smartitecture API",
+    description="API for the Smartitecture AI Agent",
+    version="0.1.0"
+)
+
+# Add CORS middleware to allow requests from any origin
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # WARNING: For development only. Restrict in production.
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Global agent instance
+agent: ReActAgent = None
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize the agent when the application starts."""
+    global agent
+    try:
+        logger.info("Initializing ReAct agent...")
+        agent = await create_agent()
+        logger.info("ReAct agent initialized successfully.")
+    except Exception as e:
+        logger.exception(f"CRITICAL: Failed to initialize agent during startup: {e}")
+
+@app.get("/health", summary="Health Check")
+def health_check():
+    """Endpoint to check if the API is running."""
+    return {"status": "ok"}
+
+@app.get("/agent/state", response_model=AgentStateResponse, summary="Get Agent State")
+def get_agent_state():
+    """Get the current state of the agent."""
+    if not agent:
+        return {"state": "uninitialized", "iteration": 0}
+    current_state = agent.get_state()
+    return {"state": current_state.status.value, "iteration": current_state.iteration}
+
+@app.post("/agent/run", response_model=AgentRunResponse, summary="Run the Agent")
+async def run_agent(request: AgentRunRequest):
+    """Run the agent with a given input."""
+    if not agent:
+        return {"error": "Agent not initialized"}
+    
+    result = await agent.run(request.input)
+    return result
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8001)
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Any, Dict, List, Optional

@@ -1,7 +1,5 @@
 using Smartitecture.Services;
-using Microsoft.Extensions.Configuration;
-using Moq;
-using System;
+using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -9,58 +7,40 @@ namespace Smartitecture.Tests.Services
 {
     public class AzureOpenAIServiceTests
     {
-        private readonly Mock<IConfiguration> _mockConfiguration;
-
-        public AzureOpenAIServiceTests()
+        private static IOptions<AzureOpenAIConfiguration> CreateOptions()
         {
-            // Setup mock configuration
-            _mockConfiguration = new Mock<IConfiguration>();
-            var configSection = new Mock<IConfigurationSection>();
-            configSection.Setup(s => s["Endpoint"]).Returns("https://test-endpoint.openai.azure.com/");
-            configSection.Setup(s => s["ApiKey"]).Returns("test-api-key");
-            configSection.Setup(s => s["DeploymentName"]).Returns("test-deployment");
-
-            _mockConfiguration.Setup(c => c.GetSection("AzureOpenAI")).Returns(configSection.Object);
+            // Fake values are fine; service methods catch exceptions and return error strings
+            return Options.Create(new AzureOpenAIConfiguration
+            {
+                Endpoint = "https://example.com/",
+                ApiKey = "test-api-key",
+                DeploymentName = "test-deployment"
+            });
         }
 
         [Fact]
         public void Constructor_WithValidConfiguration_DoesNotThrow()
         {
-            // Act & Assert
-            var exception = Record.Exception(() => new AzureOpenAIService(_mockConfiguration.Object));
-            Assert.Null(exception);
+            var opts = CreateOptions();
+            var ex = Record.Exception(() => new AzureOpenAIService(opts));
+            Assert.Null(ex);
         }
 
         [Fact]
-        public async Task ValidateConfigurationAsync_WithValidConfig_ReturnsTrue()
+        public async Task GetResponseAsync_ReturnsStringEvenOnError()
         {
-            // Arrange
-            var service = new AzureOpenAIService(_mockConfiguration.Object);
-
-            // Act & Assert - This will not actually call Azure in tests
-            // In a real scenario, you would use a mock HTTP client or dependency injection
-            // This test is just to verify the method exists and doesn't throw with valid config
-            await Assert.ThrowsAnyAsync<Exception>(() => service.ValidateConfigurationAsync());
+            var service = new AzureOpenAIService(CreateOptions());
+            var result = await service.GetResponseAsync("hello");
+            Assert.False(string.IsNullOrWhiteSpace(result));
         }
 
         [Fact]
-        public async Task GenerateResponseAsync_WithNullInput_ThrowsArgumentNullException()
+        public async Task ParseCommandAsync_WithGarbage_ReturnsUnknown()
         {
-            // Arrange
-            var service = new AzureOpenAIService(_mockConfiguration.Object);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => service.GenerateResponseAsync(null));
-        }
-
-        [Fact]
-        public async Task GenerateResponseAsync_WithEmptyInput_ThrowsArgumentException()
-        {
-            // Arrange
-            var service = new AzureOpenAIService(_mockConfiguration.Object);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => service.GenerateResponseAsync(string.Empty));
+            var service = new AzureOpenAIService(CreateOptions());
+            var (command, parameters) = await service.ParseCommandAsync("gibberish");
+            Assert.Equal("Unknown", command);
+            Assert.NotNull(parameters);
         }
     }
 }

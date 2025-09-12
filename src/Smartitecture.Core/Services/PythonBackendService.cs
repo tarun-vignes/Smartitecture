@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Net.Http;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Smartitecture.Core.Exceptions;
+using Smartitecture.Core.Models;
 using Smartitecture.Core.Options;
 
 namespace Smartitecture.Core.Services
@@ -22,7 +24,8 @@ namespace Smartitecture.Core.Services
     {
         private readonly ILogger<PythonBackendService> _logger;
         private readonly PythonApiOptions _options;
-        private readonly Process _pythonProcess;
+        private readonly IPythonApiService _pythonApiService;
+        private Process _pythonProcess;
         private readonly string _pythonBackendPath;
         private readonly string _pythonExecutable;
         private readonly string _apiScriptPath;
@@ -32,10 +35,12 @@ namespace Smartitecture.Core.Services
 
         public PythonBackendService(
             ILogger<PythonBackendService> logger,
-            IOptions<PythonApiOptions> options)
+            IOptions<PythonApiOptions> options,
+            IPythonApiService pythonApiService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            _pythonApiService = pythonApiService ?? throw new ArgumentNullException(nameof(pythonApiService));
             
             // Determine the path to the Python backend
             _pythonBackendPath = Path.Combine(
@@ -46,7 +51,7 @@ namespace Smartitecture.Core.Services
             
             // Determine the Python executable to use
             _pythonExecutable = GetPythonExecutable();
-            _apiScriptPath = Path.Combine(_pythonBackendPath, "start_api.py");
+            _apiScriptPath = Path.Combine(_pythonBackendPath, "minimal_server.py");
             
             _logger.LogInformation("Python backend service initialized");
             _logger.LogInformation($"Python executable: {_pythonExecutable}");
@@ -324,18 +329,6 @@ namespace Smartitecture.Core.Services
             await StartPythonBackendAsync(cancellationToken);
         }
         
-        public async Task StopAsync(CancellationToken cancellationToken = default)
-        {
-            if (!IsRunning)
-            {
-                _logger.LogInformation("Python backend is not running");
-                return;
-            }
-            
-            StopPythonBackend();
-            await Task.CompletedTask;
-        }
-        
         public async Task RestartAsync(CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Restarting Python backend...");
@@ -393,7 +386,7 @@ namespace Smartitecture.Core.Services
             try
             {
                 // Check if Python is already running
-                if (await _pythonApiService.IsHealthyAsync())
+                if (await _pythonApiService.CheckHealthAsync())
                 {
                     _logger.LogInformation("Python backend is already running");
                     return;
@@ -455,7 +448,7 @@ namespace Smartitecture.Core.Services
             {
                 try
                 {
-                    if (await _pythonApiService.IsHealthyAsync())
+                    if (await _pythonApiService.CheckHealthAsync())
                     {
                         _logger.LogInformation("Python API is healthy");
                         return;

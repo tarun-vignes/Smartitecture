@@ -41,7 +41,7 @@ namespace Smartitecture.WPF
                 // Build configuration
                 var configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                     .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production"}.json", optional: true)
                     .AddEnvironmentVariables()
                     .Build();
@@ -59,8 +59,8 @@ namespace Smartitecture.WPF
                         services.Configure<PythonApiOptions>(
                             context.Configuration.GetSection(PythonApiOptions.SectionName));
                         
-                        // Add core services
-                        services.AddSmartitectureCore(context.Configuration);
+                        // Add core services (without hosted service for WPF)
+                        services.AddSmartitectureCoreForWpf(context.Configuration);
                         
                         // Add WPF services
                         services.AddSingleton<MainViewModel>();
