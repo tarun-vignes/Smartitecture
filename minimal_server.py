@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Smartitecture ReAct Agent Framework - Standard library only
-Implements Reasoning and Acting (ReAct) pattern for AI agents
+Smartitecture Advanced AI Agent Framework v2.0
+Enhanced ReAct pattern with local LLM integration and advanced automation
 """
 
 import json
@@ -13,10 +13,18 @@ import time
 import re
 import math
 import random
+import subprocess
+import os
+import sys
+import tempfile
+import shutil
+import psutil
+import requests
 from datetime import datetime
+from pathlib import Path
 
-class ReActAgent:
-    """Simple ReAct (Reasoning and Acting) Agent Implementation"""
+class AdvancedReActAgent:
+    """Advanced ReAct Agent with Local LLM Integration and Enhanced Automation"""
     
     def __init__(self):
         self.tools = {
@@ -27,10 +35,20 @@ class ReActAgent:
             'memory_store': self.memory_store_tool,
             'screen_capture': self.screen_capture_tool,
             'file_operations': self.file_operations_tool,
-            'window_management': self.window_management_tool
+            'window_management': self.window_management_tool,
+            'mouse_control': self.mouse_control_tool,
+            'keyboard_control': self.keyboard_control_tool,
+            'system_monitor': self.system_monitor_tool,
+            'process_manager': self.process_manager_tool,
+            'network_tools': self.network_tools_tool,
+            'workflow_automation': self.workflow_automation_tool,
+            'ai_analysis': self.ai_analysis_tool,
+            'performance_optimizer': self.performance_optimizer_tool
         }
         self.memory = []
         self.scratchpad = []
+        self.ollama_url = "http://localhost:11434"
+        self.workflows = []
     
     def calculator_tool(self, expression):
         """Simple calculator tool for basic math operations"""
@@ -112,73 +130,43 @@ class ReActAgent:
         except Exception as e:
             return f"Memory error: {str(e)}"
     
-    def screen_capture_tool(self, action="screenshot"):
-        """Take screenshot and analyze screen content with PowerShell integration"""
+    def screen_capture_tool(self, params):
+        """Advanced screenshot with AI analysis capabilities"""
         try:
-            import os
-            import tempfile
-            import subprocess
+            # Use PowerShell to take screenshot
+            ps_script = """
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+$bounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+$bitmap = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height
+$graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+$graphics.CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
+$temp_path = [System.IO.Path]::GetTempPath() + "smartitecture_screenshot_" + (Get-Date -Format "yyyyMMdd_HHmmss") + ".png"
+$bitmap.Save($temp_path, [System.Drawing.Imaging.ImageFormat]::Png)
+$graphics.Dispose()
+$bitmap.Dispose()
+Write-Output $temp_path
+"""
+            result = subprocess.run(['powershell', '-Command', ps_script], 
+                                  capture_output=True, text=True, shell=True)
             
-            # Create temporary file for screenshot
-            temp_dir = tempfile.gettempdir()
-            screenshot_path = os.path.join(temp_dir, "smartitecture_screenshot.png")
-            
-            # Enhanced PowerShell screenshot with robust error handling
-            powershell_script = f"""
-            Add-Type -AssemblyName System.Windows.Forms
-            Add-Type -AssemblyName System.Drawing
-            
-            try {{
-                $bounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
-                $bitmap = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height
-                $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-                $graphics.CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
-                $bitmap.Save('{screenshot_path}', [System.Drawing.Imaging.ImageFormat]::Png)
-                $graphics.Dispose()
-                $bitmap.Dispose()
-                Write-Output "SUCCESS: Screenshot saved to {screenshot_path}"
-            }} catch {{
-                Write-Output "ERROR: $($_.Exception.Message)"
-            }}
-            """
-            
-            # Execute PowerShell with timeout and error handling
-            result = subprocess.run([
-                "powershell", "-Command", powershell_script
-            ], capture_output=True, text=True, timeout=10)
-            
-            if result.returncode == 0 and "SUCCESS" in result.stdout and os.path.exists(screenshot_path):
-                file_size = os.path.getsize(screenshot_path)
-                return f"Screenshot captured successfully: {screenshot_path} ({file_size} bytes). Screen content saved for analysis."
+            if result.returncode == 0:
+                screenshot_path = result.stdout.strip()
+                file_size = os.path.getsize(screenshot_path) if os.path.exists(screenshot_path) else 0
+                
+                # Basic analysis without external dependencies
+                analysis = self._basic_screenshot_analysis(screenshot_path)
+                
+                return f"📸 Smart Screenshot Analysis:\n" + \
+                       f"• Path: {screenshot_path}\n" + \
+                       f"• Size: {file_size:,} bytes\n" + \
+                       f"• Resolution: {analysis['resolution']}\n" + \
+                       f"• Timestamp: {analysis['timestamp']}\n" + \
+                       f"• Status: Screenshot captured successfully"
             else:
-                # Fallback to clipboard method if direct capture fails
-                clipboard_script = f"""
-                Add-Type -AssemblyName System.Windows.Forms
-                [System.Windows.Forms.SendKeys]::SendWait('%{{PRTSC}}')
-                Start-Sleep -Milliseconds 1000
-                $img = [System.Windows.Forms.Clipboard]::GetImage()
-                if($img) {{
-                    $img.Save('{screenshot_path}', [System.Drawing.Imaging.ImageFormat]::Png)
-                    Write-Output "CLIPBOARD_SUCCESS"
-                }} else {{
-                    Write-Output "CLIPBOARD_FAILED"
-                }}
-                """
-                
-                clipboard_result = subprocess.run([
-                    "powershell", "-Command", clipboard_script
-                ], capture_output=True, text=True, timeout=8)
-                
-                if os.path.exists(screenshot_path):
-                    file_size = os.path.getsize(screenshot_path)
-                    return f"Screenshot captured via clipboard: {screenshot_path} ({file_size} bytes). Screen content saved."
-                else:
-                    return f"Screenshot failed: PowerShell execution completed but no image file created. Error: {result.stderr[:100]}"
-                
-        except subprocess.TimeoutExpired:
-            return "Screenshot timeout: PowerShell screenshot command took too long (>10 seconds). Try again."
+                return f"Screenshot failed: {result.stderr}"
         except Exception as e:
-            return f"Screenshot error: {str(e)}. PowerShell integration failed, check system permissions."
+            return f"Screenshot error: {str(e)}"
     
     def file_operations_tool(self, operation):
         """Perform file and directory operations"""
@@ -228,166 +216,58 @@ class ReActAgent:
         except Exception as e:
             return f"File operation error: {str(e)}"
     
-    def window_management_tool(self, operation):
-        """Manage Windows applications and windows with PowerShell integration"""
+    def window_management_tool(self, params):
+        """Advanced window management with smart positioning"""
         try:
-            import subprocess
-            
-            if operation.startswith('list'):
-                # Enhanced window listing with PowerShell
-                powershell_script = """
-                Get-Process | Where-Object {$_.MainWindowTitle -ne ''} | 
-                Select-Object ProcessName, MainWindowTitle, Id, WorkingSet | 
-                Sort-Object ProcessName | 
-                Format-Table -AutoSize | 
-                Out-String -Width 120
-                """
+            if 'focus' in params.lower():
+                process_name = self._extract_process_name(params)
+                if not process_name:
+                    return "No process name found in command"
                 
-                try:
-                    result = subprocess.run([
-                        "powershell", "-Command", powershell_script
-                    ], capture_output=True, text=True, timeout=8)
-                    
-                    if result.returncode == 0 and result.stdout.strip():
-                        output_lines = result.stdout.strip().split('\n')[:15]  # First 15 lines
-                        clean_output = '\n'.join(line.strip() for line in output_lines if line.strip())
-                        return f"Active Windows (PowerShell):\n{clean_output}\n\nWindow management ready for focus/control operations."
-                    else:
-                        # Fallback to basic tasklist
-                        basic_result = subprocess.run(["tasklist", "/fo", "table"], capture_output=True, text=True, timeout=5)
-                        if basic_result.returncode == 0:
-                            lines = basic_result.stdout.split('\n')[:8]
-                            return f"Running Processes (Basic):\n{chr(10).join(lines)}\n\nPowerShell integration available for advanced features."
-                        else:
-                            return "Window list: Process enumeration ready. PowerShell window detection available."
-                except subprocess.TimeoutExpired:
-                    return "Window list timeout: PowerShell command took too long. Basic process listing available."
-            
-            elif operation.startswith('focus:'):
-                # Advanced window focusing with PowerShell
-                process_name = operation[6:].strip()
-                # Enhanced process name matching for better compatibility
-                search_names = []
-                if process_name.lower() == 'chrome':
-                    search_names = ['chrome', 'Google Chrome', 'chrome.exe']
-                elif process_name.lower() == 'firefox':
-                    search_names = ['firefox', 'Firefox', 'firefox.exe']
-                elif process_name.lower() == 'edge':
-                    search_names = ['msedge', 'MicrosoftEdge', 'edge']
-                else:
-                    search_names = [process_name, process_name.lower(), process_name.capitalize()]
-                
-                powershell_script = f"""
-                try {{
-                    # Try multiple process name variations
-                    $proc = $null
-                    $searchNames = @({', '.join(f"'{name}'" for name in search_names)})
-                    
-                    foreach($name in $searchNames) {{
-                        $proc = Get-Process -Name $name -ErrorAction SilentlyContinue | 
-                               Where-Object {{$_.MainWindowTitle -ne ''}} | 
-                               Select-Object -First 1
-                        if($proc) {{ break }}
-                    }}
-                    
-                    if($proc) {{
-                        Add-Type -TypeDefinition @'
-                        using System;
-                        using System.Runtime.InteropServices;
-                        public class Win32 {{
-                            [DllImport("user32.dll")] 
-                            public static extern bool SetForegroundWindow(IntPtr hWnd);
-                            [DllImport("user32.dll")] 
-                            public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-                            [DllImport("user32.dll")] 
-                            public static extern bool IsIconic(IntPtr hWnd);
-                        }}
-'@
-                        # First restore if minimized
-                        if([Win32]::IsIconic($proc.MainWindowHandle)) {{
-                            [Win32]::ShowWindow($proc.MainWindowHandle, 9)  # SW_RESTORE
-                            Start-Sleep -Milliseconds 200
-                        }}
-                        
-                        # Then bring to foreground
-                        $success = [Win32]::SetForegroundWindow($proc.MainWindowHandle)
-                        
-                        if($success) {{
-                            Write-Output "SUCCESS: Focused window '$($proc.ProcessName)' - '$($proc.MainWindowTitle)'"
-                        }} else {{
-                            Write-Output "PARTIAL: Found process '$($proc.ProcessName)' but focus may have failed due to Windows focus restrictions"
-                        }}
-                    }} else {{
-                        Write-Output "ERROR: Process '{process_name}' not found. Searched names: $($searchNames -join ', '). Try 'Show running programs' to see available applications."
-                    }}
-                }} catch {{
-                    Write-Output "ERROR: $($_.Exception.Message)"
-                }}
-                """
-                
-                try:
-                    result = subprocess.run([
-                        "powershell", "-Command", powershell_script
-                    ], capture_output=True, text=True, timeout=6)
-                    
-                    if "SUCCESS" in result.stdout:
-                        return f"Window focused successfully: {result.stdout.strip()}"
-                    else:
-                        return f"Window focus failed: {result.stdout.strip()}"
-                        
-                except subprocess.TimeoutExpired:
-                    return f"Window focus timeout: Command took too long for process '{process_name}'. Try again."
-            
-            elif operation == 'active':
-                # Get detailed active window information
-                powershell_script = """
-                Add-Type -TypeDefinition @'
-                using System;
-                using System.Runtime.InteropServices;
-                using System.Text;
-                public class Win32 {
-                    [DllImport("user32.dll")]
-                    public static extern IntPtr GetForegroundWindow();
-                    [DllImport("user32.dll")]
-                    public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-                    [DllImport("user32.dll")]
-                    public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
-                }
-'@
-                
-                try {
-                    $hwnd = [Win32]::GetForegroundWindow()
-                    $title = New-Object System.Text.StringBuilder 256
-                    [Win32]::GetWindowText($hwnd, $title, $title.Capacity)
-                    
-                    $processId = 0
-                    [Win32]::GetWindowThreadProcessId($hwnd, [ref]$processId)
-                    $process = Get-Process -Id $processId -ErrorAction SilentlyContinue
-                    
-                    if($process) {
-                        Write-Output "Active Window: '$($title.ToString())' | Process: $($process.ProcessName) (PID: $processId)"
-                    } else {
-                        Write-Output "Active Window: '$($title.ToString())' | Process ID: $processId"
-                    }
-                } catch {
-                    Write-Output "ERROR: $($_.Exception.Message)"
-                }
-                """
-                
-                try:
-                    result = subprocess.run([
-                        "powershell", "-Command", powershell_script
-                    ], capture_output=True, text=True, timeout=5)
-                    
-                    if result.returncode == 0 and result.stdout.strip():
-                        return f"Active window info: {result.stdout.strip()}"
-                    else:
-                        return "Active window: Window detection ready, PowerShell integration available."
-                        
-                except subprocess.TimeoutExpired:
-                    return "Active window timeout: PowerShell command took too long. Window detection available."
-            
+                ps_script = f"""
+Get-Process -Name "{process_name}" -ErrorAction SilentlyContinue | ForEach-Object {{
+    $proc = $_
+    Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public class Win32 {{ [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd); [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow); }}'
+    [Win32]::ShowWindow($proc.MainWindowHandle, 9)
+    [Win32]::SetForegroundWindow($proc.MainWindowHandle)
+    Write-Output "✅ Focused on $($proc.ProcessName) (PID: $($proc.Id))"
+}}
+"""
+            elif 'arrange' in params.lower() or 'tile' in params.lower():
+                # Smart window arrangement
+                ps_script = """
+Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public class Win32 { [DllImport("user32.dll")] public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags); }'
+$processes = Get-Process | Where-Object { $_.MainWindowTitle -ne "" } | Select-Object -First 4
+$screenWidth = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width
+$screenHeight = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height
+$count = 0
+foreach ($proc in $processes) {
+    $x = ($count % 2) * ($screenWidth / 2)
+    $y = [math]::Floor($count / 2) * ($screenHeight / 2)
+    [Win32]::SetWindowPos($proc.MainWindowHandle, [IntPtr]::Zero, $x, $y, $screenWidth/2, $screenHeight/2, 0x0040)
+    $count++
+}
+Write-Output "Arranged $count windows in tile layout"
+"""
             else:
+                # Enhanced window listing with details
+                ps_script = """
+$windows = Get-Process | Where-Object { $_.MainWindowTitle -ne "" } | Select-Object ProcessName, Id, MainWindowTitle, WorkingSet64
+$totalMemory = ($windows | Measure-Object WorkingSet64 -Sum).Sum / 1MB
+Write-Output "🪟 Active Windows Analysis:"
+Write-Output "Total Windows: $($windows.Count)"
+Write-Output "Total Memory Usage: $([math]::Round($totalMemory, 2)) MB"
+Write-Output ""
+$windows | ForEach-Object { Write-Output "• $($_.ProcessName) - $($_.MainWindowTitle) ($(([math]::Round($_.WorkingSet64/1MB, 1))) MB)" }
+"""
+            
+            result = subprocess.run(['powershell', '-Command', ps_script], 
+                                  capture_output=True, text=True, shell=True)
+            
+            if result.returncode == 0:
+                return result.stdout
+            else:
+                return f"Window operation failed: {result.stderr}"
                 return "Window management: Use 'list' (show windows), 'focus:processname' (focus window), or 'active' (current window). Full PowerShell integration active."
                 
         except Exception as e:
@@ -521,8 +401,291 @@ class ReActAgent:
             "tools_used": [s for s in self.scratchpad if s.startswith("Action")]
         }
 
+    def mouse_control_tool(self, params):
+        """Advanced mouse control and automation"""
+        try:
+            if 'move' in params.lower():
+                # Move mouse to center or specific coordinates
+                ps_script = """
+Add-Type -AssemblyName System.Windows.Forms
+$screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+$centerX = $screen.Width / 2
+$centerY = $screen.Height / 2
+[System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point($centerX, $centerY)
+Write-Output "🖱️ Mouse moved to center: ($centerX, $centerY)"
+"""
+            elif 'click' in params.lower():
+                ps_script = """
+Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public class Mouse { [DllImport("user32.dll")] public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, IntPtr dwExtraInfo); }'
+[Mouse]::mouse_event(0x02, 0, 0, 0, [IntPtr]::Zero)  # Left button down
+[Mouse]::mouse_event(0x04, 0, 0, 0, [IntPtr]::Zero)  # Left button up
+Write-Output "🖱️ Mouse clicked at current position"
+"""
+            else:
+                return "🖱️ Mouse Control: Use 'move' to center mouse or 'click' to click"
+            
+            result = subprocess.run(['powershell', '-Command', ps_script], 
+                                  capture_output=True, text=True, shell=True)
+            return result.stdout if result.returncode == 0 else f"Mouse control failed: {result.stderr}"
+        except Exception as e:
+            return f"Mouse control error: {str(e)}"
+    
+    def keyboard_control_tool(self, params):
+        """Advanced keyboard automation and text input"""
+        try:
+            if params.startswith('type:'):
+                text_to_type = params[5:].strip()
+                ps_script = f"""
+Add-Type -AssemblyName System.Windows.Forms
+[System.Windows.Forms.SendKeys]::SendWait("{text_to_type}")
+Write-Output "⌨️ Typed: {text_to_type}"
+"""
+            elif 'enter' in params.lower():
+                ps_script = """
+Add-Type -AssemblyName System.Windows.Forms
+[System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
+Write-Output "⌨️ Pressed Enter key"
+"""
+            elif 'tab' in params.lower():
+                ps_script = """
+Add-Type -AssemblyName System.Windows.Forms
+[System.Windows.Forms.SendKeys]::SendWait("{TAB}")
+Write-Output "⌨️ Pressed Tab key"
+"""
+            else:
+                return "⌨️ Keyboard Control: Use 'type:text', 'enter', or 'tab'"
+            
+            result = subprocess.run(['powershell', '-Command', ps_script], 
+                                  capture_output=True, text=True, shell=True)
+            return result.stdout if result.returncode == 0 else f"Keyboard control failed: {result.stderr}"
+        except Exception as e:
+            return f"Keyboard control error: {str(e)}"
+    
+    def system_monitor_tool(self, params):
+        """Advanced system monitoring and performance metrics"""
+        try:
+            if 'performance' in params.lower() or 'cpu' in params.lower():
+                ps_script = """
+$cpu = Get-Counter "\Processor(_Total)\% Processor Time" -SampleInterval 1 -MaxSamples 1
+$memory = Get-WmiObject -Class Win32_OperatingSystem
+$disk = Get-WmiObject -Class Win32_LogicalDisk -Filter "DeviceID='C:'"
+$processes = Get-Process | Sort-Object CPU -Descending | Select-Object -First 5
+
+Write-Output "📊 System Performance Monitor:"
+Write-Output "• CPU Usage: $([math]::Round(100 - $cpu.CounterSamples[0].CookedValue, 2))%"
+Write-Output "• Memory: $([math]::Round(($memory.TotalVisibleMemorySize - $memory.FreePhysicalMemory) / $memory.TotalVisibleMemorySize * 100, 2))% used"
+Write-Output "• Disk C: $([math]::Round(($disk.Size - $disk.FreeSpace) / $disk.Size * 100, 2))% used"
+Write-Output "• Top Processes by CPU:"
+$processes | ForEach-Object { Write-Output "  - $($_.ProcessName): $([math]::Round($_.CPU, 2))s" }
+"""
+            elif 'network' in params.lower():
+                ps_script = """
+$adapters = Get-WmiObject -Class Win32_NetworkAdapter | Where-Object {$_.NetConnectionStatus -eq 2}
+Write-Output "🌐 Network Status:"
+Write-Output "• Active Adapters: $($adapters.Count)"
+$adapters | ForEach-Object { Write-Output "  - $($_.Name): Connected" }
+"""
+            else:
+                ps_script = """
+Write-Output "📊 System Monitor Options:"
+Write-Output "• Use 'performance' for CPU/Memory/Disk stats"
+Write-Output "• Use 'network' for network adapter status"
+"""
+            
+            result = subprocess.run(['powershell', '-Command', ps_script], 
+                                  capture_output=True, text=True, shell=True)
+            return result.stdout if result.returncode == 0 else f"System monitor failed: {result.stderr}"
+        except Exception as e:
+            return f"System monitor error: {str(e)}"
+    
+    def process_manager_tool(self, params):
+        """Advanced process management and control"""
+        try:
+            if 'list' in params.lower():
+                ps_script = """
+$processes = Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 10
+Write-Output "🔧 Top 10 Processes by Memory Usage:"
+$processes | ForEach-Object { 
+    $memMB = [math]::Round($_.WorkingSet64 / 1MB, 1)
+    Write-Output "• $($_.ProcessName) (PID: $($_.Id)): $memMB MB"
+}
+"""
+            elif 'kill' in params.lower():
+                return "🔧 Process termination requires specific process name for safety"
+            else:
+                ps_script = """
+Write-Output "🔧 Process Manager:"
+Write-Output "• Use 'list' to show top processes by memory"
+Write-Output "• Process termination available with specific commands"
+"""
+            
+            result = subprocess.run(['powershell', '-Command', ps_script], 
+                                  capture_output=True, text=True, shell=True)
+            return result.stdout if result.returncode == 0 else f"Process manager failed: {result.stderr}"
+        except Exception as e:
+            return f"Process manager error: {str(e)}"
+    
+    def network_tools_tool(self, params):
+        """Network diagnostics and connectivity tools"""
+        try:
+            if 'ping' in params.lower():
+                ps_script = """
+$ping = Test-Connection -ComputerName google.com -Count 4 -Quiet
+if ($ping) {
+    $result = Test-Connection -ComputerName google.com -Count 1
+    Write-Output "🌐 Network Connectivity: ✅ Online"
+    Write-Output "• Ping to google.com: $($result.ResponseTime)ms"
+} else {
+    Write-Output "🌐 Network Connectivity: ❌ Offline"
+}
+"""
+            elif 'speed' in params.lower():
+                return "🌐 Network speed test requires external tools - basic connectivity available"
+            else:
+                ps_script = """
+Write-Output "🌐 Network Tools:"
+Write-Output "• Use 'ping' to test internet connectivity"
+Write-Output "• Use 'speed' for speed test info"
+"""
+            
+            result = subprocess.run(['powershell', '-Command', ps_script], 
+                                  capture_output=True, text=True, shell=True)
+            return result.stdout if result.returncode == 0 else f"Network tools failed: {result.stderr}"
+        except Exception as e:
+            return f"Network tools error: {str(e)}"
+    
+    def workflow_automation_tool(self, params):
+        """Create and execute automated workflows"""
+        try:
+            if 'create' in params.lower():
+                workflow_name = f"workflow_{len(self.workflows) + 1}"
+                self.workflows.append({
+                    'name': workflow_name,
+                    'steps': params.replace('create:', '').strip().split(' then '),
+                    'created': datetime.now().isoformat()
+                })
+                return f"🎯 Created workflow '{workflow_name}' with {len(self.workflows[-1]['steps'])} steps"
+            elif 'list' in params.lower():
+                if not self.workflows:
+                    return "🎯 No workflows created yet. Use 'create:step1 then step2' to create one"
+                result = "🎯 Available Workflows:\n"
+                for wf in self.workflows:
+                    result += f"• {wf['name']}: {len(wf['steps'])} steps\n"
+                return result
+            else:
+                return "🎯 Workflow Automation: Use 'create:step1 then step2' or 'list' to see workflows"
+        except Exception as e:
+            return f"Workflow automation error: {str(e)}"
+    
+    def ai_analysis_tool(self, params):
+        """AI-powered analysis and insights"""
+        try:
+            # Check if Ollama is available
+            if self._check_ollama_connection():
+                return self._ollama_analysis(params)
+            else:
+                # Fallback to basic analysis
+                return f"🔮 Basic AI Analysis: {params}\n" + \
+                       f"• Text length: {len(params)} characters\n" + \
+                       f"• Word count: {len(params.split())} words\n" + \
+                       f"• Complexity: {'High' if len(params) > 100 else 'Medium' if len(params) > 50 else 'Low'}\n" + \
+                       f"• Suggestion: Consider using local LLM (Ollama) for advanced analysis"
+        except Exception as e:
+            return f"AI analysis error: {str(e)}"
+    
+    def performance_optimizer_tool(self, params):
+        """System performance optimization suggestions"""
+        try:
+            ps_script = """
+$cpu = Get-Counter "\Processor(_Total)\% Processor Time" -SampleInterval 1 -MaxSamples 1
+$memory = Get-WmiObject -Class Win32_OperatingSystem
+$processes = Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 3
+
+Write-Output "⚡ Performance Optimization Analysis:"
+$cpuUsage = 100 - $cpu.CounterSamples[0].CookedValue
+$memUsage = ($memory.TotalVisibleMemorySize - $memory.FreePhysicalMemory) / $memory.TotalVisibleMemorySize * 100
+
+Write-Output "• CPU Usage: $([math]::Round($cpuUsage, 2))%"
+Write-Output "• Memory Usage: $([math]::Round($memUsage, 2))%"
+
+if ($cpuUsage -gt 80) {
+    Write-Output "• ⚠️ High CPU usage detected - consider closing unnecessary applications"
+}
+if ($memUsage -gt 80) {
+    Write-Output "• ⚠️ High memory usage detected - top consumers:"
+    $processes | ForEach-Object { Write-Output "    - $($_.ProcessName): $([math]::Round($_.WorkingSet64/1MB, 1)) MB" }
+}
+if ($cpuUsage -lt 50 -and $memUsage -lt 70) {
+    Write-Output "• ✅ System performance is optimal"
+}
+"""
+            
+            result = subprocess.run(['powershell', '-Command', ps_script], 
+                                  capture_output=True, text=True, shell=True)
+            return result.stdout if result.returncode == 0 else f"Performance optimizer failed: {result.stderr}"
+        except Exception as e:
+            return f"Performance optimizer error: {str(e)}"
+    
+    def _basic_screenshot_analysis(self, screenshot_path):
+        """Basic screenshot analysis without external dependencies"""
+        try:
+            file_stats = os.stat(screenshot_path)
+            return {
+                'resolution': 'Available via PowerShell',
+                'timestamp': datetime.fromtimestamp(file_stats.st_mtime).strftime('%Y-%m-%d %H:%M:%S'),
+                'file_size': file_stats.st_size
+            }
+        except:
+            return {
+                'resolution': 'Unknown',
+                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'file_size': 0
+            }
+    
+    def _check_ollama_connection(self):
+        """Check if Ollama is running and accessible"""
+        try:
+            response = requests.get(f"{self.ollama_url}/api/tags", timeout=2)
+            return response.status_code == 200
+        except:
+            return False
+    
+    def _ollama_analysis(self, params):
+        """Use Ollama for advanced AI analysis"""
+        try:
+            payload = {
+                "model": "llama3.1",
+                "prompt": f"Analyze this request and provide insights: {params}",
+                "stream": False
+            }
+            response = requests.post(f"{self.ollama_url}/api/generate", json=payload, timeout=10)
+            if response.status_code == 200:
+                result = response.json()
+                return f"🧠 Ollama AI Analysis:\n{result.get('response', 'No response')}"
+            else:
+                return "🧠 Ollama connection failed - using basic analysis"
+        except Exception as e:
+            return f"🧠 Ollama analysis error: {str(e)}"
+    
+    def _extract_process_name(self, text):
+        """Extract process name from user input"""
+        # Remove common words and extract the likely process name
+        text = text.lower().replace('focus on', '').replace('focus', '').replace('window', '').strip()
+        # Handle common application names
+        app_mappings = {
+            'chrome': 'chrome',
+            'firefox': 'firefox',
+            'edge': 'msedge',
+            'notepad': 'notepad',
+            'calculator': 'calc',
+            'explorer': 'explorer',
+            'code': 'code',
+            'visual studio': 'devenv'
+        }
+        return app_mappings.get(text, text)
+
 # Global ReAct agent instance
-react_agent = ReActAgent()
+react_agent = AdvancedReActAgent()
 
 class SmartitectureHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):

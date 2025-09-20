@@ -1,0 +1,430 @@
+<Window x:Class="SmartitectureSimple.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Smartitecture - AI Windows Automation Agent" 
+        Height="700" Width="900"
+        WindowStartupLocation="CenterScreen"
+        Background="#0D1117"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResize">
+    
+    <Window.Resources>
+        <!-- Ultra-Modern Animated Button Style -->
+        <Style x:Key="ModernAnimatedButton" TargetType="Button">
+            <Setter Property="Background" Value="#1C2128"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#30363D"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="2" Opacity="0.3" BlurRadius="8"/>
+                            </Border.Effect>
+                            <ContentPresenter x:Name="contentPresenter" 
+                                            HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"
+                                            TextBlock.FontWeight="{TemplateBinding FontWeight}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" 
+                                                          Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                          To="#2D3748" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                           Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="12" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" 
+                                                          Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                          To="#1C2128" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                           Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="8" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#161B22"/>
+                                <Setter TargetName="contentPresenter" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Glowing Status Indicator -->
+        <Style x:Key="GlowingStatusIndicator" TargetType="Ellipse">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="{Binding RelativeSource={RelativeSource Self}, Path=Fill.Color}" 
+                                    Direction="0" ShadowDepth="0" BlurRadius="10" Opacity="0.8"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Ultra-Modern Animated TextBox -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#161B22"/>
+            <Setter Property="Foreground" Value="#E6EDF3"/>
+            <Setter Property="BorderBrush" Value="#30363D"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="FontFamily" Value="Segoe UI, Arial"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="1" Opacity="0.2" BlurRadius="4"/>
+                            </Border.Effect>
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        Focusable="false" 
+                                        HorizontalScrollBarVisibility="Hidden" 
+                                        VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border"
+                                                          Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                          To="#58A6FF" Duration="0:0:0.3"/>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                           Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="8" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border"
+                                                          Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                          To="#30363D" Duration="0:0:0.3"/>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                           Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="4" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Modern Panel Style with Gradient -->
+        <Style x:Key="ModernPanel" TargetType="Border">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#1C2128" Offset="0"/>
+                        <GradientStop Color="#161B22" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="#30363D"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="3" Opacity="0.4" BlurRadius="10"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Ultra-Modern Header with Animations -->
+        <Border Grid.Row="0" Style="{StaticResource ModernPanel}" Padding="25,20" Margin="0,0,0,25">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="🚀 Smartitecture AI Agent" 
+                               FontSize="28" FontWeight="Bold" Foreground="#58A6FF">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="#58A6FF" Direction="0" ShadowDepth="0" BlurRadius="15" Opacity="0.3"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <TextBlock Text="Advanced AI-Powered Windows Automation • ReAct Framework • Local LLM Integration" 
+                               FontSize="14" Foreground="#8B949E" Margin="0,8,0,0"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <Border Background="#238636" CornerRadius="12" Padding="8,3" Margin="0,0,8,0">
+                            <TextBlock Text="✨ AI Enhanced" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border Background="#7C3AED" CornerRadius="12" Padding="8,3" Margin="0,0,8,0">
+                            <TextBlock Text="🧠 ReAct Agent" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border Background="#DC2626" CornerRadius="12" Padding="8,3">
+                            <TextBlock Text="⚡ Real-time" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse x:Name="StatusIndicator" Width="16" Height="16" Fill="#F85149" 
+                             Margin="0,0,12,0" Style="{StaticResource GlowingStatusIndicator}"/>
+                    <StackPanel>
+                        <TextBlock x:Name="StatusText" Text="Backend: Offline" 
+                                   FontSize="13" Foreground="#E6EDF3" FontWeight="Medium"/>
+                        <TextBlock x:Name="SystemStatusText" Text="System Ready" 
+                                   FontSize="11" Foreground="#8B949E"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Advanced Quick Actions Dashboard -->
+        <Border Grid.Row="1" Style="{StaticResource ModernPanel}" Padding="20" Margin="0,0,0,20">
+            <StackPanel>
+                <Grid Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="🎯 AI Command Center" FontSize="16" FontWeight="Bold" Foreground="#E6EDF3"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <TextBlock Text="LLM:" FontSize="11" Foreground="#8B949E" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <Border Background="#7C3AED" CornerRadius="8" Padding="6,2">
+                            <TextBlock x:Name="LLMStatusText" Text="Ollama Ready" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Automation Tools -->
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                        <TextBlock Text="🤖 Automation" FontSize="12" FontWeight="Bold" Foreground="#58A6FF" Margin="0,0,0,8"/>
+                        <Button Content="📸 Smart Screenshot" Style="{StaticResource ModernAnimatedButton}" Margin="0,0,0,6" Click="QuickCommand_Click" Tag="Take a screenshot and analyze it"/>
+                        <Button Content="🖱️ Mouse Control" Style="{StaticResource ModernAnimatedButton}" Margin="0,0,0,6" Click="QuickCommand_Click" Tag="Move mouse to center of screen"/>
+                        <Button Content="⌨️ Keyboard Input" Style="{StaticResource ModernAnimatedButton}" Margin="0,0,0,6" Click="QuickCommand_Click" Tag="Type hello world"/>
+                        <Button Content="🪟 Window Manager" Style="{StaticResource ModernAnimatedButton}" Click="QuickCommand_Click" Tag="List all open windows"/>
+                    </StackPanel>
+                    
+                    <!-- System Tools -->
+                    <StackPanel Grid.Column="1" Margin="5,0">
+                        <TextBlock Text="⚙️ System" FontSize="12" FontWeight="Bold" Foreground="#F79009" Margin="0,0,0,8"/>
+                        <Button Content="📊 Performance Monitor" Style="{StaticResource ModernAnimatedButton}" Margin="0,0,0,6" Click="QuickCommand_Click" Tag="Get detailed system performance metrics"/>
+                        <Button Content="🔧 Hardware Info" Style="{StaticResource ModernAnimatedButton}" Margin="0,0,0,6" Click="QuickCommand_Click" Tag="Get comprehensive hardware information"/>
+                        <Button Content="📁 File Operations" Style="{StaticResource ModernAnimatedButton}" Margin="0,0,0,6" Click="QuickCommand_Click" Tag="Open file explorer in downloads folder"/>
+                        <Button Content="🌐 Network Status" Style="{StaticResource ModernAnimatedButton}" Click="QuickCommand_Click" Tag="Check network connectivity and speed"/>
+                    </StackPanel>
+                    
+                    <!-- AI Tools -->
+                    <StackPanel Grid.Column="2" Margin="10,0,0,0">
+                        <TextBlock Text="🧠 AI Tools" FontSize="12" FontWeight="Bold" Foreground="#7C3AED" Margin="0,0,0,8"/>
+                        <Button Content="🔮 Smart Analysis" Style="{StaticResource ModernAnimatedButton}" Margin="0,0,0,6" Click="QuickCommand_Click" Tag="Analyze current desktop and suggest optimizations"/>
+                        <Button Content="📝 Text Processing" Style="{StaticResource ModernAnimatedButton}" Margin="0,0,0,6" Click="QuickCommand_Click" Tag="Extract text from clipboard and summarize"/>
+                        <Button Content="🎯 Workflow Builder" Style="{StaticResource ModernAnimatedButton}" Margin="0,0,0,6" Click="QuickCommand_Click" Tag="Create automated workflow for daily tasks"/>
+                        <Button Content="💡 AI Suggestions" Style="{StaticResource ModernAnimatedButton}" Click="QuickCommand_Click" Tag="Get AI suggestions for productivity improvements"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+        
+        <!-- Advanced Input Section -->
+        <Border Grid.Row="2" Style="{StaticResource ModernPanel}" Padding="20" Margin="0,0,0,20">
+            <StackPanel>
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="💬 Natural Language Command Interface" FontSize="14" FontWeight="Bold" Foreground="#E6EDF3"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Border Background="#238636" CornerRadius="6" Padding="4,2" Margin="0,0,5,0">
+                            <TextBlock Text="Voice Ready" FontSize="9" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border Background="#DC2626" CornerRadius="6" Padding="4,2">
+                            <TextBlock Text="Multi-Step" FontSize="9" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBox x:Name="InputTextBox" Grid.Column="0"
+                             Style="{StaticResource ModernTextBox}"
+                             Text="Take a screenshot then analyze the desktop for productivity improvements"
+                             KeyDown="InputTextBox_KeyDown"
+                             Margin="0,0,12,0"
+                             FontSize="14"/>
+                    
+                    <Button x:Name="VoiceInputButton" Grid.Column="1"
+                            Content="🎤" 
+                            Style="{StaticResource ModernAnimatedButton}"
+                            Click="VoiceInputButton_Click"
+                            Margin="0,0,8,0"
+                            Width="45" Height="45"
+                            ToolTip="Voice Input (Coming Soon)"/>
+                    
+                    <Button x:Name="RunAgentButton" Grid.Column="2" 
+                            Content="🚀 Execute AI" 
+                            Background="#238636" 
+                            Style="{StaticResource ModernAnimatedButton}"
+                            Click="RunAgentButton_Click" 
+                            IsEnabled="False"
+                            MinWidth="120" Height="45"/>
+                </Grid>
+                
+                <TextBlock Text="💡 Try: 'Take screenshot and open calculator' or 'Monitor system performance for 30 seconds'" 
+                           FontSize="11" Foreground="#8B949E" Margin="0,8,0,0" FontStyle="Italic"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- Advanced Output Dashboard -->
+        <Border Grid.Row="3" Style="{StaticResource ModernPanel}" Padding="20" Margin="0,0,0,20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <Grid Grid.Row="0" Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="🧠 AI Agent Output &amp; Reasoning Process" 
+                               FontSize="16" FontWeight="Bold" Foreground="#E6EDF3"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Border Background="#238636" CornerRadius="6" Padding="6,3" Margin="0,0,8,0">
+                            <TextBlock Text="✨ Real-time" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border Background="#7C3AED" CornerRadius="6" Padding="6,3">
+                            <TextBlock Text="🔄 Streaming" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+                
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <TextBox x:Name="OutputTextBox"
+                             Style="{StaticResource ModernTextBox}"
+                             IsReadOnly="True"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"
+                             MinHeight="250"
+                             FontFamily="Consolas, Monaco, monospace"
+                             FontSize="13">
+                        <TextBox.Text>🚀 Welcome to Smartitecture AI Agent v2.0!
+
+🧠 Advanced ReAct Framework • 🤖 Local LLM Integration • ⚡ Real-time Automation
+
+🎯 Enhanced Capabilities:
+• 📸 Smart screenshot analysis with AI insights
+• 🖱️ Advanced mouse &amp; keyboard automation
+• 🪟 Intelligent window management
+• 📊 Real-time system performance monitoring
+• 🔮 AI-powered workflow automation
+• 💡 Predictive task suggestions
+• 🎯 Multi-step command execution
+• 🧠 Context-aware reasoning
+
+💬 Natural Language Examples:
+• "Take screenshot then analyze desktop productivity"
+• "Monitor CPU usage and alert if over 80%"
+• "Create workflow: open calculator, type 25*4+17"
+• "Smart window arrangement for coding setup"
+
+🚀 Click 'Start Backend' to begin your AI automation journey!</TextBox.Text>
+                    </TextBox>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+        
+        <!-- Control Panel -->
+        <Border Grid.Row="4" Background="#1C2128" CornerRadius="8" Padding="15" Margin="0,0,0,15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button x:Name="StartBackendButton" Content="🚀 Start Backend" 
+                            Background="#0969DA" Style="{StaticResource GlassButton}"
+                            Click="StartBackendButton_Click" Margin="0,0,10,0"/>
+                    <Button x:Name="StopBackendButton" Content="⏹ Stop Backend"
+                            Background="#DA3633" Style="{StaticResource GlassButton}"
+                            Click="StopBackendButton_Click" IsEnabled="False" Margin="0,0,10,0"/>
+                    <Button x:Name="ClearOutputButton" Content="🗑 Clear Output"
+                            Style="{StaticResource GlassButton}"
+                            Click="ClearOutput_Click" Margin="0,0,10,0"/>
+                    <Button x:Name="SettingsButton" Content="⚙️ Settings"
+                            Style="{StaticResource GlassButton}"
+                            Click="SettingsButton_Click" Margin="0,0,10,0"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock Text="ReAct Framework Active" FontSize="12" Foreground="#7C3AED" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock x:Name="ToolCountText" Text="13 Tools Ready" FontSize="12" Foreground="#10B981" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Footer -->
+        <Border Grid.Row="5" Background="#0D1117" CornerRadius="8" Padding="10">
+            <TextBlock Text="✨ Advanced AI • 🧠 ReAct Reasoning • 🛠 Windows Automation • 🚀 Single-File Deployment"
+                       FontSize="11" Foreground="#6E7681" HorizontalAlignment="Center"/>
+        </Border>
+    </Grid>
+</Window>

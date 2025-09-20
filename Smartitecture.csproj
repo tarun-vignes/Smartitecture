@@ -18,8 +18,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Minimal dependencies for simple WPF app -->
+    <!-- Dependencies for LLM integration and modern UI -->
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -32,12 +34,9 @@
     <Compile Include="App.xaml.cs" />
     <Compile Include="MainWindow.xaml.cs" />
     <Compile Include="SettingsWindow.xaml.cs" />
+    <Compile Include="OllamaService.cs" />
+    <Compile Include="WindowsAutomationService.cs" />
     <Page Include="MainWindow.xaml" />
     <Page Include="SettingsWindow.xaml" />
-    
-    <!-- Include Python backend script as embedded resource -->
-    <None Include="minimal_server.py">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ namespace SmartitectureSimple
         {
             base.OnStartup(e);
             
-            // Simple startup - no complex dependency injection
+            // Create and show the main window
             var mainWindow = new MainWindow();
             mainWindow.Show();
         }

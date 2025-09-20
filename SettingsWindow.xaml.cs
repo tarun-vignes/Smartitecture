@@ -6,9 +6,11 @@ namespace SmartitectureSimple
 {
     public partial class SettingsWindow : Window
     {
+        public string ThemeMode { get; set; } = "Dark";
+        public bool BackendAutoStart { get; set; } = false;
+        public int BackendPort { get; set; } = 8001;
         public string SelectedTheme { get; private set; } = "Dark";
         public bool AutoStartBackend { get; private set; } = false;
-        public int BackendPort { get; private set; } = 8001;
         public bool SettingsChanged { get; private set; } = false;
 
         public SettingsWindow()

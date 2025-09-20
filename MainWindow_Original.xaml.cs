@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,34 +10,30 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Win32;
 
 namespace SmartitectureSimple
 {
     public partial class MainWindow : Window
     {
-        private readonly OllamaService _ollamaService;
-        private readonly WindowsAutomationService _automationService;
-        private bool _isLLMConnected = false;
-        
-        // Theme system
-        private string _currentTheme = "Dark";
-        public string ThemeMode { get; set; } = "Dark"; // "Dark", "Light", "System"
+        private Process? _pythonProcess;
+        private readonly HttpClient _httpClient;
+        private const string BaseUrl = "http://127.0.0.1:8001";
+        private bool _isDarkTheme = true;
+        private string _themeMode = "Dark"; // "Dark", "Light", "System"
+        private string _currentTheme = "Dark"; // For settings window compatibility
+        private bool _isBackendRunning = false;
 
         public MainWindow()
         {
             InitializeComponent();
-            _ollamaService = new OllamaService();
-            _automationService = new WindowsAutomationService();
+            _httpClient = new HttpClient();
+            _httpClient.Timeout = TimeSpan.FromSeconds(30);
             
-            // Initialize theme
-            DetectAndApplySystemTheme();
+            // Initialize UI state
+            UpdateUIState(false);
             
-            // Set up keyboard shortcuts
+            // Add keyboard shortcut for theme toggle
             KeyDown += MainWindow_KeyDown;
-            
-            // Initialize LLM connection
-            _ = InitializeLLMAsync();
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -173,13 +169,13 @@ namespace SmartitectureSimple
             }
         }
 
-        private void UpdateUIState(bool llmConnected)
+        private void UpdateUIState(bool backendRunning)
         {
-            _isLLMConnected = llmConnected;
+            _isBackendRunning = backendRunning;
             
-            if (llmConnected)
+            if (backendRunning)
             {
-                StatusText.Text = "AI Agent: Ready";
+                StatusText.Text = "Backend: Online";
                 StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(16, 185, 129)); // Green
                 RunAgentButton.IsEnabled = true;
                 StopBackendButton.IsEnabled = true;
@@ -187,7 +183,7 @@ namespace SmartitectureSimple
             }
             else
             {
-                StatusText.Text = "AI Agent: Offline";
+                StatusText.Text = "Backend: Offline";
                 StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(248, 81, 73)); // Red
                 RunAgentButton.IsEnabled = false;
                 StopBackendButton.IsEnabled = false;
@@ -197,7 +193,6 @@ namespace SmartitectureSimple
 
         private async void StartBackendButton_Click(object sender, RoutedEventArgs e)
         {
-            await InitializeLLMAsync();
             try
             {
                 StartBackendButton.IsEnabled = false;
@@ -273,79 +268,32 @@ namespace SmartitectureSimple
                     _pythonProcess = null;
                 }
             }
-            finally
-            {
-                StopBackendButton.IsEnabled = false;
-                StartBackendButton.IsEnabled = true;
-            }
-        }
-
-        private async Task InitializeLLMAsync()
-        {
-            try
-            {
-                StatusText.Text = "Connecting to LLM...";
-                StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(251, 191, 36)); // Orange
-
-                var isRunning = await _ollamaService.IsOllamaRunningAsync();
-                if (isRunning)
-                {
-                    var models = await _ollamaService.GetAvailableModelsAsync();
-                    _isLLMConnected = true;
-                    UpdateUIState(true);
-                    
-                    OutputTextBox.Text = "🚀 Smartitecture AI Agent Ready!\n\n" +
-                                       "✅ Local LLM connected (Ollama)\n" +
-                                       $"✅ Available models: {string.Join(", ", models)}\n" +
-                                       "✅ Windows automation tools loaded\n" +
-                                       "✅ Ready for natural language commands\n\n" +
-                                       "Try commands like:\n" +
-                                       "• 'Take a screenshot'\n" +
-                                       "• 'Focus on Chrome browser'\n" +
-                                       "• 'Show system performance'\n" +
-                                       "• 'List running processes'\n" +
-                                       "• 'Check network connectivity'\n\n" +
-                                       "🎯 AI-powered automation with local privacy!";
-                }
-                else
-                {
-                    _isLLMConnected = false;
-                    UpdateUIState(false);
-                    OutputTextBox.Text = "❌ Ollama LLM Not Available\n\n" +
-                                       "To use AI features:\n" +
-                                       "1. Install Ollama from https://ollama.ai\n" +
-                                       "2. Run: ollama pull llama3.1\n" +
-                                       "3. Start Ollama service\n\n" +
-                                       "Manual automation commands still work!";
-                }
-            }
-            catch (Exception ex)
-            {
-                _isLLMConnected = false;
-                UpdateUIState(false);
-                OutputTextBox.Text = $"❌ LLM Connection Failed: {ex.Message}";
-            }
         }
 
         private async void StopBackendButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                _ollamaService?.Dispose();
+                if (_pythonProcess != null && !_pythonProcess.HasExited)
+                {
+                    _pythonProcess.Kill();
+                    _pythonProcess = null;
+                }
+                
                 UpdateUIState(false);
-                OutputTextBox.Text = "⏹ AI Agent disconnected.\n\nReady to reconnect when needed.";
+                OutputTextBox.Text = "⏹ Backend stopped successfully.\n\nReady to restart when needed.";
             }
             catch (Exception ex)
             {
-                OutputTextBox.Text = $"❌ Error disconnecting: {ex.Message}";
+                OutputTextBox.Text = $"❌ Error stopping backend: {ex.Message}";
             }
         }
 
         private async void RunAgentButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!_isLLMConnected)
+            if (!_isBackendRunning)
             {
-                OutputTextBox.Text = "❌ LLM not connected. Please check Ollama installation.";
+                OutputTextBox.Text = "❌ Backend not running. Please start the backend first.";
                 return;
             }
 
@@ -360,63 +308,58 @@ namespace SmartitectureSimple
                     return;
                 }
 
-                OutputTextBox.Text = $"🤖 Processing: {userInput}\n\n⏳ AI agent is analyzing your request...";
+                OutputTextBox.Text = $"🤖 Processing: {userInput}\n\n⏳ ReAct agent is thinking...";
 
-                // Generate automation command using LLM
-                var llmResponse = await _ollamaService.GenerateWindowsAutomationCommandAsync(userInput);
-                
-                try
+                var requestData = new
                 {
-                    // Parse the LLM response as JSON
-                    var commandData = JsonSerializer.Deserialize<JsonElement>(llmResponse);
+                    input = userInput,
+                    max_iterations = 3
+                };
+
+                var json = JsonSerializer.Serialize(requestData);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync($"{BaseUrl}/agent/run", content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var agentResponse = JsonSerializer.Deserialize<JsonElement>(responseContent);
                     
-                    if (commandData.TryGetProperty("action", out var actionElement) &&
-                        commandData.TryGetProperty("parameters", out var parametersElement) &&
-                        commandData.TryGetProperty("description", out var descriptionElement))
+                    var result = agentResponse.GetProperty("result").GetString();
+                    var scratchpad = agentResponse.GetProperty("scratchpad");
+                    var toolsUsed = agentResponse.GetProperty("tools_used");
+                    var iterations = agentResponse.GetProperty("iterations").GetInt32();
+
+                    var output = $"🤖 Command: {userInput}\n\n";
+                    output += $"📋 ReAct Reasoning Process ({iterations} iterations):\n";
+                    
+                    foreach (var step in scratchpad.EnumerateArray())
                     {
-                        var action = actionElement.GetString();
-                        var description = descriptionElement.GetString();
-                        
-                        // Convert parameters to dictionary
-                        var parameters = new Dictionary<string, object>();
-                        foreach (var param in parametersElement.EnumerateObject())
+                        output += $"  {step.GetString()}\n";
+                    }
+                    
+                    output += $"\n🎯 Final Result:\n{result}\n\n";
+                    
+                    if (toolsUsed.GetArrayLength() > 0)
+                    {
+                        output += "🛠️ Tools Used:\n";
+                        foreach (var tool in toolsUsed.EnumerateArray())
                         {
-                            parameters[param.Name] = param.Value.GetString() ?? "";
+                            output += $"  • {tool.GetString()}\n";
                         }
-                        
-                        OutputTextBox.Text = $"🤖 Command: {userInput}\n\n" +
-                                           $"🧠 AI Analysis: {description}\n" +
-                                           $"⚡ Executing: {action}\n\n" +
-                                           "⏳ Running automation...";
-                        
-                        // Execute the automation command
-                        var result = await _automationService.ExecuteAutomationCommand(action, parameters);
-                        
-                        OutputTextBox.Text = $"🤖 Command: {userInput}\n\n" +
-                                           $"🧠 AI Analysis: {description}\n" +
-                                           $"⚡ Action: {action}\n\n" +
-                                           $"📋 Result:\n{result}";
                     }
-                    else
-                    {
-                        // Fallback: treat as direct automation command
-                        var result = await ExecuteDirectCommand(userInput);
-                        OutputTextBox.Text = $"🤖 Command: {userInput}\n\n" +
-                                           $"📋 Direct Execution Result:\n{result}";
-                    }
+
+                    OutputTextBox.Text = output;
                 }
-                catch (JsonException)
+                else
                 {
-                    // If LLM response is not valid JSON, treat as direct command
-                    var result = await ExecuteDirectCommand(userInput);
-                    OutputTextBox.Text = $"🤖 Command: {userInput}\n\n" +
-                                       $"🧠 AI Response: {llmResponse}\n\n" +
-                                       $"📋 Automation Result:\n{result}";
+                    OutputTextBox.Text = $"❌ Agent Error: {responseContent}";
                 }
             }
             catch (Exception ex)
             {
-                OutputTextBox.Text = $"❌ Error: {ex.Message}";
+                OutputTextBox.Text = $"❌ Exception: {ex.Message}";
             }
             finally
             {
@@ -424,70 +367,12 @@ namespace SmartitectureSimple
             }
         }
 
-        private async Task<string> ExecuteDirectCommand(string userInput)
-        {
-            // Simple command mapping for common automation tasks
-            var input = userInput.ToLower();
-            
-            if (input.Contains("screenshot") || input.Contains("capture"))
-            {
-                return await _automationService.ExecuteAutomationCommand("screenshot", new Dictionary<string, object>());
-            }
-            else if (input.Contains("focus") || input.Contains("bring"))
-            {
-                var processName = ExtractProcessName(userInput);
-                var parameters = new Dictionary<string, object> { ["process"] = processName };
-                return await _automationService.ExecuteAutomationCommand("focus_window", parameters);
-            }
-            else if (input.Contains("system") || input.Contains("performance") || input.Contains("info"))
-            {
-                return await _automationService.ExecuteAutomationCommand("system_info", new Dictionary<string, object>());
-            }
-            else if (input.Contains("process") || input.Contains("running"))
-            {
-                return await _automationService.ExecuteAutomationCommand("list_processes", new Dictionary<string, object>());
-            }
-            else if (input.Contains("disk") || input.Contains("storage"))
-            {
-                return await _automationService.ExecuteAutomationCommand("get_disk_usage", new Dictionary<string, object>());
-            }
-            else if (input.Contains("network") || input.Contains("internet"))
-            {
-                return await _automationService.ExecuteAutomationCommand("get_network_info", new Dictionary<string, object>());
-            }
-            else
-            {
-                return $"Command not recognized. Try:\n• Take a screenshot\n• Focus on [app name]\n• Show system info\n• List processes\n• Check disk usage\n• Network info";
-            }
-        }
-
-        private string ExtractProcessName(string input)
-        {
-            var words = input.ToLower().Split(' ');
-            var commonApps = new[] { "chrome", "firefox", "notepad", "calculator", "explorer", "word", "excel", "powerpoint", "outlook", "teams", "discord", "spotify", "steam" };
-            
-            foreach (var app in commonApps)
-            {
-                if (input.ToLower().Contains(app))
-                    return app;
-            }
-            
-            // Try to extract from "focus on X" pattern
-            var focusIndex = Array.IndexOf(words, "on");
-            if (focusIndex >= 0 && focusIndex < words.Length - 1)
-            {
-                return words[focusIndex + 1];
-            }
-            
-            return "chrome"; // Default fallback
-        }
-
         private void QuickCommand_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is string command)
             {
                 InputTextBox.Text = command;
-                if (_isLLMConnected)
+                if (_isBackendRunning)
                 {
                     RunAgentButton_Click(sender, e);
                 }
@@ -496,7 +381,7 @@ namespace SmartitectureSimple
 
         private void InputTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && _isLLMConnected)
+            if (e.Key == Key.Enter && _isBackendRunning)
             {
                 RunAgentButton_Click(sender, new RoutedEventArgs());
             }
