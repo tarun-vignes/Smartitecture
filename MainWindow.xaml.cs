@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -16,6 +18,8 @@ namespace SmartitectureSimple
         private Process? _pythonProcess;
         private readonly HttpClient _httpClient;
         private const string BaseUrl = "http://127.0.0.1:8001";
+        private bool _isDarkTheme = true;
+        private string _themeMode = "Dark"; // "Dark", "Light", "System"
         private bool _isBackendRunning = false;
 
         public MainWindow()
@@ -26,6 +30,133 @@ namespace SmartitectureSimple
             
             // Initialize UI state
             UpdateUIState(false);
+            
+            // Add keyboard shortcut for theme toggle
+            KeyDown += MainWindow_KeyDown;
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Ctrl+T to toggle theme
+            if (e.Key == Key.T && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                ToggleTheme();
+                e.Handled = true;
+            }
+        }
+
+        private void ToggleTheme()
+        {
+            _isDarkTheme = !_isDarkTheme;
+            ApplyTheme();
+        }
+
+        private void ApplyTheme()
+        {
+            var isDark = _themeMode == "Dark" || (_themeMode == "System" && IsSystemDarkTheme());
+            _isDarkTheme = isDark;
+
+            if (isDark)
+            {
+                // Dark theme
+                Background = new SolidColorBrush(Color.FromRgb(13, 17, 23));
+                ApplyDarkThemeToControls();
+            }
+            else
+            {
+                // Light theme
+                Background = new SolidColorBrush(Color.FromRgb(248, 250, 252));
+                ApplyLightThemeToControls();
+            }
+        }
+
+        private void ApplyDarkThemeToControls()
+        {
+            foreach (Border border in FindVisualChildren<Border>(this))
+            {
+                border.Background = new SolidColorBrush(Color.FromRgb(28, 33, 40));
+            }
+            
+            foreach (TextBlock textBlock in FindVisualChildren<TextBlock>(this))
+            {
+                if (textBlock.Name != "StatusText")
+                    textBlock.Foreground = new SolidColorBrush(Colors.White);
+            }
+            
+            foreach (TextBox textBox in FindVisualChildren<TextBox>(this))
+            {
+                textBox.Background = new SolidColorBrush(Color.FromRgb(22, 27, 34));
+                textBox.Foreground = new SolidColorBrush(Color.FromRgb(230, 237, 243));
+                textBox.BorderBrush = new SolidColorBrush(Color.FromRgb(48, 54, 61));
+            }
+        }
+
+        private void ApplyLightThemeToControls()
+        {
+            foreach (Border border in FindVisualChildren<Border>(this))
+            {
+                border.Background = new SolidColorBrush(Colors.White);
+                border.BorderBrush = new SolidColorBrush(Color.FromRgb(229, 231, 235));
+            }
+            
+            foreach (TextBlock textBlock in FindVisualChildren<TextBlock>(this))
+            {
+                if (textBlock.Name != "StatusText")
+                    textBlock.Foreground = new SolidColorBrush(Color.FromRgb(17, 24, 39));
+            }
+            
+            foreach (TextBox textBox in FindVisualChildren<TextBox>(this))
+            {
+                textBox.Background = new SolidColorBrush(Color.FromRgb(249, 250, 251));
+                textBox.Foreground = new SolidColorBrush(Color.FromRgb(17, 24, 39));
+                textBox.BorderBrush = new SolidColorBrush(Color.FromRgb(209, 213, 219));
+            }
+            
+            foreach (Button button in FindVisualChildren<Button>(this))
+            {
+                if (button.Name != "RunAgentButton" && button.Name != "StartBackendButton" && button.Name != "StopBackendButton")
+                {
+                    button.Background = new SolidColorBrush(Color.FromRgb(243, 244, 246));
+                    button.Foreground = new SolidColorBrush(Color.FromRgb(17, 24, 39));
+                    button.BorderBrush = new SolidColorBrush(Color.FromRgb(209, 213, 219));
+                }
+            }
+        }
+
+        private bool IsSystemDarkTheme()
+        {
+            try
+            {
+                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
+                {
+                    var value = key?.GetValue("AppsUseLightTheme");
+                    return value is int intValue && intValue == 0;
+                }
+            }
+            catch
+            {
+                return true; // Default to dark if can't detect
+            }
+        }
+
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
         }
 
         private void UpdateUIState(bool backendRunning)
@@ -248,7 +379,30 @@ namespace SmartitectureSimple
 
         private void ClearOutput_Click(object sender, RoutedEventArgs e)
         {
-            OutputTextBox.Text = "🤖 Output cleared. Ready for new commands.";
+            OutputTextBox.Text = "Output cleared.\n\nReady for new commands.";
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow();
+            settingsWindow.Owner = this;
+            settingsWindow.SetCurrentTheme(_themeMode);
+            
+            if (settingsWindow.ShowDialog() == true && settingsWindow.SettingsChanged)
+            {
+                // Apply theme changes
+                if (settingsWindow.SelectedTheme != _themeMode)
+                {
+                    _themeMode = settingsWindow.SelectedTheme;
+                    ApplyTheme();
+                }
+                
+                // Show confirmation
+                OutputTextBox.Text += $"\n\n⚙️ Settings Updated:\n" +
+                                    $"• Theme: {settingsWindow.SelectedTheme}\n" +
+                                    $"• Auto-start Backend: {(settingsWindow.AutoStartBackend ? "Enabled" : "Disabled")}\n" +
+                                    $"• Backend Port: {settingsWindow.BackendPort}";
+            }
         }
 
         protected override void OnClosed(EventArgs e)

@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <!-- Minimal dependencies for simple WPF app -->
-    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -31,18 +31,13 @@
     <!-- Explicitly include only the files we want -->
     <Compile Include="App.xaml.cs" />
     <Compile Include="MainWindow.xaml.cs" />
-    <Page Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <Compile Include="SettingsWindow.xaml.cs" />
+    <Page Include="MainWindow.xaml" />
+    <Page Include="SettingsWindow.xaml" />
     
-    <!-- Embed Python backend for single-file deployment -->
-    <Content Include="minimal_server.py">
+    <!-- Include Python backend script as embedded resource -->
+    <None Include="minimal_server.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
 </Project>

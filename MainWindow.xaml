@@ -169,6 +169,9 @@ Click 'Start Backend' to begin, then try commands like:
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
@@ -181,6 +184,9 @@ Click 'Start Backend' to begin, then try commands like:
                     <Button x:Name="ClearOutputButton" Content="🗑 Clear Output"
                             Style="{StaticResource GlassButton}"
                             Click="ClearOutput_Click" Margin="0,0,10,0"/>
+                    <Button x:Name="SettingsButton" Content="⚙️ Settings"
+                            Style="{StaticResource GlassButton}"
+                            Click="Settings_Click" Margin="0,0,10,0"/>
                 </StackPanel>
                 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
