@@ -6,89 +6,43 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <RootNamespace>Smartitecture</RootNamespace>
+    <RootNamespace>SmartitectureSimple</RootNamespace>
+    <AssemblyName>SmartitectureSimple</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Platforms>AnyCPU;x86;x64;ARM64</Platforms>
-    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
     
     <!-- Single-file deployment configuration -->
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-    
-    <!-- Application metadata -->
-    <AssemblyTitle>Smartitecture Desktop</AssemblyTitle>
-    <AssemblyDescription>AI-powered Windows automation and productivity application</AssemblyDescription>
-    <AssemblyCompany>Smartitecture</AssemblyCompany>
-    <AssemblyProduct>Smartitecture Desktop</AssemblyProduct>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Core Dependencies -->
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    
-    <!-- HTTP and API -->
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" />
-    
-    <!-- Resilience and Fault Handling -->
-    <PackageReference Include="Polly" Version="8.2.0" />
-    <PackageReference Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
-    
-    <!-- Logging -->
-    <PackageReference Include="Serilog" Version="3.1.1" />
-    <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
-    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    
-    <!-- JSON Handling -->
+    <!-- Minimal dependencies for simple WPF app -->
     <PackageReference Include="System.Text.Json" Version="8.0.0" />
-    
-    <!-- MVVM -->
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    
-    <!-- AI/ML -->
-    <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.9" />
   </ItemGroup>
 
   <PropertyGroup>
-    <EnableDefaultPageItems>false</EnableDefaultPageItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <!-- Only include files from src/ directory -->
-    <Compile Include="src\**\*.cs" />
-    <Page Include="src\**\*.xaml" />
-    
-    <!-- Exclude all legacy directories -->
-    <Compile Remove="Application\**\*.cs" />
-    <Compile Remove="Smartitecture\**\*.cs" />
-    <Compile Remove="*.Tests\**\*.cs" />
-    <None Remove="Application\**\*" />
-    <None Remove="Smartitecture\**\*" />
-    <None Remove="*.Tests\**\*" />
+    <!-- Explicitly include only the files we want -->
+    <Compile Include="App.xaml.cs" />
+    <Compile Include="MainWindow.xaml.cs" />
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     
     <!-- Embed Python backend for single-file deployment -->
-    <EmbeddedResource Include="backend-python\minimal_server.py" />
-    <Content Include="backend-python\minimal_server.py">
+    <Content Include="minimal_server.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    
-    <!-- Embed configuration files for single-file deployment -->
-    <Content Include="src\Smartitecture.WPF\appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>appsettings.json</TargetPath>
     </Content>
   </ItemGroup>
 </Project>
