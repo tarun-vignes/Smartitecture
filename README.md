@@ -1,77 +1,83 @@
-# Smartitecture - Enterprise Workflow Automation Platform
+# Smartitecture - AI-Powered Windows Automation
 
 [![Smartitecture CI](https://github.com/tarun-vignes/Smartitecture/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/tarun-vignes/Smartitecture/actions/workflows/dotnet-desktop.yml)
 
-Smartitecture is an enterprise-grade workflow automation platform that combines the power of C# WPF for the frontend with a lightweight Python backend. The application features a professional visual workflow designer with drag-and-drop node creation, connection management, and real-time execution visualization.
+Smartitecture is a modern Windows automation platform that combines the power of local AI with native Windows automation. The application features a clean, intuitive interface for executing natural language commands and automating Windows tasks with the power of local LLMs (Ollama).
+
+## 🚀 Key Features
+
+- **Local AI Integration**: Powered by Ollama for private, offline AI processing
+- **Natural Language Commands**: Control your Windows PC using everyday language
+- **Native Windows Automation**: Built with C# for seamless Windows integration
+- **No Cloud Dependencies**: All processing happens locally on your machine
+- **Modern UI**: Clean, responsive interface with dark/light theme support
 
 ## Technical Overview
 
-Smartitecture uses a modern hybrid architecture:
+Smartitecture uses a streamlined architecture:
 - **Frontend**: C# WPF (.NET 8.0) with MVVM pattern
-- **Backend**: Lightweight Python HTTP server (standard library only)
-- **Communication**: REST API between frontend and backend
+- **AI Backend**: Local Ollama LLM integration
+- **Automation**: Native Windows APIs for reliable task automation
 - **Deployment**: Self-contained single-file executable for Windows
 
-## Architecture
+## 🏗️ Architecture
 
-Smartitecture follows a hybrid architecture that combines the power of C# WPF with Python's flexibility:
+Smartitecture is built on a modern, all-C# architecture for maximum performance and reliability:
 
 ### Core Components
 
 1. **Frontend (C# WPF)**
-   - Visual Workflow Designer with drag-and-drop interface
-   - Node-based workflow creation and management
-   - Real-time execution visualization
-   - Properties panel for node configuration
+   - Clean, modern UI with dark/light theme support
+   - Natural language command input
+   - Real-time status and feedback
+   - Command history and output display
 
-2. **Backend (Python)**
-   - Lightweight HTTP server (standard library only)
-   - Workflow execution engine
-   - Plugin system for extensibility
-   - Cross-platform compatibility
+2. **AI Integration (OllamaService)**
+   - Local LLM processing with Ollama
+   - Natural language understanding
+   - Command parsing and execution planning
+   - Context-aware responses
+
+3. **Automation Engine (WindowsAutomationService)**
+   - Native Windows process management
+   - Screenshot capture and manipulation
+   - Window and application control
+   - System monitoring and information
 
 ### Key Architectural Patterns
 
-- **MVVM (Model-View-ViewModel)**: UI architecture pattern using CommunityToolkit.Mvvm
-- **Mediator Pattern**: Using MediatR for request/response workflows and decoupled communication
-- **Dependency Injection**: Microsoft.Extensions.DependencyInjection for service resolution
-- **Command Pattern**: For encapsulating system operations and user actions
+- **MVVM (Model-View-ViewModel)**: Clean separation of UI and business logic
+- **Dependency Injection**: For service management and testability
+- **Async/Await**: Non-blocking UI with responsive user experience
+- **Command Pattern**: For encapsulating automation operations
 
 ## Project Structure
 
 ```
 Smartitecture/
-├── Application/                # Core application logic
-│   ├── API/                    # ASP.NET Core API components
-│   ├── Commands/               # Command handlers and definitions
-│   ├── Network/                # Network monitoring and analysis
-│   ├── Security/               # Security monitoring and protection
-│   ├── Services/               # Core application services
-│   ├── UI/                     # UI-related logic
-│   └── ViewModels/             # MVVM view models
-├── Assets/                     # Application assets and resources
-├── Smartitecture/              # Main WinUI application project
-│   ├── Application/            # Application-specific implementations
-│   ├── Services/               # Platform-specific service implementations
-│   ├── Themes/                 # UI themes and styles
-│   └── UI/                     # UI components and pages
-├── Smartitecture.Tests/        # Unit and integration tests
-└── Website/                    # Companion website (if applicable)
+├── MainWindow.xaml            # Main application window
+├── MainWindow.xaml.cs         # Main window code-behind
+├── OllamaService.cs           # LLM integration service
+├── WindowsAutomationService.cs # Windows automation logic
+├── App.xaml                   # Application resources
+├── App.xaml.cs                # Application entry point
+├── SettingsWindow.xaml        # Settings UI
+└── Assets/                    # Application assets and resources
 ```
 
-## Key Technologies
+## 🛠️ Key Technologies
 
 ### Frontend (C# WPF)
-- **.NET 8.0**: Modern, cross-platform .NET runtime
-- **WPF (Windows Presentation Foundation)**: For rich desktop UI
+- **.NET 8.0**: Modern, high-performance .NET runtime
+- **WPF (Windows Presentation Foundation)**: Native Windows UI framework
 - **MVVM Pattern**: Clean separation of UI and business logic
-- **XAML**: Declarative UI definition
+- **XAML**: Declarative UI definition with modern styling
 
-### Backend (Python)
-- **Python 3.8+**: Lightweight and cross-platform
-- **Standard Library Only**: No external dependencies required
-- **HTTP Server**: Built-in http.server with request routing
-- **JSON-RPC**: Simple and efficient communication protocol
+### AI & Automation
+- **Ollama**: Local LLM for natural language processing
+- **Windows API**: Native Windows automation
+- **System.Management**: System information and monitoring
+- **System.Drawing**: Screenshot and image processing
 
 ### Architecture & Patterns
 - **CommunityToolkit.Mvvm**: MVVM implementation with source generators
@@ -368,9 +374,15 @@ The Smartitecture companion website is deployed to Netlify, showcasing all the e
 - Information about security tools and system diagnostics
 - Comprehensive documentation for elderly users
 
-## License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Ollama](https://ollama.ai/) for the amazing local LLM framework
+- .NET Foundation for the powerful WPF framework
+- All contributors who have helped improve Smartitecture
 
 ## Acknowledgments
 
