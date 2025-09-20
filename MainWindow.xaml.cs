@@ -5,6 +5,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SmartitectureSimple
 {
@@ -13,12 +16,38 @@ namespace SmartitectureSimple
         private Process? _pythonProcess;
         private readonly HttpClient _httpClient;
         private const string BaseUrl = "http://127.0.0.1:8001";
+        private bool _isBackendRunning = false;
 
         public MainWindow()
         {
             InitializeComponent();
             _httpClient = new HttpClient();
-            _httpClient.Timeout = TimeSpan.FromSeconds(10);
+            _httpClient.Timeout = TimeSpan.FromSeconds(30);
+            
+            // Initialize UI state
+            UpdateUIState(false);
+        }
+
+        private void UpdateUIState(bool backendRunning)
+        {
+            _isBackendRunning = backendRunning;
+            
+            if (backendRunning)
+            {
+                StatusText.Text = "Backend: Online";
+                StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(16, 185, 129)); // Green
+                RunAgentButton.IsEnabled = true;
+                StopBackendButton.IsEnabled = true;
+                StartBackendButton.IsEnabled = false;
+            }
+            else
+            {
+                StatusText.Text = "Backend: Offline";
+                StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(248, 81, 73)); // Red
+                RunAgentButton.IsEnabled = false;
+                StopBackendButton.IsEnabled = false;
+                StartBackendButton.IsEnabled = true;
+            }
         }
 
         private async void StartBackendButton_Click(object sender, RoutedEventArgs e)
@@ -26,8 +55,8 @@ namespace SmartitectureSimple
             try
             {
                 StartBackendButton.IsEnabled = false;
-                StatusText.Text = "Starting Python backend...";
-                StatusText.Foreground = System.Windows.Media.Brushes.Orange;
+                StatusText.Text = "Starting backend...";
+                StatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(251, 191, 36)); // Orange
 
                 // Get the directory where the executable is located
                 string exeDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -48,86 +77,143 @@ namespace SmartitectureSimple
                     WindowStyle = ProcessWindowStyle.Hidden,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    WorkingDirectory = exeDirectory
                 };
 
                 _pythonProcess = Process.Start(startInfo);
-                
                 if (_pythonProcess == null)
                 {
                     throw new Exception("Failed to start Python process");
                 }
 
-                // Wait a moment for the server to start
+                // Wait for backend to start and perform health check
                 await Task.Delay(2000);
-
-                // Test the connection
-                bool isHealthy = await TestBackendHealth();
                 
-                if (isHealthy)
+                var healthResponse = await _httpClient.GetAsync($"{BaseUrl}/health");
+                if (healthResponse.IsSuccessStatusCode)
                 {
-                    StatusText.Text = "✅ Python Backend: Running on port 8001";
-                    StatusText.Foreground = System.Windows.Media.Brushes.LightGreen;
-                    RunAgentButton.IsEnabled = true;
-                    StopBackendButton.IsEnabled = true;
-                    OutputTextBox.Text = "Backend started successfully! Ready to process requests.";
+                    var healthContent = await healthResponse.Content.ReadAsStringAsync();
+                    var healthData = JsonSerializer.Deserialize<JsonElement>(healthContent);
+                    
+                    UpdateUIState(true);
+                    OutputTextBox.Text = "🚀 ReAct Agent Backend Started Successfully!\n\n" +
+                                       "✅ Python backend is running\n" +
+                                       "✅ ReAct framework initialized\n" +
+                                       "✅ All 13 automation tools loaded\n" +
+                                       "✅ Ready for natural language commands\n\n" +
+                                       "Try commands like:\n" +
+                                       "• 'Take a screenshot'\n" +
+                                       "• 'Focus on chrome'\n" +
+                                       "• 'What's 25 * 4 + 17?'\n" +
+                                       "• 'Show running programs'\n" +
+                                       "• 'List files in current directory'";
                 }
                 else
                 {
-                    throw new Exception("Backend started but health check failed");
+                    throw new Exception($"Backend health check failed: {healthResponse.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                StatusText.Text = "❌ Backend Failed to Start";
-                StatusText.Foreground = System.Windows.Media.Brushes.Red;
-                OutputTextBox.Text = $"Error starting backend: {ex.Message}";
-                StartBackendButton.IsEnabled = true;
+                UpdateUIState(false);
+                OutputTextBox.Text = $"❌ Backend Failed to Start\n\nError: {ex.Message}\n\n" +
+                                   "Troubleshooting:\n" +
+                                   "• Ensure Python is installed and in PATH\n" +
+                                   "• Check if port 8001 is available\n" +
+                                   "• Verify minimal_server.py exists";
                 
-                // Clean up process if it exists
                 if (_pythonProcess != null && !_pythonProcess.HasExited)
                 {
-                    _pythonProcess.Kill();
+                    try { _pythonProcess.Kill(); } catch { }
                     _pythonProcess = null;
                 }
             }
         }
 
-        private async void RunAgentButton_Click(object sender, RoutedEventArgs e)
+        private async void StopBackendButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                RunAgentButton.IsEnabled = false;
-                OutputTextBox.Text = "Processing request...";
-
-                string input = InputTextBox.Text;
-                if (string.IsNullOrWhiteSpace(input))
+                if (_pythonProcess != null && !_pythonProcess.HasExited)
                 {
-                    input = "Test request from simplified Smartitecture";
+                    _pythonProcess.Kill();
+                    _pythonProcess = null;
                 }
+                
+                UpdateUIState(false);
+                OutputTextBox.Text = "⏹ Backend stopped successfully.\n\nReady to restart when needed.";
+            }
+            catch (Exception ex)
+            {
+                OutputTextBox.Text = $"❌ Error stopping backend: {ex.Message}";
+            }
+        }
+
+        private async void RunAgentButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_isBackendRunning)
+            {
+                OutputTextBox.Text = "❌ Backend not running. Please start the backend first.";
+                return;
+            }
+
+            try
+            {
+                RunAgentButton.IsEnabled = false;
+                var userInput = InputTextBox.Text.Trim();
+                
+                if (string.IsNullOrEmpty(userInput))
+                {
+                    OutputTextBox.Text = "❌ Please enter a command first.";
+                    return;
+                }
+
+                OutputTextBox.Text = $"🤖 Processing: {userInput}\n\n⏳ ReAct agent is thinking...";
 
                 var requestData = new
                 {
-                    input = input,
-                    max_iterations = 1
+                    input = userInput,
+                    max_iterations = 3
                 };
 
-                string jsonContent = JsonSerializer.Serialize(requestData);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                var json = JsonSerializer.Serialize(requestData);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 var response = await _httpClient.PostAsync($"{BaseUrl}/agent/run", content);
-                string responseContent = await response.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = JsonSerializer.Deserialize<JsonElement>(responseContent);
-                    string resultText = result.GetProperty("result").GetString() ?? "No result";
+                    var agentResponse = JsonSerializer.Deserialize<JsonElement>(responseContent);
                     
-                    OutputTextBox.Text = $"✅ Success!\n\nInput: {input}\n\nResult: {resultText}\n\nResponse: {responseContent}";
+                    var result = agentResponse.GetProperty("result").GetString();
+                    var scratchpad = agentResponse.GetProperty("scratchpad");
+                    var toolsUsed = agentResponse.GetProperty("tools_used");
+                    var iterations = agentResponse.GetProperty("iterations").GetInt32();
+
+                    var output = $"🤖 Command: {userInput}\n\n";
+                    output += $"📋 ReAct Reasoning Process ({iterations} iterations):\n";
+                    
+                    foreach (var step in scratchpad.EnumerateArray())
+                    {
+                        output += $"  {step.GetString()}\n";
+                    }
+                    
+                    output += $"\n🎯 Final Result:\n{result}\n\n";
+                    
+                    if (toolsUsed.GetArrayLength() > 0)
+                    {
+                        output += "🛠️ Tools Used:\n";
+                        foreach (var tool in toolsUsed.EnumerateArray())
+                        {
+                            output += $"  • {tool.GetString()}\n";
+                        }
+                    }
+
+                    OutputTextBox.Text = output;
                 }
                 else
                 {
-                    OutputTextBox.Text = $"❌ Error: {response.StatusCode}\n\nResponse: {responseContent}";
+                    OutputTextBox.Text = $"❌ Agent Error: {responseContent}";
                 }
             }
             catch (Exception ex)
@@ -140,53 +226,43 @@ namespace SmartitectureSimple
             }
         }
 
-        private void StopBackendButton_Click(object sender, RoutedEventArgs e)
+        private void QuickCommand_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is string command)
+            {
+                InputTextBox.Text = command;
+                if (_isBackendRunning)
+                {
+                    RunAgentButton_Click(sender, e);
+                }
+            }
+        }
+
+        private void InputTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && _isBackendRunning)
+            {
+                RunAgentButton_Click(sender, new RoutedEventArgs());
+            }
+        }
+
+        private void ClearOutput_Click(object sender, RoutedEventArgs e)
+        {
+            OutputTextBox.Text = "🤖 Output cleared. Ready for new commands.";
+        }
+
+        protected override void OnClosed(EventArgs e)
         {
             try
             {
                 if (_pythonProcess != null && !_pythonProcess.HasExited)
                 {
                     _pythonProcess.Kill();
-                    _pythonProcess.WaitForExit(5000);
-                    _pythonProcess = null;
                 }
-
-                StatusText.Text = "Python Backend: Stopped";
-                StatusText.Foreground = System.Windows.Media.Brushes.Gray;
-                RunAgentButton.IsEnabled = false;
-                StopBackendButton.IsEnabled = false;
-                StartBackendButton.IsEnabled = true;
-                OutputTextBox.Text = "Backend stopped successfully.";
+                _httpClient?.Dispose();
             }
-            catch (Exception ex)
-            {
-                OutputTextBox.Text = $"Error stopping backend: {ex.Message}";
-            }
-        }
-
-        private async Task<bool> TestBackendHealth()
-        {
-            try
-            {
-                var response = await _httpClient.GetAsync($"{BaseUrl}/health");
-                return response.IsSuccessStatusCode;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            // Clean up resources
-            if (_pythonProcess != null && !_pythonProcess.HasExited)
-            {
-                _pythonProcess.Kill();
-                _pythonProcess = null;
-            }
+            catch { }
             
-            _httpClient?.Dispose();
             base.OnClosed(e);
         }
     }
