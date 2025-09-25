@@ -8,7 +8,6 @@ using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SmartitectureSimple
 {
@@ -22,6 +21,21 @@ namespace SmartitectureSimple
 
         [DllImport("user32.dll")]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32.dll")]
+        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetDesktopWindow();
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
 
         private const int SW_RESTORE = 9;
         private const int SW_SHOW = 5;
@@ -55,11 +69,17 @@ namespace SmartitectureSimple
             {
                 try
                 {
-                    var bounds = Screen.PrimaryScreen.Bounds;
-                    using var bitmap = new Bitmap(bounds.Width, bounds.Height);
+                    // Get screen dimensions using Win32 API
+                    var desktopWindow = GetDesktopWindow();
+                    GetWindowRect(desktopWindow, out RECT bounds);
+                    
+                    int width = bounds.Right - bounds.Left;
+                    int height = bounds.Bottom - bounds.Top;
+                    
+                    using var bitmap = new Bitmap(width, height);
                     using var graphics = Graphics.FromImage(bitmap);
                     
-                    graphics.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
+                    graphics.CopyFromScreen(Point.Empty, Point.Empty, new Size(width, height));
                     
                     var fileName = $"screenshot_{DateTime.Now:yyyyMMdd_HHmmss}.png";
                     var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- MODIFIED: Rebranded from AIPal to Smartitecture -->
+<Page
+    x:Class="Smartitecture.UI.ThemeSettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Padding="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Text="Appearance Settings" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,16"/>
+
+        <!-- Main content area -->
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="24" MaxWidth="800">
+                <!-- Introduction -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Customize Smartitecture's Look" 
+                               Style="{StaticResource SubtitleTextBlockStyle}" 
+                               FontSize="24"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
+                        Choose how Smartitecture looks to make it comfortable for your eyes.
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Theme Selection -->
+                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1" CornerRadius="8" Padding="16">
+                    <TextBlock Text="Color Theme" 
+                               Style="{StaticResource SubtitleTextBlockStyle}" 
+                               FontSize="20"/>
+                    
+                    <StackPanel Spacing="16">
+                        <!-- Theme Options -->
+                        <RadioButtons x:Name="ThemeRadioButtons" SelectionChanged="ThemeRadioButtons_SelectionChanged">
+                            <RadioButton x:Name="SystemThemeRadioButton" Content="Use System Setting" Tag="System">
+                                <RadioButton.ContentTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="Use System Setting" FontWeight="SemiBold" FontSize="16"/>
+                                            <TextBlock Text="Smartitecture will match your Windows theme setting" 
+                                                       FontSize="14" Opacity="0.8" TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </RadioButton.ContentTemplate>
+                            </RadioButton>
+                            
+                            <RadioButton x:Name="LightThemeRadioButton" Content="Light Mode" Tag="Light">
+                                <RadioButton.ContentTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="Light Mode" FontWeight="SemiBold" FontSize="16"/>
+                                            <TextBlock Text="Bright background with dark text (good for daytime)" 
+                                                       FontSize="14" Opacity="0.8" TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </RadioButton.ContentTemplate>
+                            </RadioButton>
+                            
+                            <RadioButton x:Name="DarkThemeRadioButton" Content="Dark Mode" Tag="Dark">
+                                <RadioButton.ContentTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="Dark Mode" FontWeight="SemiBold" FontSize="16"/>
+                                            <TextBlock Text="Dark background with light text (easier on the eyes at night)" 
+                                                       FontSize="14" Opacity="0.8" TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </RadioButton.ContentTemplate>
+                            </RadioButton>
+                        </RadioButtons>
+                        
+                        <!-- Theme Preview -->
+                        <Grid Margin="0,16,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- Light Theme Preview -->
+                            <Border Grid.Column="0" 
+                                    Background="White" 
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                                    BorderThickness="1" 
+                                    CornerRadius="8" 
+                                    Margin="0,0,8,0"
+                                    Padding="12">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Text="Light Mode" Foreground="Black" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <Rectangle Height="1" Fill="#E0E0E0"/>
+                                    <TextBlock Text="Sample text in light mode" Foreground="Black" TextWrapping="Wrap"/>
+                                    <Button Content="Button" Background="#0078D7" Foreground="White" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Dark Theme Preview -->
+                            <Border Grid.Column="1" 
+                                    Background="#202020" 
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                                    BorderThickness="1" 
+                                    CornerRadius="8" 
+                                    Margin="8,0,0,0"
+                                    Padding="12">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Text="Dark Mode" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <Rectangle Height="1" Fill="#505050"/>
+                                    <TextBlock Text="Sample text in dark mode" Foreground="White" TextWrapping="Wrap"/>
+                                    <Button Content="Button" Background="#0078D7" Foreground="White" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+                
+                <!-- Quick Theme Toggle -->
+                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1" CornerRadius="8" Padding="16">
+                    <TextBlock Text="Quick Theme Toggle" 
+                               Style="{StaticResource SubtitleTextBlockStyle}" 
+                               FontSize="20"/>
+                    
+                    <StackPanel Spacing="16">
+                        <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
+                            You can quickly switch between light and dark mode using this toggle:
+                        </TextBlock>
+                        
+                        <ToggleSwitch x:Name="ThemeToggleSwitch" 
+                                     Header="Dark Mode" 
+                                     OnContent="On" 
+                                     OffContent="Off"
+                                     Toggled="ThemeToggleSwitch_Toggled"/>
+                        
+                        <TextBlock TextWrapping="Wrap" FontSize="14" Opacity="0.8">
+                            Tip: Dark mode is often easier on the eyes, especially in low light.
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+                
+                <!-- Color Accent -->
+                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1" CornerRadius="8" Padding="16">
+                    <TextBlock Text="Color Accent" 
+                               Style="{StaticResource SubtitleTextBlockStyle}" 
+                               FontSize="20"/>
+                    
+                    <StackPanel Spacing="16">
+                        <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
+                            Choose a color accent for buttons and highlights:
+                        </TextBlock>
+                        
+                        <GridView x:Name="AccentColorGridView" 
+                                 SelectionMode="Single"
+                                 SelectionChanged="AccentColorGridView_SelectionChanged"
+                                 HorizontalAlignment="Center">
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="8">
+                                        <Ellipse Width="40" Height="40" Fill="{Binding Color}"/>
+                                        <Ellipse Width="40" Height="40" Stroke="White" StrokeThickness="2" 
+                                                 Visibility="{Binding IsSelected}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                            <GridView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <ItemsWrapGrid MaximumRowsOrColumns="5" Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </GridView.ItemsPanel>
+                        </GridView>
+                        
+                        <TextBlock TextWrapping="Wrap" FontSize="14" Opacity="0.8">
+                            Note: Accent color changes will take effect after restarting Smartitecture.
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+                
+                <!-- Save Button -->
+                <Button Content="Save Appearance Settings" 
+                        Click="SaveSettings_Click" 
+                        Style="{StaticResource AccentButtonStyle}"
+                        HorizontalAlignment="Center"
+                        Padding="24,8"
+                        FontSize="16"/>
+                
+                <!-- Footer -->
+                <TextBlock TextWrapping="Wrap" FontSize="14" Opacity="0.7" Margin="0,16,0,0">
+                    Customize Smartitecture's appearance to make it comfortable for your eyes. If you have vision difficulties, also check the Accessibility Settings for more options.
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

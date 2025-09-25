@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="WisdomLink - Your friendly AI companion designed to help elderly and less tech-savvy users navigate their computers with confidence." />
+    <title>WisdomLink - Your Windows AI Companion</title>
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="WisdomLink - Your Windows AI Companion" />
+    <meta property="og:description" content="A friendly AI companion designed to help elderly and less tech-savvy users navigate their computers with confidence." />
+    <meta property="og:image" content="/src/assets/images/wisdomlink-social.png" />
+    <meta property="og:url" content="https://wisdomlink.app" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Font preloading for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/assets/index-f7c112e5.js"></script>
+    <link rel="stylesheet" href="/assets/index-9fae5d5c.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    
+    <!-- Accessibility features -->
+    <script>
+      // Check if user prefers reduced motion
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        document.documentElement.classList.add('reduce-motion');
+      }
+      
+      // Check if user prefers high contrast
+      const prefersHighContrast = window.matchMedia('(prefers-contrast: high)').matches;
+      if (prefersHighContrast) {
+        document.documentElement.classList.add('high-contrast');
+      }
+    </script>
+  </body>
+</html>

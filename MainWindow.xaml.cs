@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -19,9 +20,14 @@ namespace SmartitectureSimple
         private readonly OllamaService _ollamaService;
         private readonly WindowsAutomationService _automationService;
         private bool _isLLMConnected = false;
+        private Process? _pythonProcess;
+        private readonly HttpClient _httpClient = new HttpClient();
+        private const string BaseUrl = "http://localhost:8001";
         
         // Theme system
         private string _currentTheme = "Dark";
+        private bool _isDarkTheme = true;
+        private string _themeMode = "Dark";
         public string ThemeMode { get; set; } = "Dark"; // "Dark", "Light", "System"
 
         public MainWindow()
@@ -40,13 +46,33 @@ namespace SmartitectureSimple
             _ = InitializeLLMAsync();
         }
 
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             // Ctrl+T to toggle theme
             if (e.Key == Key.T && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 ToggleTheme();
                 e.Handled = true;
+            }
+        }
+
+        private void DetectAndApplySystemTheme()
+        {
+            _themeMode = "System";
+            ApplyTheme();
+        }
+
+        private bool IsSystemDarkTheme()
+        {
+            try
+            {
+                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+                var value = key?.GetValue("AppsUseLightTheme");
+                return value is int intValue && intValue == 0;
+            }
+            catch
+            {
+                return true; // Default to dark theme if we can't detect
             }
         }
 
@@ -137,21 +163,6 @@ namespace SmartitectureSimple
             }
         }
 
-        private bool IsSystemDarkTheme()
-        {
-            try
-            {
-                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
-                {
-                    var value = key?.GetValue("AppsUseLightTheme");
-                    return value is int intValue && intValue == 0;
-                }
-            }
-            catch
-            {
-                return true; // Default to dark if can't detect
-            }
-        }
 
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
@@ -494,7 +505,7 @@ namespace SmartitectureSimple
             }
         }
 
-        private void InputTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void InputTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Enter && _isLLMConnected)
             {

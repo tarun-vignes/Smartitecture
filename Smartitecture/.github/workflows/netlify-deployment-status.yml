@@ -1,0 +1,33 @@
+name: Netlify Deployment Status
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - 'Website/**'
+      - '.github/workflows/netlify-deployment-status.yml'
+
+jobs:
+  register-deployment:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Create GitHub Deployment
+        id: deployment
+        uses: chrnorm/deployment-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: production
+          description: 'AIPal Companion Website'
+          
+      - name: Update Deployment Status (Success)
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          state: "success"
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          environment-url: https://aipal-companion.windsurf.build
+          description: 'AIPal Companion Website deployed to Netlify'
