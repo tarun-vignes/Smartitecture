@@ -1,6 +1,8 @@
 using System;
 using Smartitecture.API;
 using Smartitecture.Services;
+using Smartitecture.Services.Models;
+using Smartitecture.Services.Providers;
 using Smartitecture.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -65,9 +67,18 @@ namespace Smartitecture
             // Register configuration
             services.Configure<AzureOpenAIConfiguration>(
                 configuration.GetSection("AzureOpenAI"));
+            services.Configure<AIModelConfiguration>(
+                configuration.GetSection("AIModel"));
+
+            // Register HTTP client for AI providers
+            services.AddHttpClient<AzureOpenAIProvider>();
+
+            // Register AI providers
+            services.AddSingleton<IModelProvider, AzureOpenAIProvider>();
+            services.AddSingleton<IModelProvider, LocalFallbackProvider>();
 
             // Register core services
-            services.AddSingleton<ILLMService, AzureOpenAIService>();
+            services.AddSingleton<ILLMService, MultiModelLLMService>();
             services.AddSingleton<CommandMapper>();
 
             // Register agent services

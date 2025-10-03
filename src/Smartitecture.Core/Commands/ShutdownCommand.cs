@@ -2,12 +2,14 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace AIPal.Application.Commands
+namespace Smartitecture.Core.Commands
 {
     /// <summary>
     /// Command implementation for shutting down the Windows system.
     /// Requires administrative privileges to execute.
     /// </summary>
+    public class ShutdownCommand : IAppCommand
+    {
         /// <summary>Gets the name of the command</summary>
         public string CommandName => "Shutdown";
 

@@ -1,13 +1,15 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using Windows.System;
 
-namespace AIPal.Application.Commands
+namespace Smartitecture.Core.Commands
 {
     /// <summary>
     /// Command implementation for launching Windows applications.
     /// Supports both Microsoft Store apps and traditional desktop applications.
     /// </summary>
+    public class LaunchAppCommand : IAppCommand
+    {
         /// <summary>Gets the name of the command</summary>
         public string CommandName => "LaunchApp";
 
@@ -32,25 +34,19 @@ namespace AIPal.Application.Commands
             {
                 var appName = parameters[0];
                 
-                // Try to launch as a store app first
+                // Launch the application using Process.Start
                 try
                 {
-                    var options = new LauncherOptions
+                    Process.Start(new ProcessStartInfo
                     {
-                        TargetApplicationPackageFamilyName = appName
-                    };
-                    await Launcher.LaunchUriAsync(new Uri("ms-store:"), options);
+                        FileName = appName,
+                        UseShellExecute = true
+                    });
                     return true;
                 }
                 catch
                 {
-                    // If store app launch fails, try as a desktop app
-                    var options = new LauncherOptions
-                    {
-                        TreatAsUntrusted = false
-                    };
-                    await Launcher.LaunchUriAsync(new Uri($"shell:AppsFolder\\{appName}"), options);
-                    return true;
+                    return false;
                 }
             }
             catch (Exception)
