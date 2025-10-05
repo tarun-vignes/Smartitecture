@@ -1,0 +1,11 @@
+<Project>
+  
+  <!-- Fix for duplicate class definitions -->
+  <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+      <Analyzer Remove="@(Analyzer)" />
+      <Analyzer Include="@(FilteredAnalyzer)" />
+    </ItemGroup>
+  </Target>
+</Project>
