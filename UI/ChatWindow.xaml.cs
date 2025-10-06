@@ -7,30 +7,23 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Smartitecture.Core.Commands;
 using Smartitecture.Services;
+using Smartitecture.Core.Commands;
 
-namespace Smartitecture
+namespace Smartitecture.UI
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class ChatWindow : Window
     {
         private readonly ILLMService _llmService;
         private readonly Dictionary<string, IAppCommand> _commands;
         private readonly string _conversationId;
         private readonly DispatcherTimer _typingTimer;
         private bool _isProcessing = false;
-        private Border _currentStreamingMessage;
-        private TextBlock _currentStreamingTextBlock;
 
-        public MainWindow()
+        public ChatWindow(ILLMService llmService)
         {
             InitializeComponent();
-            
-            // Initialize LLM service
-            _llmService = new MockLLMService();
+            _llmService = llmService ?? throw new ArgumentNullException(nameof(llmService));
             _conversationId = Guid.NewGuid().ToString();
             
             // Initialize available commands
@@ -54,107 +47,12 @@ namespace Smartitecture
                 UpdateModelStatus();
             }
 
-            // Setup placeholder text behavior for chat input
+            // Setup placeholder text behavior
             SetupPlaceholderText();
-        }
 
-        #region Navigation Methods
-
-        private void OpenChatButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                StatusText.Text = "Opening AI Chat Assistant...";
-                ShowChatView();
-                StatusText.Text = "AI Chat Assistant ready";
-            }
-            catch (Exception ex)
-            {
-                StatusText.Text = $"❌ Error opening chat: {ex.Message}";
-                MessageBox.Show($"Error opening chat: {ex.Message}", "Error", 
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            ShowMainView();
-            StatusText.Text = "Ready";
-        }
-
-        private void ShowChatView()
-        {
-            MainView.Visibility = Visibility.Collapsed;
-            ChatView.Visibility = Visibility.Visible;
-            BackButton.Visibility = Visibility.Visible;
-            HeaderTitle.Text = "🤖 AI Chat Assistant";
+            // Focus on input
             MessageInput.Focus();
         }
-
-        private void ShowMainView()
-        {
-            ChatView.Visibility = Visibility.Collapsed;
-            MainView.Visibility = Visibility.Visible;
-            BackButton.Visibility = Visibility.Collapsed;
-            HeaderTitle.Text = "🏗️ Smartitecture - AI Desktop Assistant";
-        }
-
-        #endregion
-
-        #region Original Command Methods
-
-        private async void LaunchAppButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                StatusText.Text = "Testing Launch App Command...";
-                
-                // Create and test the launch app command
-                var launchCommand = new Smartitecture.Core.Commands.LaunchAppCommand();
-                var result = await launchCommand.ExecuteAsync(new[] { "notepad" });
-                
-                StatusText.Text = result ? "✅ Launch command executed successfully!" : "❌ Launch command failed";
-            }
-            catch (Exception ex)
-            {
-                StatusText.Text = $"❌ Error: {ex.Message}";
-            }
-        }
-
-        private async void ShutdownButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                StatusText.Text = "Testing Shutdown Command...";
-                
-                // Show confirmation dialog
-                var result = MessageBox.Show(
-                    "This will test the shutdown command (with 300 second delay). Continue?", 
-                    "Confirm Shutdown Test", 
-                    MessageBoxButton.YesNo, 
-                    MessageBoxImage.Question);
-                
-                if (result == MessageBoxResult.Yes)
-                {
-                    var shutdownCommand = new Smartitecture.Core.Commands.ShutdownCommand();
-                    var success = await shutdownCommand.ExecuteAsync(new[] { "300" }); // 5 minute delay
-                    
-                    StatusText.Text = success ? "✅ Shutdown command executed (5 min delay)!" : "❌ Shutdown command failed";
-                }
-                else
-                {
-                    StatusText.Text = "Shutdown test cancelled";
-                }
-            }
-            catch (Exception ex)
-            {
-                StatusText.Text = $"❌ Error: {ex.Message}";
-            }
-        }
-
-        #endregion
-
-        #region Chat Functionality
 
         private void SetupPlaceholderText()
         {
@@ -315,6 +213,9 @@ namespace Smartitecture
             }
         }
 
+        private Border _currentStreamingMessage;
+        private TextBlock _currentStreamingTextBlock;
+
         private void OnTokenReceived(string token)
         {
             Dispatcher.Invoke(() =>
@@ -332,11 +233,7 @@ namespace Smartitecture
 
                     _currentStreamingMessage = new Border
                     {
-                        Background = new SolidColorBrush(Color.FromRgb(45, 45, 48)),
-                        CornerRadius = new CornerRadius(15, 15, 15, 5),
-                        Padding = new Thickness(12, 8, 12, 8),
-                        Margin = new Thickness(10, 5, 50, 5),
-                        HorizontalAlignment = HorizontalAlignment.Left,
+                        Style = (Style)FindResource("AssistantMessageStyle"),
                         Child = _currentStreamingTextBlock
                     };
 
@@ -369,22 +266,14 @@ namespace Smartitecture
                 case "user":
                     messageBorder = new Border
                     {
-                        Background = new SolidColorBrush(Color.FromRgb(53, 120, 212)),
-                        CornerRadius = new CornerRadius(15, 15, 5, 15),
-                        Padding = new Thickness(12, 8, 12, 8),
-                        Margin = new Thickness(50, 5, 10, 5),
-                        HorizontalAlignment = HorizontalAlignment.Right,
+                        Style = (Style)FindResource("UserMessageStyle"),
                         Child = textBlock
                     };
                     break;
                 case "system":
                     messageBorder = new Border
                     {
-                        Background = new SolidColorBrush(Color.FromRgb(64, 64, 64)),
-                        CornerRadius = new CornerRadius(8),
-                        Padding = new Thickness(8, 4, 8, 4),
-                        Margin = new Thickness(20, 5, 20, 5),
-                        HorizontalAlignment = HorizontalAlignment.Center,
+                        Style = (Style)FindResource("SystemMessageStyle"),
                         Child = textBlock
                     };
                     textBlock.Foreground = Brushes.LightGray;
@@ -393,11 +282,7 @@ namespace Smartitecture
                 default: // assistant
                     messageBorder = new Border
                     {
-                        Background = new SolidColorBrush(Color.FromRgb(45, 45, 48)),
-                        CornerRadius = new CornerRadius(15, 15, 15, 5),
-                        Padding = new Thickness(12, 8, 12, 8),
-                        Margin = new Thickness(10, 5, 50, 5),
-                        HorizontalAlignment = HorizontalAlignment.Left,
+                        Style = (Style)FindResource("AssistantMessageStyle"),
                         Child = textBlock
                     };
                     break;
@@ -476,11 +361,7 @@ namespace Smartitecture
                 // Add welcome message back
                 var welcomeBorder = new Border
                 {
-                    Background = new SolidColorBrush(Color.FromRgb(64, 64, 64)),
-                    CornerRadius = new CornerRadius(8),
-                    Padding = new Thickness(8, 4, 8, 4),
-                    Margin = new Thickness(20, 5, 20, 5),
-                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Style = (Style)FindResource("SystemMessageStyle"),
                     Child = new TextBlock
                     {
                         Text = "🏗️ Welcome to Smartitecture AI Assistant! I can help you with automation, system commands, and more.",
@@ -506,8 +387,6 @@ namespace Smartitecture
             MessageBox.Show("File attachment feature coming soon!", "Feature Preview", 
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
-        #endregion
 
         protected override void OnClosed(EventArgs e)
         {
