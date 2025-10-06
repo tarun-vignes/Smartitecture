@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="60" viewBox="0 0 300 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- AIPal Logo (Light version for dark backgrounds) -->
+  <g>
+    <!-- Robot Head -->
+    <g>
+      <!-- Main robot head (rounded rectangle) -->
+      <rect x="10" y="10" width="40" height="30" rx="5" ry="5" fill="#0078D7"/>
+      
+      <!-- Eyes -->
+      <circle cx="22" cy="25" r="5" fill="white"/>
+      <circle cx="38" cy="25" r="5" fill="white"/>
+      
+      <!-- Smile -->
+      <path d="M22 35C22 35 26 38 30 38C34 38 38 35 38 35" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      
+      <!-- Antennas -->
+      <circle cx="20" cy="10" r="3" fill="#0078D7"/>
+      <line x1="20" y1="7" x2="20" y2="10" stroke="#0078D7" stroke-width="3" stroke-linecap="round"/>
+      
+      <circle cx="40" cy="10" r="3" fill="#0078D7"/>
+      <line x1="40" y1="7" x2="40" y2="10" stroke="#0078D7" stroke-width="3" stroke-linecap="round"/>
+      
+      <!-- Chat bubble tail -->
+      <path d="M15 40L10 50L25 40" fill="#0078D7"/>
+    </g>
+    
+    <!-- Text "AIPal" -->
+    <path d="M70 15H82L103 45H91L86 37.5H66L61 45H49L70 15ZM83 30L76 17L69 30H83Z" fill="white"/>
+    <path d="M108 15H120V45H108V15Z" fill="white"/>
+    <path d="M128 15H140V40H170V45H128V15Z" fill="white"/>
+    <path d="M174 15H211.5V20H186V27H207V32H186V40H212V45H174V15Z" fill="white"/>
+    <path d="M216 45V15H228V39.5H258V45H216Z" fill="white"/>
+  </g>
+</svg>

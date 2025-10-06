@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- MODIFIED: Rebranded from AIPal to Smartitecture -->
+<Page
+    x:Class="Smartitecture.UI.ScreenAnalysisPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:Smartitecture.ViewModels"
+    xmlns:converters="using:Smartitecture.ViewModels.Converters"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Page.Resources>
+
+    <Grid Padding="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Text="Screen Analysis" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,16"/>
+
+        <!-- Main content area -->
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="16">
+                <InfoBar
+                    IsOpen="True"
+                    Severity="Informational"
+                    Title="Screen Analysis Feature"
+                    Message="Smartitecture can analyze what's on your screen without taking screenshots. This helps you understand content, identify security issues, or get help with navigation."
+                    IsClosable="False"/>
+
+                <!-- Capture options -->
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+                    <TextBlock Text="What would you like to analyze?" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                    
+                    <RadioButtons x:Name="CaptureTypeRadioButtons">
+                        <RadioButton x:Name="FullScreenRadioButton" Content="Full Screen" IsChecked="True" />
+                        <RadioButton x:Name="ActiveWindowRadioButton" Content="Active Window Only" />
+                    </RadioButtons>
+                    
+                    <TextBlock Text="Analysis Type:" Margin="0,8,0,0"/>
+                    <ComboBox x:Name="AnalysisTypeComboBox" Width="200" HorizontalAlignment="Left" SelectedIndex="0">
+                        <ComboBoxItem Content="General Analysis" Tag="general"/>
+                        <ComboBoxItem Content="Security Check" Tag="security"/>
+                        <ComboBoxItem Content="Text Extraction" Tag="text"/>
+                        <ComboBoxItem Content="UI Navigation Help" Tag="ui"/>
+                    </ComboBox>
+                    
+                    <Button x:Name="CaptureButton" 
+                            Content="Analyze Screen" 
+                            Click="CaptureButton_Click" 
+                            Style="{StaticResource AccentButtonStyle}"
+                            Margin="0,8,0,0"/>
+                </StackPanel>
+
+                <!-- Results area -->
+                <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.IsAnalysisResultVisible, Mode=OneWay}">
+                    <TextBlock Text="Analysis Results" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1" 
+                            CornerRadius="8" 
+                            Padding="16">
+                        <StackPanel>
+                            <TextBlock Text="{x:Bind ViewModel.AnalysisResultTitle, Mode=OneWay}" 
+                                       Style="{StaticResource SubtitleTextBlockStyle}" 
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="{x:Bind ViewModel.AnalysisResultContent, Mode=OneWay}" 
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Help and tips -->
+                <StackPanel Spacing="8" Margin="0,16,0,0">
+                    <TextBlock Text="Tips for Using Screen Analysis" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                    <TextBlock TextWrapping="Wrap">
+                        <Run FontWeight="SemiBold">When to use this feature:</Run><LineBreak/>
+                        • When you see a confusing message or alert<LineBreak/>
+                        • When you need help understanding what's on your screen<LineBreak/>
+                        • When you want to check if a website or popup is legitimate<LineBreak/>
+                        • When you need help navigating an application<LineBreak/>
+                        • Instead of taking and sending screenshots
+                    </TextBlock>
+                    
+                    <InfoBar
+                        IsOpen="True"
+                        Severity="Success"
+                        Title="Privacy Note"
+                        Message="Screen captures are processed locally on your computer and are not sent to external servers. Temporary files are automatically deleted."
+                        IsClosable="False"
+                        Margin="0,8,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer with help text -->
+        <StackPanel Grid.Row="2" Margin="0,16,0,0">
+            <TextBlock Text="You can also ask Smartitecture to analyze your screen directly in the chat." 
+                       TextWrapping="Wrap" 
+                       Opacity="0.7"
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Page>
