@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Smartitecture.Services
 {
@@ -28,28 +29,17 @@ namespace Smartitecture.Services
 
         public MockLLMService()
         {
-            _conversations = new Dictionary<string, List<ConversationMessage>>();
             _random = new Random();
         }
 
         public async Task<string> GetResponseAsync(string message, string conversationId = null)
         {
-            // Simulate processing delay
-            await Task.Delay(_random.Next(500, 2000));
-
-            // Store conversation
-            await StoreMessageAsync(conversationId, "user", message);
-
-            // Generate mock response
-            var response = GenerateMockResponse(message);
+            await Task.Delay(_random.Next(300, 1000)); // Simulate processing time
             
-            // Store AI response
-            await StoreMessageAsync(conversationId, "assistant", response);
-
-            return response;
+            return GenerateIntelligentResponse(message);
         }
 
-        public async Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, string conversationId = null)
+        private string GenerateIntelligentResponse(string message)
         {
             // Store user message
             await StoreMessageAsync(conversationId, "user", message);

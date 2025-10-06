@@ -18,6 +18,9 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.17" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,13 +36,19 @@
     <Compile Include="App.xaml.cs" />
     <Compile Include="MainWindow.xaml.cs" />
     <Compile Include="UI\ChatWindow.xaml.cs" />
-    <Compile Include="Services\MockLLMService.cs" />
+    <Compile Include="Services\EnhancedMockLLMService.cs" />
+    <Compile Include="Services\MultiModelAIService.cs" />
+    <Compile Include="Services\IntelligentTrainingService.cs" />
+    <Compile Include="Services\KnowledgeBaseService.cs" />
     <Compile Include="Smartitecture\Services\ILLMService.cs" />
     <Compile Include="Smartitecture\Services\ConversationManager.cs" />
     <Compile Include="Smartitecture\Services\Models\*.cs" />
     <Compile Include="src\Smartitecture.Core\Commands\IAppCommand.cs" />
     <Compile Include="src\Smartitecture.Core\Commands\LaunchAppCommand.cs" />
     <Compile Include="src\Smartitecture.Core\Commands\ShutdownCommand.cs" />
+    <Compile Include="src\Smartitecture.Core\Commands\CalculatorCommand.cs" />
+    <Compile Include="src\Smartitecture.Core\Commands\ExplorerCommand.cs" />
+    <Compile Include="src\Smartitecture.Core\Commands\TaskManagerCommand.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,159 @@
+.about-page {
+  min-height: 100vh;
+}
+
+.about-hero {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #2a6db3 100%);
+  color: white;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.about-hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.about-hero p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+.about-mission,
+.about-story {
+  padding: 4rem 0;
+}
+
+.mission-content,
+.story-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.mission-content h2,
+.story-content h2 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.mission-content p,
+.story-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.about-team {
+  background-color: var(--card-background);
+  padding: 4rem 0;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.team-member {
+  background-color: var(--background-color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.member-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin: 0 auto 1.5rem;
+}
+
+.team-member h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.member-role {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.member-bio {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.about-values {
+  padding: 4rem 0;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.value-card {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  height: 100%;
+}
+
+.value-card h3 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--primary-color);
+}
+
+.value-card p {
+  line-height: 1.6;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .about-hero {
+    padding: 3rem 0;
+  }
+  
+  .about-hero h1 {
+    font-size: 2rem;
+  }
+  
+  .about-mission,
+  .about-story,
+  .about-team,
+  .about-values {
+    padding: 3rem 0;
+  }
+  
+  .mission-content h2,
+  .story-content h2 {
+    font-size: 1.75rem;
+  }
+  
+  .mission-content p,
+  .story-content p {
+    font-size: 1rem;
+  }
+}
+
+/* Accessibility improvements for elderly users */
+@media (prefers-reduced-motion: reduce) {
+  .mission-content,
+  .story-content,
+  .team-grid,
+  .values-grid {
+    transition: none;
+  }
+}

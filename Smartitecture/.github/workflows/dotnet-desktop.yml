@@ -1,0 +1,35 @@
+name: Smartitecture CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-website:
+    name: Build Website
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+        cache-dependency-path: Website/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+      working-directory: Website
+
+    - name: Build website
+      run: npm run build
+      working-directory: Website
+      
+    # We'll add deployment steps later when ready
+
+  # We'll add test verification back when we have a better approach

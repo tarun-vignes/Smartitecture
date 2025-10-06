@@ -30,14 +30,20 @@ namespace Smartitecture
             InitializeComponent();
             
             // Initialize LLM service
-            _llmService = new MockLLMService();
+            _llmService = new MultiModelAIService();
             _conversationId = Guid.NewGuid().ToString();
             
             // Initialize available commands
             _commands = new Dictionary<string, IAppCommand>
             {
                 ["launch"] = new LaunchAppCommand(),
-                ["shutdown"] = new ShutdownCommand()
+                ["shutdown"] = new ShutdownCommand(),
+                ["calculator"] = new CalculatorCommand(),
+                ["calc"] = new CalculatorCommand(),
+                ["explorer"] = new ExplorerCommand(),
+                ["files"] = new ExplorerCommand(),
+                ["taskmanager"] = new TaskManagerCommand(),
+                ["taskmgr"] = new TaskManagerCommand()
             };
 
             // Setup typing animation timer

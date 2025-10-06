@@ -12,28 +12,41 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-    <PackageReference Include="System.Text.Json" Version="8.0.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml" />
-    <Compile Include="App.xaml.cs" />
-    <Page Include="MainWindow.xaml" />
-    <Compile Include="MainWindow.xaml.cs" />
-    <Compile Include="src\Smartitecture.Core\Commands\IAppCommand.cs" />
-    <Compile Include="src\Smartitecture.Core\Commands\LaunchAppCommand.cs" />
-    <Compile Include="src\Smartitecture.Core\Commands\ShutdownCommand.cs" />
+    <None Remove="App.xaml" />
+    <None Remove="MainWindow.xaml" />
+    <None Remove="UI\ChatWindow.xaml" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ChatWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

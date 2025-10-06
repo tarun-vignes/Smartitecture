@@ -134,12 +134,15 @@
                         
                         <ComboBox Grid.Column="1" 
                                   Name="ModelSelector"
-                                  Width="150"
+                                  Width="200"
                                   Margin="10,0"
                                   SelectionChanged="ModelSelector_SelectionChanged">
-                            <ComboBoxItem Content="Mock AI Model" IsSelected="True"/>
-                            <ComboBoxItem Content="Azure OpenAI"/>
-                            <ComboBoxItem Content="Local Model"/>
+                            <ComboBoxItem Content="Advanced AI Assistant" IsSelected="True"/>
+                            <ComboBoxItem Content="Azure OpenAI GPT-4"/>
+                            <ComboBoxItem Content="Local Ollama Model"/>
+                            <ComboBoxItem Content="Anthropic Claude"/>
+                            <ComboBoxItem Content="Google Gemini"/>
+                            <ComboBoxItem Content="System Expert Mode"/>
                         </ComboBox>
                         
                         <Button Grid.Column="2" 
