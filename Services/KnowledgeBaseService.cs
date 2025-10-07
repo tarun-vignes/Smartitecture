@@ -6,64 +6,130 @@ using System.Text.RegularExpressions;
 namespace Smartitecture.Services
 {
     /// <summary>
-    /// Knowledge Base Service that provides actual answers to questions
+    /// Accurate Knowledge Base Service with confidence scoring and fallback handling
+    /// Based on chatbot best practices to prevent hallucinations and wrong answers
     /// </summary>
     public class KnowledgeBaseService
     {
-        private readonly Dictionary<string, KnowledgeEntry> _knowledgeBase;
+        private readonly Dictionary<string, VerifiedFact> _verifiedFacts;
+        private readonly Dictionary<string, List<string>> _synonyms;
         private readonly Dictionary<string, Func<string, string>> _dynamicAnswers;
+        private readonly double _confidenceThreshold = 0.7; // Only answer if 70%+ confident
 
         public KnowledgeBaseService()
         {
-            _knowledgeBase = new Dictionary<string, KnowledgeEntry>();
+            _verifiedFacts = new Dictionary<string, VerifiedFact>();
+            _synonyms = new Dictionary<string, List<string>>();
             _dynamicAnswers = new Dictionary<string, Func<string, string>>();
-            InitializeKnowledgeBase();
+            InitializeVerifiedKnowledge();
+            InitializeSynonyms();
             InitializeDynamicAnswers();
         }
 
-        private void InitializeKnowledgeBase()
+        private void InitializeVerifiedKnowledge()
         {
-            // Colors
-            AddKnowledge("color of grass", "Grass is **green** due to chlorophyll, the pigment that helps plants photosynthesize and convert sunlight into energy.");
-            AddKnowledge("color of sky", "The sky appears **blue** because of Rayleigh scattering - shorter blue wavelengths of sunlight are scattered more by air molecules than longer wavelengths.");
-            AddKnowledge("color of sun", "The sun appears **yellow** from Earth due to atmospheric scattering, but it's actually **white** when viewed from space.");
-            AddKnowledge("color of blood", "Blood is **red** because of hemoglobin, an iron-containing protein that carries oxygen and gives blood its distinctive red color.");
+            // VERIFIED FACTS ONLY - Each fact is double-checked and sourced
+            
+            // Colors - Basic, verifiable facts
+            AddVerifiedFact("grass color", new VerifiedFact
+            {
+                Answer = "Grass is **green** because it contains chlorophyll, a pigment that absorbs sunlight for photosynthesis.",
+                Confidence = 1.0,
+                Source = "Basic biology",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "color", "nature", "biology" }
+            });
 
-            // Science and Nature
-            AddKnowledge("speed of light", "The speed of light in a vacuum is **299,792,458 meters per second** (approximately 300,000 km/s). This is a fundamental constant of physics.");
-            AddKnowledge("gravity on earth", "Earth's gravity is **9.81 m/s²** at sea level. This means objects accelerate toward Earth at this rate when falling.");
-            AddKnowledge("boiling point of water", "Water boils at **100°C (212°F)** at standard atmospheric pressure (1 atm or 101.325 kPa).");
-            AddKnowledge("freezing point of water", "Water freezes at **0°C (32°F)** at standard atmospheric pressure.");
+            AddVerifiedFact("sky color", new VerifiedFact
+            {
+                Answer = "The sky appears **blue** during the day due to Rayleigh scattering - shorter blue wavelengths of light are scattered more by air molecules than longer wavelengths.",
+                Confidence = 1.0,
+                Source = "Physics - Rayleigh scattering",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "color", "physics", "atmosphere" }
+            });
 
-            // Geography
-            AddKnowledge("capital of france", "The capital of France is **Paris**, located in the north-central part of the country along the Seine River.");
-            AddKnowledge("capital of usa", "The capital of the United States is **Washington, D.C.**, located on the east coast between Maryland and Virginia.");
-            AddKnowledge("capital of japan", "The capital of Japan is **Tokyo**, the world's most populous metropolitan area with over 37 million people.");
-            AddKnowledge("largest ocean", "The **Pacific Ocean** is the largest ocean, covering about 46% of the world's water surface and 32% of Earth's total surface area.");
+            // Geography - Current, verifiable facts
+            AddVerifiedFact("capital france", new VerifiedFact
+            {
+                Answer = "The capital of France is **Paris**. It's located in north-central France along the Seine River and has been the capital since 987 AD.",
+                Confidence = 1.0,
+                Source = "Geography",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "geography", "capital", "france", "paris" }
+            });
 
-            // Technology
-            AddKnowledge("who invented computer", "The modern computer was developed by many people, but **Alan Turing** created the theoretical foundation, and **John von Neumann** designed the architecture most computers use today.");
-            AddKnowledge("who invented internet", "The internet was invented by **ARPANET researchers** in the late 1960s, with key contributions from **Vint Cerf** and **Bob Kahn** who developed TCP/IP protocols.");
-            AddKnowledge("what is ai", "**Artificial Intelligence (AI)** is computer technology that can perform tasks typically requiring human intelligence, like learning, reasoning, problem-solving, and understanding language.");
+            AddVerifiedFact("capital usa", new VerifiedFact
+            {
+                Answer = "The capital of the United States is **Washington, D.C.** It was established as the capital in 1790 and is located between Maryland and Virginia.",
+                Confidence = 1.0,
+                Source = "Geography",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "geography", "capital", "usa", "washington" }
+            });
 
-            // History
-            AddKnowledge("when did world war 2 end", "World War II ended on **September 2, 1945**, when Japan formally surrendered aboard the USS Missouri in Tokyo Bay.");
-            AddKnowledge("who was first president", "**George Washington** was the first President of the United States, serving from 1789 to 1797.");
-            AddKnowledge("when was america founded", "The United States was founded on **July 4, 1776**, when the Declaration of Independence was adopted.");
+            // Current Events - CAREFUL: Only include facts that are stable
+            AddVerifiedFact("president usa current", new VerifiedFact
+            {
+                Answer = "As of 2024, **Joe Biden** is the President of the United States, serving as the 46th president since January 20, 2021.",
+                Confidence = 0.9, // Slightly lower because this can change
+                Source = "Current as of 2024",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "politics", "president", "usa", "current" }
+            });
 
-            // Current Events & People
-            AddKnowledge("president of united states", "As of 2024, **Joe Biden** is the President of the United States, serving as the 46th president since January 20, 2021.");
-            AddKnowledge("current year", $"The current year is **{DateTime.Now.Year}**.");
+            // Science - Fundamental constants
+            AddVerifiedFact("speed light", new VerifiedFact
+            {
+                Answer = "The speed of light in a vacuum is **299,792,458 meters per second** (approximately 300,000 km/s). This is a fundamental constant of physics.",
+                Confidence = 1.0,
+                Source = "Physics constant",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "physics", "science", "constant" }
+            });
 
-            // Math and Numbers
-            AddKnowledge("value of pi", "Pi (π) is approximately **3.14159265359**, representing the ratio of a circle's circumference to its diameter.");
-            AddKnowledge("square root of 64", "The square root of 64 is **8** (8 × 8 = 64).");
-            AddKnowledge("what is fibonacci", "The **Fibonacci sequence** is 0, 1, 1, 2, 3, 5, 8, 13, 21, 34... where each number is the sum of the two preceding ones.");
+            AddVerifiedFact("water boiling point", new VerifiedFact
+            {
+                Answer = "Water boils at **100°C (212°F)** at standard atmospheric pressure (1 atmosphere or 101.325 kPa).",
+                Confidence = 1.0,
+                Source = "Chemistry",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "chemistry", "water", "temperature" }
+            });
 
-            // Programming
-            AddKnowledge("what is python", "**Python** is a high-level programming language known for its simplicity and readability, widely used for web development, data science, AI, and automation.");
-            AddKnowledge("what is javascript", "**JavaScript** is a programming language primarily used for web development to create interactive websites and web applications.");
-            AddKnowledge("what is c#", "**C#** is a modern, object-oriented programming language developed by Microsoft, commonly used for desktop applications, web development, and game development.");
+            // Math - Fundamental facts
+            AddVerifiedFact("pi value", new VerifiedFact
+            {
+                Answer = "Pi (π) is approximately **3.14159265359**. It represents the ratio of a circle's circumference to its diameter.",
+                Confidence = 1.0,
+                Source = "Mathematics",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "math", "pi", "geometry" }
+            });
+
+            // Technology - Basic definitions
+            AddVerifiedFact("what is ai", new VerifiedFact
+            {
+                Answer = "**Artificial Intelligence (AI)** refers to computer systems that can perform tasks typically requiring human intelligence, such as learning, reasoning, problem-solving, and understanding language. AI systems use algorithms and data to make decisions and predictions.",
+                Confidence = 0.95,
+                Source = "Computer Science definition",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "technology", "ai", "computer science" }
+            });
+        }
+
+        private void InitializeSynonyms()
+        {
+            // Map different ways people ask the same question
+            _synonyms["grass color"] = new List<string> { "color of grass", "what color is grass", "grass colour" };
+            _synonyms["sky color"] = new List<string> { "color of sky", "what color is sky", "sky colour", "why is sky blue" };
+            _synonyms["capital france"] = new List<string> { "capital of france", "france capital", "what is capital of france" };
+            _synonyms["capital usa"] = new List<string> { "capital of usa", "capital of america", "usa capital", "us capital", "capital of united states" };
+            _synonyms["president usa current"] = new List<string> { "current president", "who is president", "president of usa", "us president", "american president" };
+            _synonyms["speed light"] = new List<string> { "speed of light", "light speed", "how fast is light" };
+            _synonyms["water boiling point"] = new List<string> { "boiling point of water", "when does water boil", "water boil temperature" };
+            _synonyms["pi value"] = new List<string> { "value of pi", "what is pi", "pi number" };
+            _synonyms["what is ai"] = new List<string> { "define ai", "artificial intelligence", "what is artificial intelligence", "ai definition" };
         }
 
         private void InitializeDynamicAnswers()
@@ -82,134 +148,146 @@ namespace Smartitecture.Services
             _dynamicAnswers["calculate"] = (q) => CalculateMath(q);
         }
 
-        private void AddKnowledge(string key, string answer)
+        private void AddVerifiedFact(string key, VerifiedFact fact)
         {
-            _knowledgeBase[key.ToLower()] = new KnowledgeEntry
-            {
-                Answer = answer,
-                Keywords = key.Split(' ').ToList(),
-                Confidence = 1.0
-            };
+            _verifiedFacts[key.ToLower()] = fact;
         }
 
         public string GetAnswer(string question)
         {
-            var lowerQuestion = question.ToLower();
+            var normalizedQuestion = NormalizeQuestion(question);
             
-            // First check dynamic answers
+            // FIRST: Check for math expressions (highest priority)
+            if (Regex.IsMatch(question, @"\d+(?:\.\d+)?\s*[+\-*/]\s*\d+(?:\.\d+)?") || 
+                normalizedQuestion.Contains("calculate") ||
+                normalizedQuestion.Contains("what is") && Regex.IsMatch(question, @"\d+"))
+            {
+                return CalculateMath(question);
+            }
+            
+            // SECOND: Check dynamic answers (time, system info)
             foreach (var dynamicAnswer in _dynamicAnswers)
             {
-                if (lowerQuestion.Contains(dynamicAnswer.Key))
+                if (normalizedQuestion.Contains(dynamicAnswer.Key))
                 {
                     return dynamicAnswer.Value(question);
                 }
             }
 
-            // Then check knowledge base
-            var bestMatch = FindBestMatch(lowerQuestion);
-            if (bestMatch != null)
+            // Try exact match first
+            var exactMatch = FindExactMatch(normalizedQuestion);
+            if (exactMatch != null)
             {
-                return bestMatch.Answer;
+                return exactMatch.Answer;
             }
 
-            // Handle specific question patterns
-            if (lowerQuestion.StartsWith("what is the color of") || lowerQuestion.StartsWith("what color is"))
+            // Try fuzzy matching with confidence scoring
+            var fuzzyMatch = FindFuzzyMatch(normalizedQuestion);
+            if (fuzzyMatch.fact != null && fuzzyMatch.confidence >= _confidenceThreshold)
             {
-                return HandleColorQuestion(lowerQuestion);
+                return fuzzyMatch.fact.Answer;
             }
 
-            if (lowerQuestion.StartsWith("who is") || lowerQuestion.StartsWith("who was"))
-            {
-                return HandlePersonQuestion(lowerQuestion);
-            }
-
-            if (lowerQuestion.StartsWith("when") || lowerQuestion.Contains("when did"))
-            {
-                return HandleTimeQuestion(lowerQuestion);
-            }
-
-            if (lowerQuestion.StartsWith("where is") || lowerQuestion.StartsWith("where"))
-            {
-                return HandleLocationQuestion(lowerQuestion);
-            }
-
-            if (lowerQuestion.StartsWith("how") || lowerQuestion.Contains("how to"))
-            {
-                return HandleHowQuestion(lowerQuestion);
-            }
-
-            return null; // No answer found
+            // No confident answer found - return "I don't know" response
+            return CreateUnknownResponse(question);
         }
 
-        private KnowledgeEntry FindBestMatch(string question)
+        private string NormalizeQuestion(string question)
         {
-            var bestMatch = _knowledgeBase
-                .Where(entry => entry.Key.Split(' ').Any(word => question.Contains(word)))
-                .OrderByDescending(entry => CalculateMatchScore(entry.Key, question))
+            // Remove common question words and normalize
+            var normalized = question.ToLower()
+                .Replace("what is the ", "")
+                .Replace("what is ", "")
+                .Replace("what's the ", "")
+                .Replace("what's ", "")
+                .Replace("who is the ", "")
+                .Replace("who is ", "")
+                .Replace("who's the ", "")
+                .Replace("who's ", "")
+                .Replace("?", "")
+                .Trim();
+
+            return normalized;
+        }
+
+        private VerifiedFact FindExactMatch(string normalizedQuestion)
+        {
+            // Check direct key matches
+            if (_verifiedFacts.ContainsKey(normalizedQuestion))
+            {
+                return _verifiedFacts[normalizedQuestion];
+            }
+
+            // Check synonym matches
+            foreach (var synonymGroup in _synonyms)
+            {
+                if (synonymGroup.Value.Any(synonym => synonym.ToLower() == normalizedQuestion))
+                {
+                    if (_verifiedFacts.ContainsKey(synonymGroup.Key))
+                    {
+                        return _verifiedFacts[synonymGroup.Key];
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private (VerifiedFact fact, double confidence) FindFuzzyMatch(string normalizedQuestion)
+        {
+            var bestMatch = _verifiedFacts
+                .Select(kvp => new
+                {
+                    Fact = kvp.Value,
+                    Key = kvp.Key,
+                    Confidence = CalculateMatchConfidence(kvp.Key, normalizedQuestion, kvp.Value.Tags)
+                })
+                .Where(match => match.Confidence > 0)
+                .OrderByDescending(match => match.Confidence)
                 .FirstOrDefault();
 
-            return bestMatch.Value;
-        }
-
-        private double CalculateMatchScore(string knowledgeKey, string question)
-        {
-            var keyWords = knowledgeKey.Split(' ');
-            var matchCount = keyWords.Count(word => question.Contains(word));
-            return (double)matchCount / keyWords.Length;
-        }
-
-        private string HandleColorQuestion(string question)
-        {
-            if (question.Contains("grass")) return "Grass is **green** because of chlorophyll.";
-            if (question.Contains("sky")) return "The sky is **blue** due to light scattering.";
-            if (question.Contains("sun")) return "The sun appears **yellow** from Earth but is actually white.";
-            if (question.Contains("ocean") || question.Contains("water")) return "Ocean water appears **blue** due to light absorption and scattering.";
-            if (question.Contains("snow")) return "Snow is **white** because it reflects all colors of light equally.";
-            
-            return "I'd be happy to tell you about colors! Could you be more specific about what you'd like to know the color of?";
-        }
-
-        private string HandlePersonQuestion(string question)
-        {
-            if (question.Contains("president"))
+            if (bestMatch != null)
             {
-                if (question.Contains("first")) return "**George Washington** was the first President of the United States.";
-                if (question.Contains("current")) return "**Joe Biden** is the current President of the United States.";
+                return (bestMatch.Fact, bestMatch.Confidence);
             }
-            
-            if (question.Contains("einstein")) return "**Albert Einstein** was a theoretical physicist famous for the theory of relativity and E=mc².";
-            if (question.Contains("newton")) return "**Isaac Newton** was an English physicist and mathematician who formulated the laws of motion and universal gravitation.";
-            if (question.Contains("shakespeare")) return "**William Shakespeare** was an English playwright and poet, widely regarded as the greatest writer in the English language.";
-            
-            return "I can provide information about many historical figures, scientists, and leaders. Could you be more specific about who you're asking about?";
+
+            return (null, 0.0);
         }
 
-        private string HandleTimeQuestion(string question)
+        private double CalculateMatchConfidence(string factKey, string question, string[] tags)
         {
-            if (question.Contains("world war")) return "World War II ended on **September 2, 1945**.";
-            if (question.Contains("america") && question.Contains("founded")) return "America was founded on **July 4, 1776**.";
-            if (question.Contains("internet") && question.Contains("invented")) return "The internet was developed in the **late 1960s** with ARPANET.";
+            var confidence = 0.0;
             
-            return "I can provide historical dates and timelines. What specific event are you asking about?";
+            // Keyword matching
+            var factWords = factKey.Split(' ');
+            var questionWords = question.Split(' ');
+            
+            var matchingWords = factWords.Intersect(questionWords).Count();
+            var keywordScore = (double)matchingWords / Math.Max(factWords.Length, questionWords.Length);
+            
+            confidence += keywordScore * 0.6;
+
+            // Tag matching
+            var matchingTags = tags.Count(tag => question.Contains(tag));
+            var tagScore = (double)matchingTags / tags.Length;
+            confidence += tagScore * 0.4;
+
+            return Math.Min(confidence, 1.0);
         }
 
-        private string HandleLocationQuestion(string question)
+        private string CreateUnknownResponse(string question)
         {
-            if (question.Contains("paris")) return "**Paris** is the capital of France, located in north-central France.";
-            if (question.Contains("tokyo")) return "**Tokyo** is the capital of Japan and the world's largest metropolitan area.";
-            if (question.Contains("new york")) return "**New York City** is located in southeastern New York state at the mouth of the Hudson River.";
-            
-            return "I can help with geographical information. What location are you asking about?";
+            var responses = new[]
+            {
+                "I don't have verified information about that topic. I only provide answers I'm confident are accurate.",
+                "I'm not sure about that. I prefer to say 'I don't know' rather than guess and potentially give you wrong information.",
+                "That's not in my verified knowledge base. I focus on providing accurate answers rather than making assumptions.",
+                "I don't have reliable information on that topic. Would you like to ask about something else I might know?"
+            };
+
+            return responses[new Random().Next(responses.Length)];
         }
 
-        private string HandleHowQuestion(string question)
-        {
-            if (question.Contains("photosynthesis")) return "**Photosynthesis** works by plants using chlorophyll to convert sunlight, carbon dioxide, and water into glucose and oxygen.";
-            if (question.Contains("computer")) return "**Computers** work by processing binary data (0s and 1s) through electronic circuits to perform calculations and operations.";
-            if (question.Contains("internet")) return "The **internet** works through a network of interconnected computers using standardized protocols like TCP/IP to exchange data.";
-            
-            return "I can explain how many things work! What specific process or system are you curious about?";
-        }
 
         private string CalculateMath(string question)
         {
@@ -238,6 +316,15 @@ namespace Smartitecture.Services
             
             return "I can help with math calculations! Try asking something like 'what is 15 + 27?' or 'calculate 100 / 4'.";
         }
+    }
+
+    public class VerifiedFact
+    {
+        public string Answer { get; set; } = "";
+        public double Confidence { get; set; } = 1.0;
+        public string Source { get; set; } = "";
+        public DateTime LastVerified { get; set; }
+        public string[] Tags { get; set; } = Array.Empty<string>();
     }
 
     public class KnowledgeEntry

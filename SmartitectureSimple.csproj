@@ -20,6 +20,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.17" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="OpenAI" Version="2.0.0" />
     <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
 
@@ -40,6 +41,9 @@
     <Compile Include="Services\MultiModelAIService.cs" />
     <Compile Include="Services\IntelligentTrainingService.cs" />
     <Compile Include="Services\KnowledgeBaseService.cs" />
+    <Compile Include="Services\OpenAIService.cs" />
+    <Compile Include="Services\ConfigurationService.cs" />
+    <Compile Include="Services\NaturalConversationService.cs" />
     <Compile Include="Smartitecture\Services\ILLMService.cs" />
     <Compile Include="Smartitecture\Services\ConversationManager.cs" />
     <Compile Include="Smartitecture\Services\Models\*.cs" />
