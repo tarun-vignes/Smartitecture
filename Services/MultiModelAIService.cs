@@ -21,12 +21,17 @@ namespace Smartitecture.Services
         private Dictionary<string, AIModelConfig> _modelConfigs;
         private readonly IntelligentTrainingService _trainingService;
         private readonly KnowledgeBaseService _knowledgeBase;
+        private readonly ConfigurationService _configService;
+        private readonly NaturalConversationService _naturalConversation;
+        private OpenAIService _openAIService;
 
         public string CurrentModel { get; private set; } = "Advanced AI Assistant";
 
         public IEnumerable<string> AvailableModels => new[] 
         { 
             "Advanced AI Assistant",
+            "OpenAI GPT-4",
+            "OpenAI GPT-3.5-Turbo", 
             "Azure OpenAI GPT-4",
             "Local Ollama Model",
             "Anthropic Claude",
@@ -43,7 +48,27 @@ namespace Smartitecture.Services
             _random = new Random();
             _trainingService = new IntelligentTrainingService();
             _knowledgeBase = new KnowledgeBaseService();
+            _configService = new ConfigurationService();
+            _naturalConversation = new NaturalConversationService();
             InitializeModelConfigs();
+            InitializeOpenAI();
+        }
+
+        private void InitializeOpenAI()
+        {
+            try
+            {
+                if (_configService.IsOpenAIConfigured())
+                {
+                    var apiKey = _configService.GetOpenAIApiKey();
+                    _openAIService = new OpenAIService(apiKey);
+                }
+            }
+            catch (Exception)
+            {
+                // OpenAI initialization failed - will fall back to mock responses
+                _openAIService = null;
+            }
         }
 
         private void InitializeModelConfigs()
@@ -55,6 +80,18 @@ namespace Smartitecture.Services
                     Name = "Advanced AI Assistant",
                     Type = "Enhanced Mock",
                     SystemPrompt = "You are an advanced AI assistant specialized in system automation, programming, and intelligent task execution."
+                },
+                ["OpenAI GPT-4"] = new AIModelConfig
+                {
+                    Name = "OpenAI GPT-4",
+                    Type = "OpenAI",
+                    SystemPrompt = "You are a highly capable AI assistant with access to system automation tools."
+                },
+                ["OpenAI GPT-3.5-Turbo"] = new AIModelConfig
+                {
+                    Name = "OpenAI GPT-3.5-Turbo",
+                    Type = "OpenAI",
+                    SystemPrompt = "You are a helpful AI assistant focused on providing accurate and concise responses."
                 },
                 ["Azure OpenAI GPT-4"] = new AIModelConfig
                 {
@@ -80,6 +117,25 @@ namespace Smartitecture.Services
         public async Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, string conversationId = null)
         {
             await StoreMessageAsync(conversationId, "user", message);
+            
+            // Check if we should use real OpenAI streaming
+            if ((CurrentModel == "OpenAI GPT-4" || CurrentModel == "OpenAI GPT-3.5-Turbo") && 
+                _openAIService != null && _openAIService.IsConfigured())
+            {
+                try
+                {
+                    var context = await GetConversationContext(conversationId);
+                    var openAIResponse = await _openAIService.GetStreamingResponseAsync(message, onTokenReceived, context);
+                    await StoreMessageAsync(conversationId, "assistant", openAIResponse);
+                    return openAIResponse;
+                }
+                catch (Exception)
+                {
+                    // Fall back to mock streaming if OpenAI fails
+                }
+            }
+            
+            // Use mock streaming for other models or if OpenAI fails
             var response = await GenerateAdvancedResponse(message, conversationId);
             
             // Advanced streaming simulation
@@ -117,12 +173,49 @@ namespace Smartitecture.Services
             
             switch (CurrentModel)
             {
+                case "OpenAI GPT-4":
+                case "OpenAI GPT-3.5-Turbo":
+                    return await GenerateOpenAIResponse(message, context);
                 case "System Expert Mode":
                     return await GenerateSystemExpertResponse(message, context);
                 case "Azure OpenAI GPT-4":
                     return await GenerateAzureOpenAIResponse(message, context);
                 default:
                     return await GenerateAdvancedAIResponse(message, context);
+            }
+        }
+
+        private async Task<string> GenerateOpenAIResponse(string message, List<ConversationMessage> context)
+        {
+            // ALWAYS check knowledge base first for accurate answers (math, facts, etc.)
+            var knowledgeAnswer = _knowledgeBase.GetAnswer(message);
+            if (!string.IsNullOrEmpty(knowledgeAnswer))
+            {
+                return knowledgeAnswer;
+            }
+
+            try
+            {
+                if (_openAIService != null && _openAIService.IsConfigured())
+                {
+                    // Use real OpenAI API for complex queries
+                    return await _openAIService.GetResponseAsync(message, context);
+                }
+                else
+                {
+                    // Fallback to configuration instructions
+                    return "🔑 **OpenAI Configuration Required**\n\n" +
+                           "To use real OpenAI models, you need to configure your API key:\n\n" +
+                           "1. Get an API key from https://platform.openai.com/\n" +
+                           "2. Go to Settings → API Configuration\n" +
+                           "3. Enter your OpenAI API key\n\n" +
+                           "I don't have verified information about that topic. Please configure OpenAI for more comprehensive responses.";
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"❌ **OpenAI Error:** {ex.Message}\n\n" +
+                       "I don't have information about that topic.";
             }
         }
 
@@ -246,48 +339,8 @@ namespace Smartitecture.Services
 
         private async Task<string> GenerateAdvancedAIResponse(string message, List<ConversationMessage> context)
         {
-            var lowerMessage = message.ToLower();
-            
-            // FIRST: Try to get a direct answer from knowledge base
-            var knowledgeAnswer = _knowledgeBase.GetAnswer(message);
-            if (!string.IsNullOrEmpty(knowledgeAnswer))
-            {
-                return knowledgeAnswer;
-            }
-            
-            // SECOND: Check for specific technical requests that need specialized handling
-            if (lowerMessage.Contains("calculate") || lowerMessage.Contains("math") || Regex.IsMatch(message, @"\d+\s*[+\-*/]\s*\d+"))
-            {
-                return HandleAdvancedMath(message);
-            }
-            
-            // Time-related queries (direct answers)
-            if (lowerMessage.Contains("time") || lowerMessage.Contains("date") || lowerMessage.Contains("what time"))
-            {
-                return GetTimeAndSchedulingInfo(message);
-            }
-            
-            // Programming and coding assistance
-            if (lowerMessage.Contains("code") || lowerMessage.Contains("program") || lowerMessage.Contains("script"))
-            {
-                return GetCodingAssistance(message);
-            }
-            
-            // System automation
-            if (lowerMessage.Contains("automate") || lowerMessage.Contains("workflow") || lowerMessage.Contains("batch"))
-            {
-                return GetAutomationHelp(message);
-            }
-            
-            // File operations
-            if (lowerMessage.Contains("file") || lowerMessage.Contains("folder") || lowerMessage.Contains("directory"))
-            {
-                return GetFileOperationHelp(message);
-            }
-            
-            // THIRD: Use intelligent training service for conversational responses
-            var conversationHistory = context.Select(c => c.Content).ToList();
-            return _trainingService.GenerateIntelligentResponse(message, "helpful_assistant", conversationHistory);
+            // Use natural, concise conversation service - like modern ChatGPT
+            return await _naturalConversation.GetResponseAsync(message, context);
         }
 
         private string HandleAdvancedMath(string message)
