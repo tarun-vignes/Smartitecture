@@ -22,7 +22,7 @@ namespace Smartitecture.Services
         private readonly IntelligentTrainingService _trainingService;
         private readonly KnowledgeBaseService _knowledgeBase;
         private readonly ConfigurationService _configService;
-        private readonly NaturalConversationService _naturalConversation;
+        private readonly HumanLikeConversationEngine _humanConversation;
         private OpenAIService _openAIService;
 
         public string CurrentModel { get; private set; } = "Advanced AI Assistant";
@@ -49,7 +49,7 @@ namespace Smartitecture.Services
             _trainingService = new IntelligentTrainingService();
             _knowledgeBase = new KnowledgeBaseService();
             _configService = new ConfigurationService();
-            _naturalConversation = new NaturalConversationService();
+            _humanConversation = new HumanLikeConversationEngine();
             InitializeModelConfigs();
             InitializeOpenAI();
         }
@@ -168,6 +168,9 @@ namespace Smartitecture.Services
         {
             var lowerMessage = message.ToLower();
             
+            // DEBUG: Log which model we're using
+            System.Diagnostics.Debug.WriteLine($"[MultiModel] Current Model: '{CurrentModel}' | Message: '{message}'");
+            
             // Get conversation context
             var context = await GetConversationContext(conversationId);
             
@@ -175,47 +178,39 @@ namespace Smartitecture.Services
             {
                 case "OpenAI GPT-4":
                 case "OpenAI GPT-3.5-Turbo":
+                    System.Diagnostics.Debug.WriteLine("[MultiModel] Using OpenAI path");
                     return await GenerateOpenAIResponse(message, context);
                 case "System Expert Mode":
+                    System.Diagnostics.Debug.WriteLine("[MultiModel] Using System Expert path");
                     return await GenerateSystemExpertResponse(message, context);
                 case "Azure OpenAI GPT-4":
+                    System.Diagnostics.Debug.WriteLine("[MultiModel] Using Azure OpenAI path");
                     return await GenerateAzureOpenAIResponse(message, context);
                 default:
+                    System.Diagnostics.Debug.WriteLine("[MultiModel] Using DEFAULT path (Advanced AI)");
                     return await GenerateAdvancedAIResponse(message, context);
             }
         }
 
         private async Task<string> GenerateOpenAIResponse(string message, List<ConversationMessage> context)
         {
-            // ALWAYS check knowledge base first for accurate answers (math, facts, etc.)
-            var knowledgeAnswer = _knowledgeBase.GetAnswer(message);
-            if (!string.IsNullOrEmpty(knowledgeAnswer))
-            {
-                return knowledgeAnswer;
-            }
-
             try
             {
                 if (_openAIService != null && _openAIService.IsConfigured())
                 {
-                    // Use real OpenAI API for complex queries
+                    // Use real OpenAI API - it handles knowledge base internally
                     return await _openAIService.GetResponseAsync(message, context);
                 }
                 else
                 {
-                    // Fallback to configuration instructions
-                    return "🔑 **OpenAI Configuration Required**\n\n" +
-                           "To use real OpenAI models, you need to configure your API key:\n\n" +
-                           "1. Get an API key from https://platform.openai.com/\n" +
-                           "2. Go to Settings → API Configuration\n" +
-                           "3. Enter your OpenAI API key\n\n" +
-                           "I don't have verified information about that topic. Please configure OpenAI for more comprehensive responses.";
+                    // No OpenAI configured - use our human-like conversation engine
+                    return await _humanConversation.GetResponseAsync(message, "openai-fallback", context);
                 }
             }
             catch (Exception ex)
             {
-                return $"❌ **OpenAI Error:** {ex.Message}\n\n" +
-                       "I don't have information about that topic.";
+                // Error with OpenAI - fallback to human-like conversation
+                return await _humanConversation.GetResponseAsync(message, "openai-error", context);
             }
         }
 
@@ -339,8 +334,14 @@ namespace Smartitecture.Services
 
         private async Task<string> GenerateAdvancedAIResponse(string message, List<ConversationMessage> context)
         {
-            // Use natural, concise conversation service - like modern ChatGPT
-            return await _naturalConversation.GetResponseAsync(message, context);
+            // DEBUG: Log that we're using the human conversation engine
+            System.Diagnostics.Debug.WriteLine($"[MultiModel] Using Human-Like Conversation Engine for: '{message}'");
+            
+            // Use human-like conversation engine with emotional intelligence
+            var response = await _humanConversation.GetResponseAsync(message, "default", context);
+            
+            System.Diagnostics.Debug.WriteLine($"[MultiModel] Human engine returned: '{response}'");
+            return response;
         }
 
         private string HandleAdvancedMath(string message)
