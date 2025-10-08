@@ -43,7 +43,8 @@
     <Compile Include="Services\KnowledgeBaseService.cs" />
     <Compile Include="Services\OpenAIService.cs" />
     <Compile Include="Services\ConfigurationService.cs" />
-    <Compile Include="Services\NaturalConversationService.cs" />
+    <Compile Include="Services\HumanLikeConversationEngine.cs" />
+    <Compile Include="Services\WebResearchEngine.cs" />
     <Compile Include="Smartitecture\Services\ILLMService.cs" />
     <Compile Include="Smartitecture\Services\ConversationManager.cs" />
     <Compile Include="Smartitecture\Services\Models\*.cs" />

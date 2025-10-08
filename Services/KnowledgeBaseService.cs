@@ -71,9 +71,9 @@ namespace Smartitecture.Services
             // Current Events - CAREFUL: Only include facts that are stable
             AddVerifiedFact("president usa current", new VerifiedFact
             {
-                Answer = "As of 2024, **Joe Biden** is the President of the United States, serving as the 46th president since January 20, 2021.",
+                Answer = "As of 2025, **Donald Trump** is the President of the United States, serving as the 47th president since January 20, 2025.",
                 Confidence = 0.9, // Slightly lower because this can change
-                Source = "Current as of 2024",
+                Source = "Current as of 2025",
                 LastVerified = DateTime.Now,
                 Tags = new[] { "politics", "president", "usa", "current" }
             });
@@ -82,19 +82,50 @@ namespace Smartitecture.Services
             AddVerifiedFact("speed light", new VerifiedFact
             {
                 Answer = "The speed of light in a vacuum is **299,792,458 meters per second** (approximately 300,000 km/s). This is a fundamental constant of physics.",
-                Confidence = 1.0,
+                Confidence = 0.95,
                 Source = "Physics constant",
                 LastVerified = DateTime.Now,
                 Tags = new[] { "physics", "science", "constant" }
             });
-
+            AddVerifiedFact("pi", new VerifiedFact
+            {
+                Answer = "Pi (π) is approximately **3.14159**.",
+                Confidence = 1.0,
+                Source = "Mathematics",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "math", "pi", "geometry" }
+            });
+            AddVerifiedFact("speed of light", new VerifiedFact
+            {
+                Answer = "The speed of light is approximately **299,792,458 meters per second**.",
+                Confidence = 0.95,
+                Source = "Physics constant",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "physics", "science", "constant" }
+            });
+            AddVerifiedFact("earth", new VerifiedFact
+            {
+                Answer = "Earth is the third planet from the Sun.",
+                Confidence = 1.0,
+                Source = "Astronomy",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "astronomy", "earth", "planet" }
+            });
             AddVerifiedFact("water boiling point", new VerifiedFact
             {
-                Answer = "Water boils at **100°C (212°F)** at standard atmospheric pressure (1 atmosphere or 101.325 kPa).",
+                Answer = "Water boils at **100°C (212°F)** at sea level.",
                 Confidence = 1.0,
                 Source = "Chemistry",
                 LastVerified = DateTime.Now,
                 Tags = new[] { "chemistry", "water", "temperature" }
+            });
+            AddVerifiedFact("gravity", new VerifiedFact
+            {
+                Answer = "Earth's gravity is approximately **9.8 m/s²**.",
+                Confidence = 0.95,
+                Source = "Physics",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "physics", "gravity", "earth" }
             });
 
             // Math - Fundamental facts
@@ -116,6 +147,43 @@ namespace Smartitecture.Services
                 LastVerified = DateTime.Now,
                 Tags = new[] { "technology", "ai", "computer science" }
             });
+
+            // US State Capitals
+            AddVerifiedFact("capital florida", new VerifiedFact
+            {
+                Answer = "The capital of Florida is **Tallahassee**.",
+                Confidence = 1.0,
+                Source = "Geography",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "geography", "capital", "florida", "usa" }
+            });
+
+            AddVerifiedFact("capital california", new VerifiedFact
+            {
+                Answer = "The capital of California is **Sacramento**.",
+                Confidence = 1.0,
+                Source = "Geography", 
+                LastVerified = DateTime.Now,
+                Tags = new[] { "geography", "capital", "california", "usa" }
+            });
+
+            AddVerifiedFact("capital texas", new VerifiedFact
+            {
+                Answer = "The capital of Texas is **Austin**.",
+                Confidence = 1.0,
+                Source = "Geography",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "geography", "capital", "texas", "usa" }
+            });
+
+            AddVerifiedFact("capital new york", new VerifiedFact
+            {
+                Answer = "The capital of New York is **Albany** (not New York City).",
+                Confidence = 1.0,
+                Source = "Geography",
+                LastVerified = DateTime.Now,
+                Tags = new[] { "geography", "capital", "new york", "usa" }
+            });
         }
 
         private void InitializeSynonyms()
@@ -130,6 +198,12 @@ namespace Smartitecture.Services
             _synonyms["water boiling point"] = new List<string> { "boiling point of water", "when does water boil", "water boil temperature" };
             _synonyms["pi value"] = new List<string> { "value of pi", "what is pi", "pi number" };
             _synonyms["what is ai"] = new List<string> { "define ai", "artificial intelligence", "what is artificial intelligence", "ai definition" };
+            
+            // Geography synonyms
+            _synonyms["capital florida"] = new List<string> { "capital of florida", "florida capital", "what is capital of florida" };
+            _synonyms["capital california"] = new List<string> { "capital of california", "california capital", "what is capital of california" };
+            _synonyms["capital texas"] = new List<string> { "capital of texas", "texas capital", "what is capital of texas" };
+            _synonyms["capital new york"] = new List<string> { "capital of new york", "new york capital", "what is capital of new york" };
         }
 
         private void InitializeDynamicAnswers()
@@ -153,7 +227,7 @@ namespace Smartitecture.Services
             _verifiedFacts[key.ToLower()] = fact;
         }
 
-        public string GetAnswer(string question)
+        public string? GetAnswer(string question)
         {
             var normalizedQuestion = NormalizeQuestion(question);
             
@@ -188,8 +262,8 @@ namespace Smartitecture.Services
                 return fuzzyMatch.fact.Answer;
             }
 
-            // No confident answer found - return "I don't know" response
-            return CreateUnknownResponse(question);
+            // No confident answer found - return null so conversation engine can handle it
+            return null;
         }
 
         private string NormalizeQuestion(string question)
