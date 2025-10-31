@@ -8,14 +8,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Smartitecture.Services;
-using Smartitecture.Core.Commands;
+// using Smartitecture.Core.Commands;
 
 namespace Smartitecture.UI
 {
     public partial class ChatWindow : Window
     {
         private readonly ILLMService _llmService;
-        private readonly Dictionary<string, IAppCommand> _commands;
+        private readonly Dictionary<string, object> _commands;
         private readonly string _conversationId;
         private readonly DispatcherTimer _typingTimer;
         private bool _isProcessing = false;
@@ -27,11 +27,7 @@ namespace Smartitecture.UI
             _conversationId = Guid.NewGuid().ToString();
             
             // Initialize available commands
-            _commands = new Dictionary<string, IAppCommand>
-            {
-                ["launch"] = new LaunchAppCommand(),
-                ["shutdown"] = new ShutdownCommand()
-            };
+            _commands = new Dictionary<string, object>();
 
             // Setup typing animation timer
             _typingTimer = new DispatcherTimer
@@ -97,7 +93,7 @@ namespace Smartitecture.UI
             await SendMessageAsync();
         }
 
-        private async void MessageInput_KeyDown(object sender, KeyEventArgs e)
+        private async void MessageInput_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Enter && !Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
             {
@@ -127,14 +123,7 @@ namespace Smartitecture.UI
                 ShowTypingIndicator();
 
                 // Check if message contains a command
-                var (commandName, parameters) = await _llmService.ParseCommandAsync(userMessage);
-                
-                if (!string.IsNullOrEmpty(commandName) && _commands.ContainsKey(commandName.ToLower()))
-                {
-                    // Execute command
-                    await ExecuteCommandAsync(commandName.ToLower(), parameters, userMessage);
-                }
-                else
+                // Minimal build: skip command execution
                 {
                     // Get AI response
                     await GetAIResponseAsync(userMessage);
@@ -150,48 +139,6 @@ namespace Smartitecture.UI
                 _isProcessing = false;
                 SendButton.IsEnabled = true;
                 MessageInput.Focus();
-            }
-        }
-
-        private async Task ExecuteCommandAsync(string commandName, Dictionary<string, object> parameters, string originalMessage)
-        {
-            try
-            {
-                var command = _commands[commandName];
-                
-                // Convert parameters to string array (simplified)
-                var args = parameters?.Values?.Select(v => v?.ToString())?.ToArray() ?? new string[0];
-                
-                AddMessageToChat($"🔧 Executing {commandName} command...", "system");
-                
-                var success = await command.ExecuteAsync(args);
-                
-                if (success)
-                {
-                    AddMessageToChat($"✅ Command '{commandName}' executed successfully!", "system");
-                    
-                    // Also get AI commentary on the action
-                    var aiResponse = await _llmService.GetResponseAsync(
-                        $"I just executed the {commandName} command for the user. Please provide a brief, helpful response about what was done.",
-                        _conversationId);
-                    
-                    AddMessageToChat(aiResponse, "assistant");
-                }
-                else
-                {
-                    AddMessageToChat($"❌ Command '{commandName}' failed to execute.", "system");
-                    
-                    // Get AI help for failed command
-                    var aiResponse = await _llmService.GetResponseAsync(
-                        $"The {commandName} command failed. Please help the user understand what might have gone wrong and suggest alternatives.",
-                        _conversationId);
-                    
-                    AddMessageToChat(aiResponse, "assistant");
-                }
-            }
-            catch (Exception ex)
-            {
-                AddMessageToChat($"❌ Error executing command: {ex.Message}", "system");
             }
         }
 
@@ -347,7 +294,7 @@ namespace Smartitecture.UI
 
         private async void ClearChatButton_Click(object sender, RoutedEventArgs e)
         {
-            var result = MessageBox.Show(
+            var result = System.Windows.MessageBox.Show(
                 "Are you sure you want to clear the chat history?",
                 "Clear Chat",
                 MessageBoxButton.YesNo,
@@ -365,10 +312,10 @@ namespace Smartitecture.UI
                     Child = new TextBlock
                     {
                         Text = "🏗️ Welcome to Smartitecture AI Assistant! I can help you with automation, system commands, and more.",
-                        Foreground = new SolidColorBrush(Color.FromRgb(176, 176, 176)),
+                        Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(176, 176, 176)),
                         FontSize = 12,
                         TextWrapping = TextWrapping.Wrap,
-                        HorizontalAlignment = HorizontalAlignment.Center
+                        HorizontalAlignment = System.Windows.HorizontalAlignment.Center
                     }
                 };
                 ChatMessagesPanel.Children.Add(welcomeBorder);
@@ -384,7 +331,7 @@ namespace Smartitecture.UI
         private void AttachButton_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Implement file attachment functionality
-            MessageBox.Show("File attachment feature coming soon!", "Feature Preview", 
+            System.Windows.MessageBox.Show("File attachment feature coming soon!", "Feature Preview", 
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -399,3 +346,8 @@ namespace Smartitecture.UI
         }
     }
 }
+
+
+
+
+

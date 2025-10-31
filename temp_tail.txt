@@ -1,0 +1,88 @@
+            AddMessageToChat(ok ? $"Switched to {_currentMode} (backend: {best})" : $"Failed to select backend for {_currentMode}", "system");
+            UpdateModelStatus();
+        }
+
+        private async void ManualModelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_llmService == null || ManualModelSelector.SelectedItem == null) return;
+            var model = ((ComboBoxItem)ManualModelSelector.SelectedItem).Content.ToString();
+            var ok = await _llmService.SwitchModelAsync(model);
+            AddMessageToChat(ok ? $"Manual: switched to {model}" : $"Manual switch failed: {model}", "system");
+        }
+
+        private string ChooseBestModelForMode(string mode)
+        {
+            var available = _llmService.AvailableModels?.ToList() ?? new List<string>();
+            string[] priority = new[]
+            {
+                "Anthropic Claude 3.5 Sonnet",
+                "OpenAI GPT-4",
+                "Azure OpenAI GPT-4",
+                "OpenAI GPT-3.5-Turbo",
+                "Advanced AI Assistant",
+                "Local Ollama Model",
+                "Google Gemini",
+                "System Expert Mode"
+            };
+            foreach (var p in priority) if (available.Contains(p)) return p;
+            return _llmService.CurrentModel ?? "Advanced AI Assistant";
+        }
+        private void LaunchAppButton_Click(object sender, RoutedEventArgs e)
+        {
+            StatusText.Text = "Launch App demo is disabled in this build";
+        }
+
+        private void ShutdownButton_Click(object sender, RoutedEventArgs e)
+        {
+            StatusText.Text = "Shutdown demo is disabled in this build";
+        }
+
+        private void AutoDetectToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            AddMessageToChat("Auto-detection enabled", "system");
+        }
+
+        private void AutoDetectToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            AddMessageToChat("Auto-detection disabled", "system");
+        }
+
+        private void ModeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AddMessageToChat("Mode selector coming soon!", "system");
+        }
+
+        private async void ClearChatButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChatMessagesPanel.Children.Clear();
+            var welcome = new Border
+            {
+                Background = new SolidColorBrush(Color.FromRgb(64, 64, 64)),
+                CornerRadius = new CornerRadius(8),
+                Padding = new Thickness(8, 4, 8, 4),
+                Margin = new Thickness(20, 5, 20, 5),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Child = new TextBlock
+                {
+                    Text = "Welcome to Smartitecture AI Assistant!",
+                    Foreground = new SolidColorBrush(Color.FromRgb(176, 176, 176)),
+                    FontSize = 12,
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                }
+            };
+            ChatMessagesPanel.Children.Add(welcome);
+            if (_llmService != null)
+            {
+                await _llmService.ClearConversationAsync(_conversationId);
+            }
+        }
+
+        private void AttachButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.MessageBox.Show("File attachment feature coming soon!", "Feature Preview", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        }
+    }
+}
+

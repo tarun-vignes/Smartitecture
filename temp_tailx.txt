@@ -1,0 +1,81 @@
+                                       HorizontalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+                
+                <!-- Typing Indicator -->
+                <Border Grid.Row="2" 
+                        Name="TypingIndicator"
+                        Background="#2D2D30"
+                        Padding="15,8"
+                        Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🤖 AI is typing" 
+                                   Foreground="#90EE90" 
+                                   FontSize="12"/>
+                        <TextBlock Name="TypingDots" 
+                                   Text="..." 
+                                   Foreground="#90EE90" 
+                                   FontSize="12"
+                                   Margin="5,0,0,0"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Input Area -->
+                <Border Grid.Row="3" Background="#2D2D30" Padding="15">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBox Grid.Column="0"
+                                 Name="MessageInput"
+                                 Background="#404040"
+                                 Foreground="White"
+                                 BorderBrush="#606060"
+                                 Padding="12,8"
+                                 FontSize="14"
+                                 AcceptsReturn="True"
+                                 MaxHeight="100"
+                                 VerticalScrollBarVisibility="Auto"
+                                 KeyDown="MessageInput_KeyDown"
+                                 TextWrapping="Wrap"
+                                 Text="Type your message or command here..."/>
+                        
+                        <Button Grid.Column="1"
+                                Name="AttachButton"
+                                Content="📎"
+                                Width="40"
+                                Height="40"
+                                Margin="10,0,5,0"
+                                Background="#404040"
+                                Foreground="White"
+                                BorderBrush="#606060"
+                                Click="AttachButton_Click"
+                                ToolTip="Attach file or screenshot"/>
+                        
+                        <Button Grid.Column="2"
+                                Name="SendButton"
+                                Content="Send"
+                                Width="80"
+                                Height="40"
+                                Background="#0078D4"
+                                Foreground="White"
+                                BorderBrush="#0078D4"
+                                Click="SendButton_Click"
+                                IsDefault="True"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+        
+        <!-- Status Bar -->
+        <Border Grid.Row="2" Background="#F0F0F0" Padding="10">
+            <TextBlock Name="StatusText" 
+                       Text="Ready" 
+                       FontSize="12"/>
+        </Border>
+    </Grid>
+</Window>
