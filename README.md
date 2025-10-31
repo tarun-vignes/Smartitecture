@@ -80,3 +80,5 @@ dotnet run --project Smartitecture.csproj
 ## License
 
 This project is in development; license to be finalized.
+
+See full codebase overview in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
