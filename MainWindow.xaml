@@ -1,256 +1,348 @@
 <Window x:Class="Smartitecture.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Smartitecture" Height="600" Width="800"
-        WindowStartupLocation="CenterScreen">
+        Title="Smartitecture" Height="720" Width="1120"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource Brush.AppBackground}"
+        FontFamily="Segoe UI Variable Text, Segoe UI, Arial"
+        Foreground="#F5F7FF">
+    <Window.Resources>
+        <!-- Easing and durations -->
+        <Duration x:Key="Fast">0:0:0.12</Duration>
+        <Duration x:Key="Mid">0:0:0.25</Duration>
+        <QuadraticEase x:Key="EaseOut" EasingMode="EaseOut"/>
+
+        <!-- Glass / Acrylic brushes -->
+        <LinearGradientBrush x:Key="GlassBrush" StartPoint="0,0" EndPoint="1,1" Opacity="0.85">
+            <GradientStop Color="#33FFFFFF" Offset="0"/>
+            <GradientStop Color="#22FFFFFF" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="AcrylicCardBrush" StartPoint="0,0" EndPoint="1,1" Opacity="0.90">
+            <GradientStop Color="#202026" Offset="0"/>
+            <GradientStop Color="#1A1A1F" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Header glass style -->
+        <Style x:Key="GlassHeaderBorder" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource GlassBrush}"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <BlurEffect Radius="6"/> <!-- conservative blur to keep 60fps -->
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Card style with hover elevation and scale -->
+        <Style x:Key="CardBorderStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Background" Value="{StaticResource AcrylicCardBrush}"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" ShadowDepth="3" BlurRadius="12" Opacity="0.35"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                                 To="1.02" Duration="{StaticResource Fast}" EasingFunction="{StaticResource EaseOut}"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                                 To="1.02" Duration="{StaticResource Fast}" EasingFunction="{StaticResource EaseOut}"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                                 To="1.0" Duration="{StaticResource Fast}" EasingFunction="{StaticResource EaseOut}"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                                 To="1.0" Duration="{StaticResource Fast}" EasingFunction="{StaticResource EaseOut}"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Modern button style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#3A3A3F"/>
+            <Setter Property="BorderBrush" Value="#5A5A60"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#4A4A50"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#2E2E33"/>
+                            </Trigger>
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="bd" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.03" Duration="{StaticResource Fast}"/>
+                                        <DoubleAnimation Storyboard.TargetName="bd" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.03" Duration="{StaticResource Fast}"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="bd" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" Duration="{StaticResource Fast}"/>
+                                        <DoubleAnimation Storyboard.TargetName="bd" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" Duration="{StaticResource Fast}"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Pulsing status dot style -->
+        <Style x:Key="PulsingDot" TargetType="Ellipse">
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="Height" Value="10"/>
+            <Setter Property="Fill" Value="#66FF66"/>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.7" To="1" Duration="{StaticResource Mid}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-        <!-- Header with Navigation -->
-        <Border Grid.Row="0" Background="#2D2D30" Padding="20">
+
+        <!-- Header -->
+        <Border Grid.Row="0" Style="{StaticResource Card.Glass}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
-                <!-- Back Button (hidden by default) -->
-                <Button Grid.Column="0" 
-                        Name="BackButton"
-                        Content="← Back"
-                        Click="BackButton_Click"
-                        Background="Transparent"
-                        Foreground="White"
-                        BorderBrush="White"
-                        Padding="10,5"
-                        Margin="0,0,20,0"
-                        Visibility="Collapsed"/>
-                
-                <!-- Title -->
-                <TextBlock Grid.Column="1"
-                           Name="HeaderTitle"
-                           Text="🏗️ Smartitecture - AI Desktop Assistant" 
-                           Foreground="White" 
-                           FontSize="24" 
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"/>
+                <Button Grid.Column="0" Name="BackButton" Content="Back" Click="BackButton_Click"
+                        Background="Transparent" Foreground="White" BorderBrush="White" Padding="8,4" Visibility="Collapsed"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
+                    <Image Source="Assets/smartitecture-logo.png" Width="28" Height="28" Stretch="Uniform" Margin="0,0,8,0"/>
+                    <TextBlock Name="HeaderTitle" Text="Smartitecture AI" Foreground="White" FontSize="20" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Name="HeaderModeIcon" Text="💡" FontSize="18" Margin="0,0,6,0"/>
+                </StackPanel>
             </Grid>
         </Border>
-        
-        <!-- Main Content Container -->
-        <Grid Grid.Row="1" Name="ContentContainer">
-            <!-- Main View -->
-            <ScrollViewer Name="MainView" Padding="20">
-                <StackPanel>
-                    <TextBlock Text="Welcome to Smartitecture!" 
-                               FontSize="18" 
-                               FontWeight="SemiBold" 
-                               Margin="0,0,0,20"/>
-                    
-                    <TextBlock Text="Your AI-powered desktop assistant is ready to help with:" 
-                               FontSize="14" 
-                               Margin="0,0,0,10"/>
-                    
-                    <StackPanel Margin="20,0,0,20">
-                        <TextBlock Text="• System Commands (Launch apps, shutdown, volume control)" FontSize="12" Margin="0,2"/>
-                        <TextBlock Text="• AI Integration (Azure OpenAI, local models)" FontSize="12" Margin="0,2"/>
-                        <TextBlock Text="• Security Tools (Permission management, monitoring)" FontSize="12" Margin="0,2"/>
-                        <TextBlock Text="• Network Utilities (Configuration, diagnostics)" FontSize="12" Margin="0,2"/>
+
+        <!-- Content -->
+        <Grid Grid.Row="1">
+            <Grid Name="MainView" Visibility="Collapsed">
+                <ScrollViewer Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Welcome to Smartitecture!" FontSize="18" FontWeight="SemiBold"/>
+                        <Button Content="Open AI Chat Assistant" Name="OpenChatButton" Click="OpenChatButton_Click" Padding="12,8" Margin="0,12,0,0"/>
                     </StackPanel>
-                    
-                    <Button Content="Launch App Command Test" 
-                            Name="LaunchAppButton"
-                            Click="LaunchAppButton_Click"
-                            Padding="10,5" 
-                            Margin="0,10"
-                            HorizontalAlignment="Left"/>
-                    
-                    <Button Content="Shutdown Command Test" 
-                            Name="ShutdownButton"
-                            Click="ShutdownButton_Click"
-                            Padding="10,5" 
-                            Margin="0,10"
-                            HorizontalAlignment="Left"/>
-                    
-                    <Separator Margin="0,20"/>
-                    
-                    <TextBlock Text="🤖 AI Assistant Features:" 
-                               FontSize="16" 
-                               FontWeight="SemiBold" 
-                               Margin="0,0,0,10"/>
-                    
-                    <Button Content="Open AI Chat Assistant" 
-                            Name="OpenChatButton"
-                            Click="OpenChatButton_Click"
-                            Padding="15,8" 
-                            Margin="0,10"
-                            Background="#0078D4"
-                            Foreground="White"
-                            FontWeight="SemiBold"
-                            HorizontalAlignment="Left"/>
-                    
-                    <TextBlock Text="Chat with AI to execute commands, get help, and automate tasks" 
-                               FontSize="12" 
-                               Foreground="Gray"
-                               Margin="0,5,0,0"/>
-                </StackPanel>
-            </ScrollViewer>
-            
-            <!-- Chat View (hidden by default) -->
-            <Grid Name="ChatView" Visibility="Collapsed" Background="#1E1E1E">
+                </ScrollViewer>
+            </Grid>
+
+            <Grid Name="ChatView" Background="#1E1E1E" Visibility="Visible">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                
-                <!-- Chat Header with Model Selection -->
-                <Border Grid.Row="0" Background="#2D2D30" Padding="15">
+
+                <!-- Chat header -->
+                <Border Grid.Row="0" Style="{StaticResource Card.Glass}" Padding="12">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        
                         <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <TextBlock Text="🤖 AI Assistant" 
-                                       Foreground="White" 
-                                       FontSize="18" 
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center"/>
-                            <TextBlock Name="ModelStatusText"
-                                       Text="(Mock AI Model)"
-                                       Foreground="#90EE90"
-                                       FontSize="12"
-                                       Margin="10,0,0,0"
-                                       VerticalAlignment="Center"/>
+                            <TextBlock Name="ChatHeaderModeIcon" Text="💡" FontSize="16" Margin="0,0,6,0"/>
+                            <TextBlock Text="Smartitecture AI" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Name="ModelStatusText" Text="(LUMEN)" Foreground="#3B82F6" FontSize="12" Margin="8,0,0,0"/>
                         </StackPanel>
-                        
-                        <ComboBox Grid.Column="1" 
-                                  Name="ModelSelector"
-                                  Width="200"
-                                  Margin="10,0"
-                                  SelectionChanged="ModelSelector_SelectionChanged">
-                            <ComboBoxItem Content="Advanced AI Assistant" IsSelected="True"/>
-                            <ComboBoxItem Content="Azure OpenAI GPT-4"/>
-                            <ComboBoxItem Content="Local Ollama Model"/>
-                            <ComboBoxItem Content="Anthropic Claude"/>
-                            <ComboBoxItem Content="Google Gemini"/>
-                            <ComboBoxItem Content="System Expert Mode"/>
+                        <ToggleButton Grid.Column="1" Name="AutoDetectToggle" Content="Auto" Width="80" Height="28"
+                                      Margin="8,0" Background="#404040" Foreground="White" BorderBrush="#606060"
+                                      Checked="AutoDetectToggle_Checked" Unchecked="AutoDetectToggle_Unchecked"/>
+                        <ComboBox Grid.Column="2" Name="ModelSelector" Width="220" Margin="8,0" SelectionChanged="ModelSelector_SelectionChanged">
+                            <ComboBoxItem Content="LUMEN (General Assistant)" IsSelected="True"/>
+                            <ComboBoxItem Content="FORTIS (Security Expert)"/>
+                            <ComboBoxItem Content="NEXA (Performance Expert)"/>
                         </ComboBox>
-                        
-                        <Button Grid.Column="2" 
-                                Name="ClearChatButton"
-                                Content="Clear Chat"
-                                Click="ClearChatButton_Click"
-                                Padding="10,5"
-                                Background="#404040"
-                                Foreground="White"
-                                BorderBrush="#606060"/>
+                <Button Grid.Column="3" Name="ClearChatButton" Content="Clear Chat" Click="ClearChatButton_Click" Padding="12,8" Style="{StaticResource Button.Glass}"/>
                     </Grid>
                 </Border>
-                
-                <!-- Chat Messages Area -->
-                <ScrollViewer Grid.Row="1" 
-                              Name="ChatScrollViewer"
-                              Background="#1E1E1E"
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled">
+
+                <!-- Mode Dashboard -->
+                <Border Grid.Row="1" Background="#242424" Padding="8" Name="ModeDashboard">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Performance -->
+                        <Border Grid.Column="0" Style="{StaticResource Card.Glass}" Name="NexaCard">
+                            <StackPanel>
+                                <TextBlock Text="Performance" Foreground="#B0E0FF" FontWeight="Bold"/>
+                                <TextBlock Text="CPU" Foreground="#CCCCCC" FontSize="12"/>
+                                <ProgressBar Name="CpuBar" Height="12" Minimum="0" Maximum="100" Value="0"/>
+                                <TextBlock Text="Memory" Foreground="#CCCCCC" FontSize="12" Margin="0,6,0,0"/>
+                                <ProgressBar Name="MemBar" Height="12" Minimum="0" Maximum="100" Value="0"/>
+                                <TextBlock Text="Disk" Foreground="#CCCCCC" FontSize="12" Margin="0,6,0,0"/>
+                                <ProgressBar Name="DiskBar" Height="12" Minimum="0" Maximum="100" Value="0"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                    <TextBlock Text="CPU Temp:" Foreground="#CCCCCC" FontSize="12"/>
+                                    <TextBlock Name="CpuTempText" Text="N/A" Foreground="#CCCCCC" FontSize="12" Margin="6,0,0,0"/>
+                                </StackPanel>
+                                <Button Name="OptimizeButton" Content="Optimize Performance" Margin="0,8,0,0" Padding="8,4" Click="OptimizeButton_Click"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Security -->
+                        <Border Grid.Column="1" Style="{StaticResource Card.Glass}" Name="FortisCard">
+                            <StackPanel>
+                                <TextBlock Text="Security" Foreground="#FFB0B0" FontWeight="Bold"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                    <Ellipse Style="{StaticResource PulsingDot}" Margin="0,0,6,0" Name="FirewallDot"/>
+                                    <TextBlock Name="FirewallStatusText" Text="Firewall: Checking..." Foreground="#CCCCCC"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                    <Ellipse Style="{StaticResource PulsingDot}" Margin="0,0,6,0" Name="DefenderDot"/>
+                                    <TextBlock Name="DefenderStatusText" Text="Defender: Checking..." Foreground="#CCCCCC"/>
+                                </StackPanel>
+                                <TextBlock Name="ThreatStatusText" Text="No active scan" Foreground="#CCCCCC" Margin="0,6,0,0"/>
+                                <TextBlock Name="LastScanText" Text="Last scan: Never" Foreground="#AAAAAA" FontSize="11"/>
+                                <ProgressBar Name="SecurityScanProgress" Height="12" Minimum="0" Maximum="100" Value="0" Margin="0,6,0,0"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <Button Name="QuickScanButton" Content="Quick Scan" Padding="12,8" Margin="0,0,6,0" Click="QuickScanButton_Click" Style="{StaticResource Button.Primary}"/>
+                                    <Button Name="FullScanButton" Content="Full Scan" Padding="12,8" Click="FullScanButton_Click" Style="{StaticResource Button.Glass}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Assistant -->
+                        <Border Grid.Column="2" Style="{StaticResource Card.Glass}" Name="LumenCard">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Name="AssistantModeIcon" Text="💡" FontSize="16" Margin="0,0,6,0"/>
+                                    <TextBlock Text="Assistant" Foreground="#B0FFB0" FontWeight="Bold"/>
+                                </StackPanel>
+                                <TextBlock Name="ResearchStatusText" Text="Ready for research" Foreground="#CCCCCC"/>
+                                <ProgressBar Name="ResearchProgress" Height="10" Minimum="0" Maximum="100" Value="0" Margin="0,6,0,0"/>
+                                <Button Name="ResearchButton" Content="Research This Topic" Margin="0,8,0,0" Padding="8,4" Click="ResearchButton_Click" Style="{StaticResource Button.Primary}"/>
+                                <TextBlock Text="Recent Actions" Foreground="#AAAAAA" FontSize="11" Margin="0,10,0,2"/>
+                                <ListBox Name="RecentActionsList" Height="90"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Activity/Network -->
+                        <Border Grid.Column="3" Style="{StaticResource Card.Glass}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="File Activity" Foreground="#CCCCFF" FontWeight="Bold"/>
+                                    <ListBox Name="FileActivityList" Height="90"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                        <TextBlock Text="Disk Usage:" Foreground="#CCCCCC"/>
+                                        <ProgressBar Name="DiskUsageBar" Height="10" Minimum="0" Maximum="100" Value="0" Width="140" Margin="6,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock Name="DiskUsageText" Text="" Foreground="#AAAAAA" FontSize="11"/>
+                                    <Button Name="CleanTempButton" Content="Clean Temp Files" Padding="12,8" Margin="0,6,0,0" Click="CleanTempButton_Click" Style="{StaticResource Button.Glass}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                    <TextBlock Text="Network" Foreground="#CCCCFF" FontWeight="Bold"/>
+                                    <TextBlock Name="NetworkStatusText" Text="Monitoring idle" Foreground="#CCCCCC"/>
+                                    <TextBlock Name="UpSpeedText" Text="Up: 0 kbps" Foreground="#CCCCCC" FontSize="11"/>
+                                    <TextBlock Name="DownSpeedText" Text="Down: 0 kbps" Foreground="#CCCCCC" FontSize="11"/>
+                                    <ListBox Name="NetworkEventsList" Height="68"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Messages -->
+                <ScrollViewer Grid.Row="2" Name="ChatScrollViewer" Background="Transparent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Name="ChatMessagesPanel" Margin="10">
-                        <!-- Welcome Message -->
-                        <Border Background="#404040"
-                                CornerRadius="8"
-                                Padding="8,4"
-                                Margin="20,5,20,5"
-                                HorizontalAlignment="Center">
-                            <TextBlock Text="🏗️ Welcome to Smartitecture AI Assistant! I can help you with automation, system commands, and more."
-                                       Foreground="#B0B0B0"
-                                       FontSize="12"
-                                       TextWrapping="Wrap"
-                                       HorizontalAlignment="Center"/>
+                        <Border Style="{StaticResource Card.Glass}" Padding="10,6" Margin="20,5,20,5" HorizontalAlignment="Center">
+                            <TextBlock Text="Welcome to Smartitecture AI Assistant!" Style="{StaticResource Text.Caption}" TextWrapping="Wrap" HorizontalAlignment="Center"/>
                         </Border>
                     </StackPanel>
                 </ScrollViewer>
-                
-                <!-- Typing Indicator -->
-                <Border Grid.Row="2" 
-                        Name="TypingIndicator"
-                        Background="#2D2D30"
-                        Padding="15,8"
-                        Visibility="Collapsed">
+
+                <!-- Typing indicator -->
+                <Border Grid.Row="3" Name="TypingIndicator" Style="{StaticResource Card.Glass}" Padding="10" Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🤖 AI is typing" 
-                                   Foreground="#90EE90" 
-                                   FontSize="12"/>
-                        <TextBlock Name="TypingDots" 
-                                   Text="..." 
-                                   Foreground="#90EE90" 
-                                   FontSize="12"
-                                   Margin="5,0,0,0"/>
+                        <TextBlock Text="AI is typing" Foreground="#90EE90" FontSize="12"/>
+                        <TextBlock Name="TypingDots" Text="..." Foreground="#90EE90" FontSize="12" Margin="5,0,0,0"/>
                     </StackPanel>
                 </Border>
-                
-                <!-- Input Area -->
-                <Border Grid.Row="3" Background="#2D2D30" Padding="15">
+
+                <!-- Input -->
+                <Border Grid.Row="4" Style="{StaticResource Card.Glass}" Padding="10">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        
-                        <TextBox Grid.Column="0"
-                                 Name="MessageInput"
-                                 Background="#404040"
-                                 Foreground="White"
-                                 BorderBrush="#606060"
-                                 Padding="12,8"
-                                 FontSize="14"
-                                 AcceptsReturn="True"
-                                 MaxHeight="100"
-                                 VerticalScrollBarVisibility="Auto"
-                                 KeyDown="MessageInput_KeyDown"
-                                 TextWrapping="Wrap"
-                                 Text="Type your message or command here..."/>
-                        
-                        <Button Grid.Column="1"
-                                Name="AttachButton"
-                                Content="📎"
-                                Width="40"
-                                Height="40"
-                                Margin="10,0,5,0"
-                                Background="#404040"
-                                Foreground="White"
-                                BorderBrush="#606060"
-                                Click="AttachButton_Click"
-                                ToolTip="Attach file or screenshot"/>
-                        
-                        <Button Grid.Column="2"
-                                Name="SendButton"
-                                Content="Send"
-                                Width="80"
-                                Height="40"
-                                Background="#0078D4"
-                                Foreground="White"
-                                BorderBrush="#0078D4"
-                                Click="SendButton_Click"
-                                IsDefault="True"/>
+                        <TextBox Grid.Column="0" Name="MessageInput" Background="#404040" Foreground="White" BorderBrush="#606060" Padding="12,8" FontSize="14" AcceptsReturn="True" MaxHeight="100" VerticalScrollBarVisibility="Auto" KeyDown="MessageInput_KeyDown" TextWrapping="Wrap" Text="Type your message or command here..."/>
+                        <Button Grid.Column="1" Name="AttachButton" Content="Attach" Width="90" Height="40" Margin="10,0,5,0" Style="{StaticResource Button.Glass}" Click="AttachButton_Click"/>
+                        <Button Grid.Column="2" Name="SendButton" Content="Send" Width="90" Height="40" Style="{StaticResource Button.Primary}" Click="SendButton_Click" IsDefault="True"/>
                     </Grid>
                 </Border>
             </Grid>
         </Grid>
-        
-        <!-- Status Bar -->
-        <Border Grid.Row="2" Background="#F0F0F0" Padding="10">
-            <TextBlock Name="StatusText" 
-                       Text="Ready" 
-                       FontSize="12"/>
+
+        <!-- Status bar -->
+        <Border Grid.Row="2" Background="#F0F0F0" Padding="8">
+            <TextBlock Name="StatusText" Text="Ready" FontSize="12"/>
         </Border>
     </Grid>
 </Window>

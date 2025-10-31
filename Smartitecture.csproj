@@ -7,8 +7,8 @@
     <RootNamespace>Smartitecture</RootNamespace>
     <StartupObject>Smartitecture.App</StartupObject>
     <EnableDefaultItems>false</EnableDefaultItems>
+    
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
@@ -18,36 +18,61 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Anthropic.SDK" Version="*" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="OpenAI" Version="*" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="App.xaml" />
     <None Remove="MainWindow.xaml" />
     <None Remove="UI\ChatWindow.xaml" />
   </ItemGroup>
-
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
   </ItemGroup>
-
   <ItemGroup>
     <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StartupWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ChatWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
-
   <ItemGroup>
-    <Compile Include="**/*.cs" />
+    <Compile Include="*.cs" />
+    <!-- removed Application tree include -->
+    <Compile Include="Services\**\*.cs" />
+    <Compile Include="Properties\**\*.cs" />
+    <Compile Include="UI\**\*.cs" />
+    
+    <!-- -->
+    <Compile Remove="Application\\**\\*.cs" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Include="Smartitecture\\Services\\ILLMService.cs" />
+    <Compile Remove="Services\\AdvancedConversationalAgent.cs" />
+    <Compile Remove="Services\\SmartitectureAIService.cs" />
+    <Compile Remove="Services\\MockLLMService.cs" />
+    <Compile Remove="Services\\EnhancedMockLLMService.cs" />
+    <Compile Remove="TestShutdown.cs" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Resource Include="Assets\**\*.*" />
   </ItemGroup>
 </Project>
+
+
+
+
