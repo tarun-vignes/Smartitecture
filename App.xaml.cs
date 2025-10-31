@@ -10,10 +10,10 @@ namespace Smartitecture
     /// Main application class that provides application-specific behavior to supplement the default Application class.
     /// Handles initialization of services, API hosting, and UI components.
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
-        private Window _window;
-        private IServiceProvider _serviceProvider;
+        private Window? _window;
+        private IServiceProvider? _serviceProvider;
 
         /// <summary>
         /// Initializes a new instance of the App class.
@@ -26,12 +26,12 @@ namespace Smartitecture
         /// <summary>
         /// Gets the service provider for the application.
         /// </summary>
-        public IServiceProvider Services => _serviceProvider;
+        public IServiceProvider? Services => _serviceProvider;
 
         /// <summary>
         /// Gets the current application instance.
         /// </summary>
-        public new static App Current => (App)Application.Current;
+        public new static App Current => (App)System.Windows.Application.Current;
 
         /// <summary>
         /// Invoked when the application is launched.
@@ -57,10 +57,15 @@ namespace Smartitecture
 
             _serviceProvider = services.BuildServiceProvider();
 
-            // Create and show the main window
-            _window = new MainWindow();
-            _window.Show();
+            // Show Startup window first
+            var startup = new StartupWindow();
+            this.MainWindow = startup;
+            _window = startup;
+            startup.Show();
         }
 
     }
 }
+
+
+

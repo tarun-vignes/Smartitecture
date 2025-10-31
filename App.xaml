@@ -4,12 +4,218 @@
              xmlns:local="clr-namespace:Smartitecture">
     <Application.Resources>
         <ResourceDictionary>
-            <!-- App colors -->
-            <SolidColorBrush x:Key="SmartitecturePrimaryBrush" Color="#3584D9"/>
-            <SolidColorBrush x:Key="SmartitectureSecondaryBrush" Color="#4D9FF3"/>
-            <SolidColorBrush x:Key="SmartitectureAccentBrush" Color="#FF5A5A"/>
-            
-            <!-- Add your styles and resources here -->
+            <!-- Color System -->
+            <Color x:Key="Color.Primary">#4F46E5</Color>
+            <Color x:Key="Color.Secondary">#8B5CF6</Color>
+            <Color x:Key="Color.Success">#10B981</Color>
+            <Color x:Key="Color.Warning">#F59E0B</Color>
+            <Color x:Key="Color.Error">#EF4444</Color>
+            <Color x:Key="Color.Surface">#0F1020</Color>
+            <Color x:Key="Color.OnSurface">#F5F7FF</Color>
+
+            <SolidColorBrush x:Key="Brush.Primary" Color="{StaticResource Color.Primary}"/>
+            <SolidColorBrush x:Key="Brush.Secondary" Color="{StaticResource Color.Secondary}"/>
+            <SolidColorBrush x:Key="Brush.Success" Color="{StaticResource Color.Success}"/>
+            <SolidColorBrush x:Key="Brush.Warning" Color="{StaticResource Color.Warning}"/>
+            <SolidColorBrush x:Key="Brush.Error" Color="{StaticResource Color.Error}"/>
+            <SolidColorBrush x:Key="Brush.Surface" Color="{StaticResource Color.Surface}"/>
+            <SolidColorBrush x:Key="Brush.OnSurface" Color="{StaticResource Color.OnSurface}"/>
+
+            <!-- Background gradient (window) -->
+            <LinearGradientBrush x:Key="Brush.AppBackground" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#161429" Offset="0"/>
+                <GradientStop Color="#131235" Offset="0.35"/>
+                <GradientStop Color="#221C5F" Offset="1"/>
+            </LinearGradientBrush>
+
+            <!-- Glass/Translucent surfaces -->
+            <LinearGradientBrush x:Key="Brush.GlassCard" StartPoint="0,0" EndPoint="1,1" Opacity="0.88">
+                <GradientStop Color="#22FFFFFF" Offset="0"/>
+                <GradientStop Color="#14FFFFFF" Offset="1"/>
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="Brush.GlassBorder" StartPoint="0,0" EndPoint="1,1" Opacity="0.9">
+                <GradientStop Color="#40FFFFFF" Offset="0"/>
+                <GradientStop Color="#20FFFFFF" Offset="1"/>
+            </LinearGradientBrush>
+
+            <!-- Easing and durations -->
+            <Duration x:Key="Duration.Fast">0:0:0.12</Duration>
+            <Duration x:Key="Duration.Mid">0:0:0.25</Duration>
+            <QuadraticEase x:Key="Ease.Out" EasingMode="EaseOut"/>
+
+            <!-- Typography -->
+            <Style x:Key="Text.H1" TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI, Arial"/>
+                <Setter Property="FontSize" Value="28"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="{StaticResource Brush.OnSurface}"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="3" ShadowDepth="0" Color="#88000000" Opacity="0.4"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="Text.H2" TargetType="TextBlock" BasedOn="{StaticResource Text.H1}">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="2" ShadowDepth="0" Color="#66000000" Opacity="0.35"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="Text.Body" TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="Segoe UI Variable Text, Segoe UI, Arial"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Foreground" Value="#E6FFFFFF"/>
+            </Style>
+            <Style x:Key="Text.Caption" TargetType="TextBlock" BasedOn="{StaticResource Text.Body}">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Foreground" Value="#CCFFFFFF"/>
+            </Style>
+
+            <!-- Glass Card -->
+            <Style x:Key="Card.Glass" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource Brush.GlassCard}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource Brush.GlassBorder}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="16"/>
+                <Setter Property="Padding" Value="16"/>
+                <Setter Property="Margin" Value="8"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="#000000" ShadowDepth="4" BlurRadius="16" Opacity="0.35"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)" To="1.02" Duration="{StaticResource Duration.Fast}" EasingFunction="{StaticResource Ease.Out}"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)" To="1.02" Duration="{StaticResource Duration.Fast}" EasingFunction="{StaticResource Ease.Out}"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                        <Trigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)" To="1.0" Duration="{StaticResource Duration.Fast}" EasingFunction="{StaticResource Ease.Out}"/>
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)" To="1.0" Duration="{StaticResource Duration.Fast}" EasingFunction="{StaticResource Ease.Out}"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.ExitActions>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Premium Button -->
+            <Style x:Key="Button.Primary" TargetType="Button">
+                <Setter Property="Foreground" Value="#FFFFFF"/>
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#6A5AE6" Offset="0"/>
+                            <GradientStop Color="#4F46E5" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="BorderBrush" Value="#807CF8"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="12,8"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd" CornerRadius="10" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="bd" Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="2" Opacity="0.35"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="bd" Property="Opacity" Value="0.9"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.6"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Secondary Button (glass) -->
+            <Style x:Key="Button.Glass" TargetType="Button">
+                <Setter Property="Foreground" Value="#FFFFFF"/>
+                <Setter Property="Background" Value="#22FFFFFF"/>
+                <Setter Property="BorderBrush" Value="#55FFFFFF"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="10,6"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd" CornerRadius="10" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="bd" Property="Background" Value="#33FFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="bd" Property="Opacity" Value="0.9"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Status Text Colors -->
+            <Style x:Key="Text.Success" TargetType="TextBlock" BasedOn="{StaticResource Text.Body}">
+                <Setter Property="Foreground" Value="{StaticResource Brush.Success}"/>
+            </Style>
+            <Style x:Key="Text.Warning" TargetType="TextBlock" BasedOn="{StaticResource Text.Body}">
+                <Setter Property="Foreground" Value="{StaticResource Brush.Warning}"/>
+            </Style>
+            <Style x:Key="Text.Error" TargetType="TextBlock" BasedOn="{StaticResource Text.Body}">
+                <Setter Property="Foreground" Value="{StaticResource Brush.Error}"/>
+            </Style>
+
+            <!-- Skeleton shimmer for loading states -->
+            <LinearGradientBrush x:Key="SkeletonBrush" StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Color="#22FFFFFF" Offset="0"/>
+                <GradientStop Color="#44FFFFFF" Offset="0.5"/>
+                <GradientStop Color="#22FFFFFF" Offset="1"/>
+            </LinearGradientBrush>
+            <Style x:Key="Skeleton.Block" TargetType="Rectangle">
+                <Setter Property="RadiusX" Value="6"/>
+                <Setter Property="RadiusY" Value="6"/>
+                <Setter Property="Fill" Value="{StaticResource SkeletonBrush}"/>
+                <Setter Property="Opacity" Value="0.6"/>
+                <Setter Property="Height" Value="14"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <TranslateTransform X="-200"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
+
