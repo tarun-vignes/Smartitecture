@@ -1,5 +1,5 @@
-using Smartitecture.Security;
 using System;
+using Smartitecture.Security;
 using Xunit;
 
 namespace Smartitecture.Tests.Security
@@ -16,13 +16,11 @@ namespace Smartitecture.Tests.Security
         [Fact]
         public void ValidateCommand_NullOrEmptyCommand_ReturnsFalse()
         {
-            // Arrange
-            string? nullCommand = null;
             string emptyCommand = string.Empty;
             string whitespaceCommand = "   ";
 
             // Act & Assert
-            Assert.False(_permissionManager.ValidateCommand(nullCommand));
+            Assert.False(_permissionManager.ValidateCommand(null!));
             Assert.False(_permissionManager.ValidateCommand(emptyCommand));
             Assert.False(_permissionManager.ValidateCommand(whitespaceCommand));
         }

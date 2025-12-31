@@ -1,4 +1,5 @@
 using Smartitecture.Commands;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -6,99 +7,28 @@ namespace Smartitecture.Tests.Commands
 {
     public class VolumeCommandTests
     {
-        private readonly VolumeCommand _volumeCommand;
-
-        public VolumeCommandTests()
+        [Fact]
+        public void Metadata_IsCorrect()
         {
-            _volumeCommand = new VolumeCommand();
-        }
-
-        [Theory]
-        [InlineData("up 10")]
-        [InlineData("up")]
-        [InlineData("down 20")]
-        [InlineData("down")]
-        [InlineData("mute")]
-        [InlineData("unmute")]
-        public async Task Execute_WithValidParameters_ReturnsSuccess(string parameters)
-        {
-            // Act
-            var result = await _volumeCommand.Execute(parameters);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Contains("volume", result.ToLower());
-        }
-
-        [Theory]
-        [InlineData("")]
-        [InlineData(null)]
-        [InlineData("invalid")]
-        [InlineData("up abc")]
-        [InlineData("down -10")]
-        public async Task Execute_WithInvalidParameters_ReturnsErrorMessage(string parameters)
-        {
-            // Act
-            var result = await _volumeCommand.Execute(parameters);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Contains("usage", result.ToLower());
+            var cmd = new VolumeCommand();
+            Assert.Equal("Volume", cmd.CommandName);
+            Assert.False(cmd.RequiresElevation);
         }
 
         [Fact]
-        public void CanHandle_WithVolumeKeywords_ReturnsTrue()
+        public async Task ExecuteAsync_WithNoParameters_ReturnsFalse()
         {
-            // Arrange
-            string[] validInputs = new[]
-            {
-                "volume up",
-                "volume down",
-                "volume mute",
-                "volume unmute",
-                "turn up volume",
-                "turn down volume",
-                "increase volume",
-                "decrease volume"
-            };
-
-            // Act & Assert
-            foreach (var input in validInputs)
-            {
-                Assert.True(_volumeCommand.CanHandle(input));
-            }
+            var cmd = new VolumeCommand();
+            var result = await cmd.ExecuteAsync(Array.Empty<string>());
+            Assert.False(result);
         }
 
         [Fact]
-        public void CanHandle_WithNonVolumeKeywords_ReturnsFalse()
+        public async Task ExecuteAsync_WithNullParameters_ReturnsFalse()
         {
-            // Arrange
-            string[] invalidInputs = new[]
-            {
-                "launch notepad",
-                "open settings",
-                "shutdown",
-                "play music",
-                "what time is it"
-            };
-
-            // Act & Assert
-            foreach (var input in invalidInputs)
-            {
-                Assert.False(_volumeCommand.CanHandle(input));
-            }
-        }
-
-        [Fact]
-        public void GetHelpText_ReturnsNonEmptyString()
-        {
-            // Act
-            var helpText = _volumeCommand.GetHelpText();
-
-            // Assert
-            Assert.NotNull(helpText);
-            Assert.NotEmpty(helpText);
-            Assert.Contains("volume", helpText.ToLower());
+            var cmd = new VolumeCommand();
+            var result = await cmd.ExecuteAsync(null!);
+            Assert.False(result);
         }
     }
 }

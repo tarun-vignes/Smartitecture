@@ -37,13 +37,37 @@
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ShellWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="StartupWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ChatWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Pages\WelcomePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Pages\StartupPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Pages\DashboardPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Pages\ChatPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Theme.Base.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Theme.Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Theme.Light.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -66,13 +90,18 @@
     <Compile Remove="TestShutdown.cs" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Include only the command/security types needed by tests -->
+    <Compile Include="Application\\Commands\\ISystemCommand.cs" />
+    <Compile Include="Application\\Commands\\VolumeCommand.cs" />
+    <Compile Include="Application\\Security\\IPermissionManager.cs" />
+    <Compile Include="Application\\Security\\PermissionManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Resource Include="Assets\**\*.*" />
   </ItemGroup>
 </Project>
-
-
 
 

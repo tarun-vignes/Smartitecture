@@ -6,7 +6,7 @@ namespace Smartitecture.Services
 {
     public class UserPreferences
     {
-        public string Theme { get; set; } = "Dark"; // Dark | Light
+        public string Theme { get; set; } = "System"; // System | Dark | Light
         public bool NotificationsEnabled { get; set; } = true;
     }
 
@@ -47,4 +47,3 @@ namespace Smartitecture.Services
         }
     }
 }
-

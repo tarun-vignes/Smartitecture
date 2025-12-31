@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Smartitecture" Height="720" Width="1120"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource Brush.AppBackground}"
+        Background="{DynamicResource Brush.AppBackground}"
         FontFamily="Segoe UI Variable Text, Segoe UI, Arial"
-        Foreground="#F5F7FF">
+        Foreground="{DynamicResource Brush.OnSurface}"
+        ResizeMode="CanResize">
     <Window.Resources>
         <!-- Easing and durations -->
         <Duration x:Key="Fast">0:0:0.12</Duration>
@@ -158,7 +159,7 @@
                 <Button Grid.Column="0" Name="BackButton" Content="Back" Click="BackButton_Click"
                         Background="Transparent" Foreground="White" BorderBrush="White" Padding="8,4" Visibility="Collapsed"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
-                    <Image Source="Assets/smartitecture-logo.png" Width="28" Height="28" Stretch="Uniform" Margin="0,0,8,0"/>
+                    <Image Source="{DynamicResource Image.AppLogo}" Width="28" Height="28" Stretch="Uniform" Margin="0,0,8,0"/>
                     <TextBlock Name="HeaderTitle" Text="Smartitecture AI" Foreground="White" FontSize="20" FontWeight="Bold"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">

@@ -1,0 +1,77 @@
+<Page x:Class="Smartitecture.UI.Pages.WelcomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{DynamicResource Brush.AppBackground}"
+      FontFamily="Segoe UI Variable Text, Segoe UI, Arial"
+      Foreground="{DynamicResource Brush.OnSurface}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Style="{StaticResource Card.Glass}"
+                Padding="26"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                MaxWidth="720">
+            <StackPanel HorizontalAlignment="Center">
+                <Image Source="{DynamicResource Image.AppLogo}"
+                       Width="104"
+                       Height="104"
+                       Stretch="Uniform"
+                       HorizontalAlignment="Center"
+                       Margin="0,6,0,14"/>
+
+                <TextBlock Text="Welcome to Smartitecture!"
+                           Style="{StaticResource Text.H1}"
+                           TextAlignment="Center"
+                           Margin="0,0,0,6"/>
+
+                <TextBlock Text="Your friendly AI-powered system assistant."
+                           Style="{StaticResource Text.Body}"
+                           FontSize="16"
+                           TextAlignment="Center"
+                           Margin="0,0,0,14"/>
+
+                <Border Background="{DynamicResource Brush.GlassButtonBackground}"
+                        BorderBrush="{DynamicResource Brush.GlassButtonBorder}"
+                        BorderThickness="1"
+                        CornerRadius="14"
+                        Padding="16"
+                        Margin="0,0,0,18">
+                    <StackPanel>
+                        <TextBlock Text="In a moment, we&apos;ll help you:"
+                                   Style="{StaticResource Text.Body}"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,6"/>
+                        <TextBlock Text="&#8226; Save your API keys (optional)"
+                                   Style="{StaticResource Text.Caption}"
+                                   Margin="0,2,0,0"/>
+                        <TextBlock Text="&#8226; Choose your theme (System / Dark / Light)"
+                                   Style="{StaticResource Text.Caption}"
+                                   Margin="0,2,0,0"/>
+                        <TextBlock Text="&#8226; Launch your dashboard and start chatting"
+                                   Style="{StaticResource Text.Caption}"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <Button Content="Let&apos;s Go! &#x2192;"
+                        Style="{StaticResource Button.Primary}"
+                        Width="180"
+                        Height="44"
+                        Click="LetsGo_Click"
+                        IsDefault="True"/>
+            </StackPanel>
+        </Border>
+
+        <TextBlock Grid.Row="1"
+                   Text="Tip: You can change theme any time from the Dashboard."
+                   Style="{StaticResource Text.Caption}"
+                   HorizontalAlignment="Center"
+                   Opacity="0.9"
+                   Margin="0,14,0,0"/>
+    </Grid>
+</Page>
