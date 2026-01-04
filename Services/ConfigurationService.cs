@@ -65,6 +65,32 @@ namespace Smartitecture.Services
             return !string.IsNullOrWhiteSpace(_config.OpenAI.ApiKey);
         }
 
+        public async Task<bool> SetClaudeApiKeyAsync(string apiKey)
+        {
+            if (string.IsNullOrWhiteSpace(apiKey))
+                return false;
+
+            _config.Claude.ApiKey = apiKey;
+            await SaveConfigurationAsync(_config);
+            return true;
+        }
+
+        public string GetClaudeApiKey()
+        {
+            // Prefer stored config; fall back to environment variables for developer convenience
+            if (!string.IsNullOrWhiteSpace(_config.Claude.ApiKey))
+                return _config.Claude.ApiKey;
+
+            var env = Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY")
+                      ?? Environment.GetEnvironmentVariable("CLAUDE_API_KEY");
+            return env ?? string.Empty;
+        }
+
+        public bool IsClaudeConfigured()
+        {
+            return !string.IsNullOrWhiteSpace(GetClaudeApiKey());
+        }
+
         private void LoadConfiguration()
         {
             try
@@ -93,8 +119,23 @@ namespace Smartitecture.Services
     public class AppConfig
     {
         public OpenAIConfig OpenAI { get; set; } = new OpenAIConfig();
+        public ClaudeConfig Claude { get; set; } = new ClaudeConfig();
         public UIConfig UI { get; set; } = new UIConfig();
         public SystemConfig System { get; set; } = new SystemConfig();
+    }
+
+    /// <summary>
+    /// Claude (Anthropic) configuration settings
+    /// </summary>
+    public class ClaudeConfig
+    {
+        public string ApiKey { get; set; } = string.Empty;
+        public string DefaultModel { get; set; } = "claude-3-5-sonnet-20240620";
+        public double Temperature { get; set; } = 0.7;
+        public int MaxTokens { get; set; } = 2000;
+        public int MaxRetries { get; set; } = 3;
+        public int RateLimitPerMinute { get; set; } = 50;
+        public string ApiVersion { get; set; } = "2023-06-01";
     }
 
     /// <summary>

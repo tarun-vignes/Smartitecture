@@ -1,0 +1,59 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <BitmapImage x:Key="Image.AppLogo" UriSource="/Assets/smartitecture-dark.png" />
+
+    <!-- Core colors -->
+    <Color x:Key="Color.Primary">#4F46E5</Color>
+    <Color x:Key="Color.Secondary">#8B5CF6</Color>
+    <Color x:Key="Color.Success">#10B981</Color>
+    <Color x:Key="Color.Warning">#F59E0B</Color>
+    <Color x:Key="Color.Error">#EF4444</Color>
+    <Color x:Key="Color.Surface">#0F1020</Color>
+    <Color x:Key="Color.OnSurface">#F5F7FF</Color>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="Brush.Primary" Color="{StaticResource Color.Primary}"/>
+    <SolidColorBrush x:Key="Brush.Secondary" Color="{StaticResource Color.Secondary}"/>
+    <SolidColorBrush x:Key="Brush.Success" Color="{StaticResource Color.Success}"/>
+    <SolidColorBrush x:Key="Brush.Warning" Color="{StaticResource Color.Warning}"/>
+    <SolidColorBrush x:Key="Brush.Error" Color="{StaticResource Color.Error}"/>
+    <SolidColorBrush x:Key="Brush.Surface" Color="{StaticResource Color.Surface}"/>
+    <SolidColorBrush x:Key="Brush.OnSurface" Color="{StaticResource Color.OnSurface}"/>
+    <SolidColorBrush x:Key="Brush.MutedText" Color="#E6FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.CaptionText" Color="#CCFFFFFF"/>
+
+    <SolidColorBrush x:Key="Brush.ButtonPrimaryForeground" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.ButtonGlassForeground" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="Brush.GlassButtonBackground" Color="#22FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.GlassButtonBorder" Color="#55FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.GlassButtonHoverBackground" Color="#33FFFFFF"/>
+
+    <SolidColorBrush x:Key="Brush.PlaceholderText" Color="#A0A0A0"/>
+    <SolidColorBrush x:Key="Brush.InputBackground" Color="#404040"/>
+    <SolidColorBrush x:Key="Brush.InputBorder" Color="#606060"/>
+
+    <!-- Background gradient (window) -->
+    <LinearGradientBrush x:Key="Brush.AppBackground" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#161429" Offset="0"/>
+        <GradientStop Color="#131235" Offset="0.35"/>
+        <GradientStop Color="#221C5F" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- Glass/Translucent surfaces -->
+    <LinearGradientBrush x:Key="Brush.GlassCard" StartPoint="0,0" EndPoint="1,1" Opacity="0.88">
+        <GradientStop Color="#22FFFFFF" Offset="0"/>
+        <GradientStop Color="#14FFFFFF" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Brush.GlassBorder" StartPoint="0,0" EndPoint="1,1" Opacity="0.9">
+        <GradientStop Color="#40FFFFFF" Offset="0"/>
+        <GradientStop Color="#20FFFFFF" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- Skeleton brush -->
+    <LinearGradientBrush x:Key="Brush.Skeleton" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#22FFFFFF" Offset="0"/>
+        <GradientStop Color="#44FFFFFF" Offset="0.5"/>
+        <GradientStop Color="#22FFFFFF" Offset="1"/>
+    </LinearGradientBrush>
+</ResourceDictionary>

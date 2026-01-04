@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Welcome &#8226; Smartitecture" Height="680" Width="980"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource Brush.AppBackground}"
+        Background="{DynamicResource Brush.AppBackground}"
         FontFamily="Segoe UI Variable Text, Segoe UI, Arial"
-        Foreground="#F5F7FF"
+        Foreground="{DynamicResource Brush.OnSurface}"
+        ResizeMode="CanResize"
         AllowsTransparency="False">
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
@@ -26,7 +27,7 @@
 
         <!-- Hero -->
         <StackPanel Grid.Row="0" Margin="24,28,24,10" HorizontalAlignment="Center">
-            <Image Source="Assets/smartitecture-logo.png" Width="96" Height="96" Stretch="Uniform" HorizontalAlignment="Center"/>
+            <Image Source="{DynamicResource Image.AppLogo}" Width="96" Height="96" Stretch="Uniform" HorizontalAlignment="Center"/>
             <TextBlock Text="Smartitecture" Style="{StaticResource Text.H1}" HorizontalAlignment="Center" Margin="0,12,0,2"/>
             <TextBlock Text="AI-Powered System Intelligence" Style="{StaticResource Text.Body}" HorizontalAlignment="Center" FontSize="16"/>
             <TextBlock Text="LUMEN &#8226; FORTIS &#8226; NEXA" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" Opacity="0.9"/>
@@ -167,4 +168,3 @@
         </Grid>
     </Grid>
 </Window>
-

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Windows.System;
+using Smartitecture.Commands;
 
 namespace AIPal.Application.Commands
 {
@@ -8,6 +9,8 @@ namespace AIPal.Application.Commands
     /// Command implementation for launching Windows applications.
     /// Supports both Microsoft Store apps and traditional desktop applications.
     /// </summary>
+    public class LaunchAppCommand : ISystemCommand
+    {
         /// <summary>Gets the name of the command</summary>
         public string CommandName => "LaunchApp";
 
@@ -24,14 +27,13 @@ namespace AIPal.Application.Commands
         /// <returns>True if the application was launched successfully, false otherwise</returns>
         public async Task<bool> ExecuteAsync(string[] parameters)
         {
-            // Validate that an application name was provided
-            if (parameters.Length == 0)
+            if (parameters == null || parameters.Length == 0)
                 return false;
 
             try
             {
                 var appName = parameters[0];
-                
+
                 // Try to launch as a store app first
                 try
                 {

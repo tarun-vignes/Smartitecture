@@ -24,20 +24,40 @@ namespace Smartitecture.Services
         private readonly ConfigurationService _configService;
         private readonly HumanLikeConversationEngine _humanConversation;
         private OpenAIService _openAIService;
+        private ClaudeService _claudeService;
 
         public string CurrentModel { get; private set; } = "Advanced AI Assistant";
 
-        public IEnumerable<string> AvailableModels => new[] 
-        { 
-            "Advanced AI Assistant",
-            "OpenAI GPT-4",
-            "OpenAI GPT-3.5-Turbo", 
-            "Azure OpenAI GPT-4",
-            "Local Ollama Model",
-            "Anthropic Claude",
-            "Google Gemini",
-            "System Expert Mode"
-        };
+        public IEnumerable<string> AvailableModels
+        {
+            get
+            {
+                var list = new List<string> { "Advanced AI Assistant" };
+
+                // OpenAI availability
+                if (_openAIService != null && _configService.IsOpenAIConfigured())
+                {
+                    list.Add("OpenAI GPT-4");
+                    list.Add("OpenAI GPT-3.5-Turbo");
+                    // Optional: Azure path only if treated as configured (not implemented here)
+                }
+
+                // Claude availability
+                if (_claudeService != null && _claudeService.IsConfigured())
+                {
+                    list.Add("Anthropic Claude 3.5 Sonnet");
+                    list.Add("Anthropic Claude 3 Haiku");
+                }
+
+                // Keep these hidden unless implemented/configured
+                // list.Add("Azure OpenAI GPT-4");
+                // list.Add("Local Ollama Model");
+                // list.Add("Google Gemini");
+                // list.Add("System Expert Mode");
+
+                return list;
+            }
+        }
 
         public event EventHandler<ModelSwitchedEventArgs> ModelSwitched;
 
@@ -52,6 +72,7 @@ namespace Smartitecture.Services
             _humanConversation = new HumanLikeConversationEngine();
             InitializeModelConfigs();
             InitializeOpenAI();
+            InitializeClaude();
         }
 
         private void InitializeOpenAI()
@@ -68,6 +89,21 @@ namespace Smartitecture.Services
             {
                 // OpenAI initialization failed - will fall back to mock responses
                 _openAIService = null;
+            }
+        }
+
+        private void InitializeClaude()
+        {
+            try
+            {
+                if (_configService.IsClaudeConfigured())
+                {
+                    _claudeService = new ClaudeService();
+                }
+            }
+            catch
+            {
+                _claudeService = null;
             }
         }
 
@@ -118,7 +154,21 @@ namespace Smartitecture.Services
         {
             await StoreMessageAsync(conversationId, "user", message);
             
-            // Check if we should use real OpenAI streaming
+                        // Claude streaming (simulated token stream)
+            if ((CurrentModel == "Anthropic Claude 3.5 Sonnet" || CurrentModel == "Anthropic Claude 3 Haiku") &&
+                _claudeService != null && _claudeService.IsConfigured())
+            {
+                try
+                {
+                    var context = await GetConversationContext(conversationId);
+                    var claudeModel = CurrentModel.Contains("Sonnet") ? "claude-3-5-sonnet-20240620" : "claude-3-haiku-20240307";
+                    var full = await _claudeService.GetStreamingResponseAsync(message, onTokenReceived, context, claudeModel);
+                    await StoreMessageAsync(conversationId, "assistant", full);
+                    return full;
+                }
+                catch { /* fall through to default */ }
+            }
+// Check if we should use real OpenAI streaming
             if ((CurrentModel == "OpenAI GPT-4" || CurrentModel == "OpenAI GPT-3.5-Turbo") && 
                 _openAIService != null && _openAIService.IsConfigured())
             {
@@ -186,6 +236,10 @@ namespace Smartitecture.Services
                 case "Azure OpenAI GPT-4":
                     System.Diagnostics.Debug.WriteLine("[MultiModel] Using Azure OpenAI path");
                     return await GenerateAzureOpenAIResponse(message, context);
+                case "Anthropic Claude 3.5 Sonnet":
+                case "Anthropic Claude 3 Haiku":
+                    System.Diagnostics.Debug.WriteLine("[MultiModel] Using Anthropic Claude path");
+                    return await GenerateClaudeResponse(message, context);
                 default:
                     System.Diagnostics.Debug.WriteLine("[MultiModel] Using DEFAULT path (Advanced AI)");
                     return await GenerateAdvancedAIResponse(message, context);
@@ -535,7 +589,26 @@ namespace Smartitecture.Services
             return false;
         }
 
-        private async Task StoreMessageAsync(string conversationId, string role, string content)
+                private async Task<string> GenerateClaudeResponse(string message, List<ConversationMessage> context)
+        {
+            try
+            {
+                if (_claudeService != null && _claudeService.IsConfigured())
+                {
+                    var model = CurrentModel.Contains("Sonnet") ? "claude-3-5-sonnet-20240620" : "claude-3-haiku-20240307";
+                    return await _claudeService.GetResponseAsync(message, context, model);
+                }
+                else
+                {
+                    return await _humanConversation.GetResponseAsync(message, "claude-fallback", context);
+                }
+            }
+            catch
+            {
+                return await _humanConversation.GetResponseAsync(message, "claude-error", context);
+            }
+        }
+private async Task StoreMessageAsync(string conversationId, string role, string content)
         {
             if (string.IsNullOrEmpty(conversationId)) return;
 
@@ -563,3 +636,10 @@ namespace Smartitecture.Services
         public string Endpoint { get; set; } = "";
     }
 }
+
+
+
+
+
+
+

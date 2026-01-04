@@ -1,0 +1,18 @@
+<Window x:Class="Smartitecture.ShellWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Smartitecture"
+        Height="720"
+        Width="1120"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Brush.AppBackground}"
+        FontFamily="Segoe UI Variable Text, Segoe UI, Arial"
+        Foreground="{DynamicResource Brush.OnSurface}"
+        SizeToContent="Manual"
+        ResizeMode="CanResize">
+    <Grid>
+        <Frame x:Name="MainFrame"
+               NavigationUIVisibility="Hidden"
+               Background="Transparent"/>
+    </Grid>
+</Window>

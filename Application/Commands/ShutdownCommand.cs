@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Smartitecture.Commands;
 
 namespace AIPal.Application.Commands
 {
@@ -8,6 +9,8 @@ namespace AIPal.Application.Commands
     /// Command implementation for shutting down the Windows system.
     /// Requires administrative privileges to execute.
     /// </summary>
+    public class ShutdownCommand : ISystemCommand
+    {
         /// <summary>Gets the name of the command</summary>
         public string CommandName => "Shutdown";
 
@@ -26,9 +29,7 @@ namespace AIPal.Application.Commands
         {
             try
             {
-                // Get timeout parameter or use default 60 seconds
-                var timeout = parameters.Length > 0 ? parameters[0] : "60";
-                // Configure the shutdown process with administrative privileges
+                var timeout = (parameters != null && parameters.Length > 0) ? parameters[0] : "60";
                 var process = new Process
                 {
                     StartInfo = new ProcessStartInfo
@@ -40,7 +41,6 @@ namespace AIPal.Application.Commands
                     }
                 };
 
-                // Initiate the shutdown command
                 process.Start();
                 return true;
             }

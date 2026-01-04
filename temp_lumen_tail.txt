@@ -1,0 +1,90 @@
+                // Log error but don't throw
+                results.Add($"Error searching files: {ex.Message}");
+            }
+
+            return results;
+        }
+
+        private string ExtractSearchTerm(string query)
+        {
+            // Simple extraction - look for quoted terms or last word
+            var quotedMatch = Regex.Match(query, @"""([^""]+)""");
+            if (quotedMatch.Success)
+                return quotedMatch.Groups[1].Value;
+
+            var words = query.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            return words.LastOrDefault() ?? "";
+        }
+
+        private string ExtractAppName(string query)
+        {
+            var words = query.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            // Look for the word after "open", "launch", etc.
+            for (int i = 0; i < words.Length - 1; i++)
+            {
+                if (new[] { "open", "launch", "start", "run" }.Contains(words[i].ToLowerInvariant()))
+                {
+                    return words[i + 1];
+                }
+            }
+            return words.LastOrDefault() ?? "";
+        }
+
+        private async Task<string> LaunchApplicationAsync(string appName)
+        {
+            try
+            {
+                // Try to launch the application
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = appName,
+                    UseShellExecute = true
+                });
+                return $"✅ Launched {appName} successfully.";
+            }
+            catch (Exception ex)
+            {
+                return $"❌ Could not launch {appName}: {ex.Message}";
+            }
+        }
+
+        private string GetBasicSystemInfo()
+        {
+            try
+            {
+                var info = new List<string>
+                {
+                    $"💻 Computer: {Environment.MachineName}",
+                    $"👤 User: {Environment.UserName}",
+                    $"🖥️ OS: {Environment.OSVersion}",
+                    $"⚙️ Processors: {Environment.ProcessorCount}",
+                    $"📁 Current Directory: {Environment.CurrentDirectory}",
+                    $"🕒 System Uptime: {TimeSpan.FromMilliseconds(Environment.TickCount):dd\\.hh\\:mm\\:ss}"
+                };
+
+                return string.Join("\n", info);
+            }
+            catch (Exception ex)
+            {
+                return $"Error retrieving system information: {ex.Message}";
+            }
+        }
+
+        private string BuildLumenPrompt(string query)
+        {
+            return $@"You are LUMEN, a helpful AI assistant integrated into the Smartitecture system. 
+You specialize in:
+- General knowledge and conversation
+- File management and search assistance
+- Web research and information gathering
+- Basic system information and guidance
+
+User Query: {query}
+
+Provide a helpful, friendly, and informative response. If the query involves security concerns, mention that FORTIS can provide specialized security analysis. If it involves system performance, mention that NEXA can provide detailed performance optimization.";
+        }
+
+        #endregion
+    }
+}
+

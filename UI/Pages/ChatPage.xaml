@@ -1,0 +1,130 @@
+<Page x:Class="Smartitecture.UI.Pages.ChatPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{DynamicResource Brush.AppBackground}"
+      FontFamily="Segoe UI Variable Text, Segoe UI, Arial"
+      Foreground="{DynamicResource Brush.OnSurface}">
+
+    <Page.Resources>
+        <Style x:Key="UserMessageStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource Brush.Primary}"/>
+            <Setter Property="CornerRadius" Value="15,15,5,15"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Margin" Value="50,5,10,5"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+
+        <Style x:Key="AssistantMessageStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource Brush.GlassCard}"/>
+            <Setter Property="CornerRadius" Value="15,15,15,5"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Margin" Value="10,5,50,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
+        <Style x:Key="SystemMessageStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource Brush.GlassButtonBackground}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Margin" Value="20,5,20,5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Style="{StaticResource Card.Glass}" Padding="16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
+                        Content="&#x2190; Dashboard"
+                        Style="{StaticResource Button.Glass}"
+                        Padding="10,6"
+                        Margin="0,0,12,0"
+                        Click="BackButton_Click"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Smartitecture Chat" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Name="ModelStatusText"
+                               Text=""
+                               Foreground="{DynamicResource Brush.Success}"
+                               FontSize="12"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Button Grid.Column="2"
+                        Name="ClearChatButton"
+                        Content="Clear Chat"
+                        Click="ClearChatButton_Click"
+                        Padding="10,6"
+                        Style="{StaticResource Button.Glass}"/>
+            </Grid>
+        </Border>
+
+        <!-- Chat Messages Area -->
+        <ScrollViewer Grid.Row="1"
+                      Name="ChatScrollViewer"
+                      Background="Transparent"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Name="ChatMessagesPanel" Margin="10"/>
+        </ScrollViewer>
+
+        <!-- Typing Indicator -->
+        <Border Grid.Row="2"
+                Name="TypingIndicator"
+                Style="{StaticResource Card.Glass}"
+                Padding="15,8"
+                Visibility="Collapsed"
+                Margin="0,12,0,0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="AI is typing" Foreground="{DynamicResource Brush.Success}" FontSize="12"/>
+                <TextBlock Name="TypingDots" Text="..." Foreground="{DynamicResource Brush.Success}" FontSize="12" Margin="5,0,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Input Area -->
+        <Border Grid.Row="3" Style="{StaticResource Card.Glass}" Padding="16" Margin="0,12,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         Name="MessageInput"
+                         Padding="12,8"
+                         FontSize="14"
+                         AcceptsReturn="True"
+                         MaxHeight="120"
+                         VerticalScrollBarVisibility="Auto"
+                         KeyDown="MessageInput_KeyDown"
+                         TextWrapping="Wrap"
+                         Text="Type your message here..."/>
+
+                <Button Grid.Column="1"
+                        Name="SendButton"
+                        Content="Send"
+                        Width="100"
+                        Height="40"
+                        Margin="10,0,0,0"
+                        Style="{StaticResource Button.Primary}"
+                        Click="SendButton_Click"
+                        IsDefault="True"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

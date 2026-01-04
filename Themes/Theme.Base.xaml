@@ -1,0 +1,235 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Easing and durations -->
+    <Duration x:Key="Duration.Fast">0:0:0.12</Duration>
+    <Duration x:Key="Duration.Mid">0:0:0.25</Duration>
+    <QuadraticEase x:Key="Ease.Out" EasingMode="EaseOut"/>
+
+    <!-- Typography -->
+    <Style x:Key="Text.H1" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI, Arial"/>
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource Brush.OnSurface}"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="3" ShadowDepth="0" Color="#88000000" Opacity="0.4"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Text.H2" TargetType="TextBlock" BasedOn="{StaticResource Text.H1}">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="2" ShadowDepth="0" Color="#66000000" Opacity="0.35"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Text.Body" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Variable Text, Segoe UI, Arial"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{DynamicResource Brush.MutedText}"/>
+    </Style>
+    <Style x:Key="Text.Caption" TargetType="TextBlock" BasedOn="{StaticResource Text.Body}">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="{DynamicResource Brush.CaptionText}"/>
+    </Style>
+
+    <!-- Glass Card -->
+    <Style x:Key="Card.Glass" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Brush.GlassCard}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Brush.GlassBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Padding" Value="16"/>
+        <Setter Property="Margin" Value="8"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="#000000" ShadowDepth="6" BlurRadius="18" Opacity="0.35"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Primary Button -->
+    <Style x:Key="Button.Primary" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource Brush.ButtonPrimaryForeground}"/>
+        <Setter Property="Background" Value="{DynamicResource Brush.Primary}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Brush.Primary}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="root">
+                        <Border x:Name="bd"
+                                CornerRadius="10"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"/>
+                                    <TranslateTransform x:Name="translate" X="0" Y="0"/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="translate"
+                                                         Storyboard.TargetProperty="Y"
+                                                         To="-1"
+                                                         Duration="{StaticResource Duration.Fast}"
+                                                         EasingFunction="{StaticResource Ease.Out}"/>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="bd" Storyboard.TargetProperty="Effect">
+                                            <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                                <DiscreteObjectKeyFrame.Value>
+                                                    <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="2" Opacity="0.35"/>
+                                                </DiscreteObjectKeyFrame.Value>
+                                            </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="scale"
+                                                         Storyboard.TargetProperty="ScaleX"
+                                                         To="0.98"
+                                                         Duration="{StaticResource Duration.Fast}"
+                                                         EasingFunction="{StaticResource Ease.Out}"/>
+                                        <DoubleAnimation Storyboard.TargetName="scale"
+                                                         Storyboard.TargetProperty="ScaleY"
+                                                         To="0.98"
+                                                         Duration="{StaticResource Duration.Fast}"
+                                                         EasingFunction="{StaticResource Ease.Out}"/>
+                                        <DoubleAnimation Storyboard.TargetName="bd"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.92"
+                                                         Duration="{StaticResource Duration.Fast}"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="root"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.6"
+                                                         Duration="{StaticResource Duration.Fast}"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Secondary Button (glass) -->
+    <Style x:Key="Button.Glass" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource Brush.ButtonGlassForeground}"/>
+        <Setter Property="Background" Value="{DynamicResource Brush.GlassButtonBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Brush.GlassButtonBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="root">
+                        <Border x:Name="bd"
+                                CornerRadius="10"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"/>
+                                    <TranslateTransform x:Name="translate" X="0" Y="0"/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="bd" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{DynamicResource Brush.GlassButtonHoverBackground}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <DoubleAnimation Storyboard.TargetName="translate"
+                                                         Storyboard.TargetProperty="Y"
+                                                         To="-1"
+                                                         Duration="{StaticResource Duration.Fast}"
+                                                         EasingFunction="{StaticResource Ease.Out}"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="scale"
+                                                         Storyboard.TargetProperty="ScaleX"
+                                                         To="0.985"
+                                                         Duration="{StaticResource Duration.Fast}"
+                                                         EasingFunction="{StaticResource Ease.Out}"/>
+                                        <DoubleAnimation Storyboard.TargetName="scale"
+                                                         Storyboard.TargetProperty="ScaleY"
+                                                         To="0.985"
+                                                         Duration="{StaticResource Duration.Fast}"
+                                                         EasingFunction="{StaticResource Ease.Out}"/>
+                                        <DoubleAnimation Storyboard.TargetName="bd"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.92"
+                                                         Duration="{StaticResource Duration.Fast}"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="root"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.6"
+                                                         Duration="{StaticResource Duration.Fast}"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Status Text Colors -->
+    <Style x:Key="Text.Success" TargetType="TextBlock" BasedOn="{StaticResource Text.Body}">
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Success}"/>
+    </Style>
+    <Style x:Key="Text.Warning" TargetType="TextBlock" BasedOn="{StaticResource Text.Body}">
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Warning}"/>
+    </Style>
+    <Style x:Key="Text.Error" TargetType="TextBlock" BasedOn="{StaticResource Text.Body}">
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Error}"/>
+    </Style>
+
+    <!-- Skeleton shimmer for loading states -->
+    <Style x:Key="Skeleton.Block" TargetType="Rectangle">
+        <Setter Property="RadiusX" Value="6"/>
+        <Setter Property="RadiusY" Value="6"/>
+        <Setter Property="Fill" Value="{DynamicResource Brush.Skeleton}"/>
+        <Setter Property="Opacity" Value="0.6"/>
+        <Setter Property="Height" Value="14"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform X="-200"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

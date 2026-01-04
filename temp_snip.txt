@@ -1,0 +1,62 @@
+            _modeRouter.ModeChanged += ModeRouter_ModeChanged;
+
+            _typingTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
+            _typingTimer.Tick += TypingTimer_Tick;
+
+            SetupPlaceholderText();
+            UpdateModelStatus();
+        }
+
+        private void OnModelSwitched(object sender, ModelSwitchedEventArgs e)
+        {
+            Dispatcher.Invoke(UpdateModelStatus);
+        }
+
+        private void UpdateModelStatus()
+        {
+            if (ModelStatusText != null)
+            {
+                var isAuto = (AutoDetectToggle?.IsChecked ?? false);
+                ModelStatusText.Text = isAuto ? "(Auto)" : $"({_currentMode})";
+            }
+        }
+        
+        private async void ModeRouter_ModeChanged(object sender, ModeChangedEventArgs e)
+        {
+            _currentMode = e.NewMode.GetDisplayName();
+            var best = ChooseBestModelForMode(_currentMode);
+            if (!string.IsNullOrEmpty(best))
+            {
+                try { await _llmService.SwitchModelAsync(best); } catch { }
+            }
+        private async void ModeRouter_ModeChanged(object sender, ModeChangedEventArgs e)
+        {
+            _currentMode = e.NewMode.GetDisplayName();
+            var best = ChooseBestModelForMode(_currentMode);
+            if (!string.IsNullOrEmpty(best))
+            {
+                try { await _llmService.SwitchModelAsync(best); } catch { }
+            }
+            Dispatcher.Invoke(UpdateModelStatus);
+        }
+
+        private void SetupPlaceholderText()
+        {
+            var placeholderText = "Type your message or command here...";
+            MessageInput.Text = placeholderText;
+            MessageInput.Foreground = Brushes.Gray;
+
+            MessageInput.GotFocus += (s, e) =>
+            {
+                if (MessageInput.Text == placeholderText)
+                {
+                    MessageInput.Text = string.Empty;
+                    MessageInput.Foreground = Brushes.White;
+                }
+            };
+
+            MessageInput.LostFocus += (s, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(MessageInput.Text))
+                {
+                    MessageInput.Text = placeholderText;

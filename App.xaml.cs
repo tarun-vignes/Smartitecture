@@ -3,6 +3,7 @@ using System.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Smartitecture.Services;
 
 namespace Smartitecture
 {
@@ -57,15 +58,24 @@ namespace Smartitecture
 
             _serviceProvider = services.BuildServiceProvider();
 
-            // Show Startup window first
-            var startup = new StartupWindow();
-            this.MainWindow = startup;
-            _window = startup;
-            startup.Show();
+            try
+            {
+                var prefs = new PreferencesService().Load();
+                ThemeManager.ApplyTheme(ThemeManager.Parse(prefs.Theme));
+            }
+            catch
+            {
+                ThemeManager.ApplyTheme(ThemeMode.System);
+            }
+
+            // Fixed shell window (content-only navigation)
+            var shell = new ShellWindow();
+            this.MainWindow = shell;
+            _window = shell;
+            shell.Show();
         }
 
     }
 }
-
 
 
