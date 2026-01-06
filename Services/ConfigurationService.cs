@@ -57,12 +57,17 @@ namespace Smartitecture.Services
 
         public string GetOpenAIApiKey()
         {
-            return _config.OpenAI.ApiKey;
+            // Prefer stored config; fall back to environment variables for developer convenience
+            if (!string.IsNullOrWhiteSpace(_config.OpenAI.ApiKey))
+                return _config.OpenAI.ApiKey;
+
+            var env = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+            return env ?? string.Empty;
         }
 
         public bool IsOpenAIConfigured()
         {
-            return !string.IsNullOrWhiteSpace(_config.OpenAI.ApiKey);
+            return !string.IsNullOrWhiteSpace(GetOpenAIApiKey());
         }
 
         public async Task<bool> SetClaudeApiKeyAsync(string apiKey)

@@ -1,4 +1,5 @@
 using System.Windows;
+using Smartitecture.UI.Pages;
 
 namespace SmartitectureSimple
 {
@@ -7,18 +8,12 @@ namespace SmartitectureSimple
         public SettingsWindow()
         {
             InitializeComponent();
+            SettingsFrame.Navigate(new SettingsPage());
         }
 
-        private void ThemeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void Close_Click(object sender, RoutedEventArgs e)
         {
-            // Placeholder: hook up to UI theme settings if needed
-        }
-
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-            // Placeholder: persist settings via ConfigurationService
-            this.Close();
+            Close();
         }
     }
 }
-

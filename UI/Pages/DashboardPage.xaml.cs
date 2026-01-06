@@ -1,4 +1,5 @@
 using System;
+using System.Windows;
 using System.Windows.Controls;
 using Smartitecture.Services;
 
@@ -6,51 +7,39 @@ namespace Smartitecture.UI.Pages
 {
     public partial class DashboardPage : Page
     {
-        private readonly PreferencesService _prefsService = new PreferencesService();
-        private readonly UserPreferences _prefs;
+        private readonly ConfigurationService _configService = new ConfigurationService();
 
         public DashboardPage()
         {
             InitializeComponent();
 
-            _prefs = _prefsService.Load();
-            GreetingText.Text = $"Welcome, {Environment.UserName}";
-            SetThemeSelectorFromPrefs();
+            GreetingText.Text = $"Hello, {Environment.UserName}";
+            RefreshStatus();
         }
 
-        private void OpenChat_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void RefreshStatus()
+        {
+            var openAi = _configService.IsOpenAIConfigured();
+            var claude = _configService.IsClaudeConfigured();
+
+            AiStatusText.Text = (openAi || claude)
+                ? $"AI providers: {(openAi ? "OpenAI" : string.Empty)}{(openAi && claude ? ", " : string.Empty)}{(claude ? "Claude" : string.Empty)}"
+                : "AI providers: not configured (use Settings to add keys).";
+
+            ModelStatusText.Text = $"Model: {AppSession.LlmService.CurrentModel}";
+        }
+
+        private void OpenChat_Click(object sender, RoutedEventArgs e)
         {
             AppNavigator.Navigate(new ChatPage(AppSession.LlmService));
         }
 
-        private void ThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OpenSettings_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var theme = GetSelectedTheme();
-                _prefs.Theme = theme.ToString();
-                _prefsService.Save(_prefs);
-                ThemeManager.ApplyTheme(theme);
-            }
-            catch
-            {
-            }
+            AppNavigator.Navigate(new SettingsPage());
         }
 
-        private void SetThemeSelectorFromPrefs()
-        {
-            var mode = ThemeManager.Parse(_prefs.Theme);
-            ThemeSelector.SelectedIndex = mode == ThemeMode.Dark ? 1 : mode == ThemeMode.Light ? 2 : 0;
-        }
-
-        private ThemeMode GetSelectedTheme()
-        {
-            return ThemeSelector.SelectedIndex == 1 ? ThemeMode.Dark :
-                   ThemeSelector.SelectedIndex == 2 ? ThemeMode.Light :
-                   ThemeMode.System;
-        }
-
-        private void BackToGettingStarted_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void OpenSetup_Click(object sender, RoutedEventArgs e)
         {
             AppNavigator.Navigate(new StartupPage());
         }

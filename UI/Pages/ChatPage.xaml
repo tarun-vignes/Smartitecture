@@ -43,20 +43,12 @@
         <Border Grid.Row="0" Style="{StaticResource Card.Glass}" Padding="16">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0"
-                        Content="&#x2190; Dashboard"
-                        Style="{StaticResource Button.Glass}"
-                        Padding="10,6"
-                        Margin="0,0,12,0"
-                        Click="BackButton_Click"/>
-
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Smartitecture Chat" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Chat" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBlock Name="ModelStatusText"
                                Text=""
                                Foreground="{DynamicResource Brush.Success}"
@@ -65,9 +57,9 @@
                                VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <Button Grid.Column="2"
+                <Button Grid.Column="1"
                         Name="ClearChatButton"
-                        Content="Clear Chat"
+                        Content="Clear"
                         Click="ClearChatButton_Click"
                         Padding="10,6"
                         Style="{StaticResource Button.Glass}"/>
@@ -106,8 +98,7 @@
 
                 <TextBox Grid.Column="0"
                          Name="MessageInput"
-                         Padding="12,8"
-                         FontSize="14"
+                         Style="{StaticResource Input.TextBox}"
                          AcceptsReturn="True"
                          MaxHeight="120"
                          VerticalScrollBarVisibility="Auto"

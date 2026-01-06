@@ -11,8 +11,47 @@
         SizeToContent="Manual"
         ResizeMode="CanResize">
     <Grid>
-        <Frame x:Name="MainFrame"
-               NavigationUIVisibility="Hidden"
-               Background="Transparent"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0"
+                Style="{StaticResource Card.Glass}"
+                Margin="18"
+                Padding="16">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{DynamicResource Image.AppLogo}" Width="28" Height="28" Stretch="Uniform" Margin="0,0,10,0"/>
+                        <TextBlock Text="Smartitecture" Style="{StaticResource Text.H2}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Text="AI system assistant" Style="{StaticResource Text.Caption}" Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Margin="0,18,0,0">
+                    <ToggleButton x:Name="NavDashboard" Content="Dashboard" Style="{StaticResource Nav.Toggle}" Click="NavDashboard_Click"/>
+                    <ToggleButton x:Name="NavChat" Content="Chat" Style="{StaticResource Nav.Toggle}" Margin="0,6,0,0" Click="NavChat_Click"/>
+                    <ToggleButton x:Name="NavSettings" Content="Settings" Style="{StaticResource Nav.Toggle}" Margin="0,6,0,0" Click="NavSettings_Click"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="3" Text="Tip: Set keys in Settings to unlock OpenAI/Claude." Style="{StaticResource Text.Caption}" Opacity="0.85" TextWrapping="Wrap"/>
+            </Grid>
+        </Border>
+
+        <!-- Content -->
+        <Border Grid.Column="1" Margin="0,18,18,18" Background="Transparent">
+            <Frame x:Name="MainFrame"
+                   NavigationUIVisibility="Hidden"
+                   Background="Transparent"/>
+        </Border>
     </Grid>
 </Window>

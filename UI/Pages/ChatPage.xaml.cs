@@ -16,8 +16,8 @@ namespace Smartitecture.UI.Pages
         private readonly DispatcherTimer _typingTimer;
         private bool _isProcessing;
 
-        private Border? _currentStreamingBorder;
-        private TextBlock? _currentStreamingText;
+        private Border _currentStreamingBorder;
+        private TextBlock _currentStreamingText;
 
         private const string PlaceholderText = "Type your message here...";
 
@@ -36,11 +36,6 @@ namespace Smartitecture.UI.Pages
 
             SetupPlaceholder();
             AddSystemMessage("Welcome to Smartitecture! Ask a question to get started.");
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            AppNavigator.Navigate(new DashboardPage());
         }
 
         private void ClearChatButton_Click(object sender, RoutedEventArgs e)
@@ -170,7 +165,7 @@ namespace Smartitecture.UI.Pages
                     ChatMessagesPanel.Children.Add(_currentStreamingBorder);
                 }
 
-                _currentStreamingText!.Text += token;
+                _currentStreamingText.Text += token;
                 ScrollToBottom();
             });
         }

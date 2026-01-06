@@ -75,6 +75,12 @@ namespace Smartitecture.Services
             InitializeClaude();
         }
 
+        public void ReloadProviders()
+        {
+            InitializeOpenAI();
+            InitializeClaude();
+        }
+
         private void InitializeOpenAI()
         {
             try

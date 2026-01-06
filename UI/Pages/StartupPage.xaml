@@ -5,183 +5,56 @@
       FontFamily="Segoe UI Variable Text, Segoe UI, Arial"
       Foreground="{DynamicResource Brush.OnSurface}">
 
-    <Grid>
+    <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Hero -->
-        <Grid Grid.Row="0" Margin="24,22,24,10">
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="Setup &amp; Health Check" Style="{StaticResource Text.H1}"/>
+            <TextBlock Text="Make sure keys and core system checks are ready." Style="{StaticResource Text.Caption}" Margin="0,6,0,0"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0"
-                    Content="&#x2190; Welcome"
-                    Style="{StaticResource Button.Glass}"
-                    Padding="10,6"
-                    Margin="0,6,12,0"
-                    VerticalAlignment="Top"
-                    Click="BackToWelcome_Click"/>
+            <Border Grid.Column="0" Style="{StaticResource Card.Glass}" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="Readiness" Style="{StaticResource Text.H2}"/>
 
-            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                <Image Source="{DynamicResource Image.AppLogo}"
-                       Width="96"
-                       Height="96"
-                       Stretch="Uniform"
-                       HorizontalAlignment="Center"/>
-                <TextBlock Text="Smartitecture"
-                           Style="{StaticResource Text.H1}"
-                           HorizontalAlignment="Center"
-                           Margin="0,12,0,2"/>
-                <TextBlock Text="AI-Powered System Intelligence"
-                           Style="{StaticResource Text.Body}"
-                           HorizontalAlignment="Center"
-                           FontSize="16"/>
-                <TextBlock Text="LUMEN &#8226; FORTIS &#8226; NEXA"
-                           Style="{StaticResource Text.Caption}"
-                           HorizontalAlignment="Center"
-                           Opacity="0.9"/>
-            </StackPanel>
-        </Grid>
+                    <StackPanel Margin="0,10,0,0">
+                        <TextBlock Text="AI keys" Style="{StaticResource Text.Caption}"/>
+                        <TextBlock x:Name="ConfigStatusText" Style="{StaticResource Text.Warning}" Margin="0,4,0,0"/>
 
-        <!-- Main content -->
-        <Grid Grid.Row="1" Margin="24">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                        <TextBlock Text="Windows Defender" Style="{StaticResource Text.Caption}" Margin="0,12,0,0"/>
+                        <TextBlock x:Name="DefenderStatusText" Style="{StaticResource Text.Warning}" Margin="0,4,0,0"/>
 
-            <!-- Status strip -->
-            <Border Style="{StaticResource Card.Glass}" Padding="12" Margin="0,0,0,14">
-                <DockPanel>
-                    <TextBlock Text="System Readiness:" Style="{StaticResource Text.Body}" FontWeight="SemiBold"/>
-                    <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                        <TextBlock Name="StatusConfig" Text="Config" Margin="0,0,12,0" Style="{StaticResource Text.Warning}"/>
-                        <TextBlock Name="StatusDefender" Text="Defender" Margin="0,0,12,0" Style="{StaticResource Text.Warning}"/>
-                        <TextBlock Name="StatusFirewall" Text="Firewall" Margin="0,0,12,0" Style="{StaticResource Text.Warning}"/>
-                        <TextBlock Name="StatusReady" Text="Not Ready" Style="{StaticResource Text.Error}"/>
+                        <TextBlock Text="Firewall" Style="{StaticResource Text.Caption}" Margin="0,12,0,0"/>
+                        <TextBlock x:Name="FirewallStatusText" Style="{StaticResource Text.Warning}" Margin="0,4,0,0"/>
+
+                        <TextBlock Text="Overall" Style="{StaticResource Text.Caption}" Margin="0,12,0,0"/>
+                        <TextBlock x:Name="OverallStatusText" Style="{StaticResource Text.Warning}" Margin="0,4,0,0"/>
                     </StackPanel>
-                </DockPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button Content="Refresh" Style="{StaticResource Button.Glass}" Click="Refresh_Click" Width="120"/>
+                        <Button Content="Open settings" Style="{StaticResource Button.Primary}" Click="OpenSettings_Click" Width="150" Margin="10,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
             </Border>
 
-            <!-- Cards grid -->
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- API Configuration -->
-                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource Card.Glass}">
-                    <StackPanel>
-                        <TextBlock Text="API Configuration" Style="{StaticResource Text.H2}"/>
-                        <TextBlock Text="Connect your OpenAI / Claude keys to unlock AI features." Style="{StaticResource Text.Caption}"/>
-                        <StackPanel Margin="0,8,0,0">
-                            <TextBlock Text="OpenAI API Key" Style="{StaticResource Text.Caption}"/>
-                            <PasswordBox Name="OpenAiKeyBox" Margin="0,4,0,0"/>
-                            <TextBlock Text="Anthropic (Claude) API Key" Style="{StaticResource Text.Caption}" Margin="0,8,0,0"/>
-                            <PasswordBox Name="ClaudeKeyBox" Margin="0,4,0,0"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
-                            <Button Content="Save Keys" Style="{StaticResource Button.Primary}" Click="SaveKeys_Click"/>
-                            <Button Content="Learn More" Margin="8,0,0,0" Style="{StaticResource Button.Glass}" Click="OpenDocs_Click"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- System Permissions -->
-                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource Card.Glass}">
-                    <StackPanel>
-                        <TextBlock Text="System Permissions" Style="{StaticResource Text.H2}"/>
-                        <TextBlock Text="Windows Defender, Firewall, and basic system access." Style="{StaticResource Text.Caption}"/>
-                        <StackPanel Margin="0,8,0,0">
-                            <TextBlock Name="DefenderText" Text="Defender: Checking..." Style="{StaticResource Text.Caption}"/>
-                            <TextBlock Name="FirewallText" Text="Firewall: Checking..." Style="{StaticResource Text.Caption}"/>
-                        </StackPanel>
-                        <Button Content="Run Health Check" Margin="0,12,0,0" Style="{StaticResource Button.Glass}" Click="HealthCheck_Click"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- User Preferences / Wizard -->
-                <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource Card.Glass}" Margin="0,14,14,0">
-                    <StackPanel>
-                        <TextBlock Text="User Preferences" Style="{StaticResource Text.H2}"/>
-                        <TextBlock Text="Theme and notifications." Style="{StaticResource Text.Caption}"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                            <TextBlock Text="Theme:" VerticalAlignment="Center"/>
-                            <ComboBox Name="ThemeSelector" Width="150" Margin="8,0,0,0">
-                                <ComboBoxItem Content="System" IsSelected="True"/>
-                                <ComboBoxItem Content="Dark"/>
-                                <ComboBoxItem Content="Light"/>
-                            </ComboBox>
-                        </StackPanel>
-                        <CheckBox Name="NotifyToggle" Content="Enable Notifications" Margin="0,8,0,0"/>
-                        <Button Content="Apply" Margin="0,12,0,0" Style="{StaticResource Button.Glass}" Click="ApplyPrefs_Click"/>
-                    </StackPanel>
-                </Border>
-
-                <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource Card.Glass}" Margin="14,14,0,0">
-                    <StackPanel>
-                        <TextBlock Text="First-time Setup Wizard" Style="{StaticResource Text.H2}"/>
-                        <TextBlock Text="Guided configuration for new users." Style="{StaticResource Text.Caption}"/>
-                        <Button Content="Start Setup" Margin="0,10,0,0" Style="{StaticResource Button.Primary}" Click="StartWizard_Click"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
-        </Grid>
-
-        <!-- Navigation footer -->
-        <Border Grid.Row="2" Background="Transparent" Padding="12" Margin="16,0,16,16">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Launch Dashboard &#x2192;" Width="170" Style="{StaticResource Button.Primary}" Click="LaunchDashboard_Click"/>
-                <Button Content="Settings &amp; Configuration" Width="190" Margin="10,0,0,0" Style="{StaticResource Button.Glass}" Click="OpenSettings_Click"/>
-                <Button Content="System Health Check" Width="170" Margin="10,0,0,0" Style="{StaticResource Button.Glass}" Click="HealthCheck_Click"/>
-                <Button Content="About &amp; Documentation" Width="190" Margin="10,0,0,0" Style="{StaticResource Button.Glass}" Click="OpenDocs_Click"/>
-            </StackPanel>
-        </Border>
-
-        <!-- Guided Setup Overlay (in-layer) -->
-        <Grid Name="WizardOverlay" Background="#99000000" Visibility="Collapsed">
-            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="720">
-                <Border Style="{StaticResource Card.Glass}" Padding="18">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- Header + Stepper -->
-                        <StackPanel Grid.Row="0" Margin="0,0,0,8">
-                            <TextBlock Text="First-time Setup" Style="{StaticResource Text.H2}"/>
-                            <TextBlock Name="WizardStepText" Text="Step 1 of 4 - API Keys" Style="{StaticResource Text.Caption}"/>
-                        </StackPanel>
-
-                        <!-- Content -->
-                        <Grid Grid.Row="1" Name="WizardContent"/>
-
-                        <!-- Controls -->
-                        <DockPanel Grid.Row="2" LastChildFill="False" Margin="0,10,0,0">
-                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                                <Button Name="WizardCancel" Content="Cancel" Style="{StaticResource Button.Glass}" Click="WizardCancel_Click"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                                <Button Name="WizardBack" Content="&#x2190; Back" Margin="0,0,8,0" Style="{StaticResource Button.Glass}" Click="WizardBack_Click"/>
-                                <Button Name="WizardNext" Content="Next &#x2192;" Style="{StaticResource Button.Primary}" Click="WizardNext_Click"/>
-                            </StackPanel>
-                        </DockPanel>
-                    </Grid>
-                </Border>
-            </Grid>
+            <Border Grid.Column="1" Style="{StaticResource Card.Glass}" Margin="10,0,0,0">
+                <StackPanel>
+                    <TextBlock Text="Next" Style="{StaticResource Text.H2}"/>
+                    <TextBlock Text="Once you're ready, jump into chat." Style="{StaticResource Text.Caption}" TextWrapping="Wrap" Margin="0,6,0,12"/>
+                    <Button Content="Go to dashboard" Style="{StaticResource Button.Glass}" Click="GoDashboard_Click"/>
+                    <Button Content="Go to chat" Style="{StaticResource Button.Primary}" Click="GoChat_Click" Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
         </Grid>
     </Grid>
 </Page>
