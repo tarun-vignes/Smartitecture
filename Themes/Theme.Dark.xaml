@@ -19,8 +19,8 @@
     <SolidColorBrush x:Key="Brush.Error" Color="{StaticResource Color.Error}"/>
     <SolidColorBrush x:Key="Brush.Surface" Color="{StaticResource Color.Surface}"/>
     <SolidColorBrush x:Key="Brush.OnSurface" Color="{StaticResource Color.OnSurface}"/>
-    <SolidColorBrush x:Key="Brush.MutedText" Color="#E6FFFFFF"/>
-    <SolidColorBrush x:Key="Brush.CaptionText" Color="#CCFFFFFF"/>
+    <SolidColorBrush x:Key="Brush.MutedText" Color="#F0FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.CaptionText" Color="#D9FFFFFF"/>
 
     <SolidColorBrush x:Key="Brush.ButtonPrimaryForeground" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="Brush.ButtonGlassForeground" Color="#FFFFFF"/>
@@ -42,8 +42,8 @@
 
     <!-- Glass/Translucent surfaces -->
     <LinearGradientBrush x:Key="Brush.GlassCard" StartPoint="0,0" EndPoint="1,1" Opacity="0.88">
-        <GradientStop Color="#22FFFFFF" Offset="0"/>
-        <GradientStop Color="#14FFFFFF" Offset="1"/>
+        <GradientStop Color="#2EFFFFFF" Offset="0"/>
+        <GradientStop Color="#1FFFFFFF" Offset="1"/>
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="Brush.GlassBorder" StartPoint="0,0" EndPoint="1,1" Opacity="0.9">
         <GradientStop Color="#40FFFFFF" Offset="0"/>
@@ -52,7 +52,7 @@
 
     <!-- Skeleton brush -->
     <LinearGradientBrush x:Key="Brush.Skeleton" StartPoint="0,0" EndPoint="1,0">
-        <GradientStop Color="#22FFFFFF" Offset="0"/>
+        <GradientStop Color="#2EFFFFFF" Offset="0"/>
         <GradientStop Color="#44FFFFFF" Offset="0.5"/>
         <GradientStop Color="#22FFFFFF" Offset="1"/>
     </LinearGradientBrush>
