@@ -35,7 +35,6 @@ The codebase has been reorganized into the following structure:
 
 ### Tests
 
-- **Smartitecture.Tests**: Contains all test projects
   - `/Commands`: Tests for command implementations
   - `/Security`: Tests for security components
   - `/Services`: Tests for services
@@ -47,7 +46,6 @@ The namespace structure follows the physical organization:
 - `Smartitecture.Core.*`: Core functionality
 - `Smartitecture.API.*`: API functionality
 - `Smartitecture.UI.*`: UI components
-- `Smartitecture.Tests.*`: Test classes
 
 ## Migration Notes
 

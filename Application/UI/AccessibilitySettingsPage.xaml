@@ -8,6 +8,16 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="16"/>
+        </Style>
+    </Page.Resources>
+
     <Grid Padding="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -19,7 +29,7 @@
 
         <!-- Main content area -->
         <ScrollViewer Grid.Row="1">
-            <StackPanel Spacing="24" MaxWidth="800">
+            <StackPanel Spacing="24" MaxWidth="900" HorizontalAlignment="Center">
                 <!-- Introduction -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="Make Smartitecture Work Better For You" 
@@ -31,8 +41,8 @@
                 </StackPanel>
 
                 <!-- Text Size Settings -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <Border Style="{StaticResource CardBorder}">
+                <StackPanel Spacing="16">
                     <TextBlock Text="Text Size" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
@@ -59,10 +69,11 @@
                                    Margin="0,16,0,0"/>
                     </StackPanel>
                 </StackPanel>
+                </Border>
                 
                 <!-- High Contrast Settings -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <Border Style="{StaticResource CardBorder}">
+                <StackPanel Spacing="16">
                     <TextBlock Text="Display Settings" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
@@ -89,10 +100,11 @@
                                    TextWrapping="Wrap"/>
                     </StackPanel>
                 </StackPanel>
+                </Border>
                 
                 <!-- Reading and Speech Settings -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <Border Style="{StaticResource CardBorder}">
+                <StackPanel Spacing="16">
                     <TextBlock Text="Reading and Speech" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
@@ -126,10 +138,11 @@
                                 Margin="0,8,0,0"/>
                     </StackPanel>
                 </StackPanel>
+                </Border>
                 
                 <!-- Simplified Mode -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <Border Style="{StaticResource CardBorder}">
+                <StackPanel Spacing="16">
                     <TextBlock Text="Simplified Mode" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
@@ -153,6 +166,7 @@
                             IsClosable="False"/>
                     </StackPanel>
                 </StackPanel>
+                </Border>
                 
                 <!-- Save Button -->
                 <Button Content="Save Settings" 

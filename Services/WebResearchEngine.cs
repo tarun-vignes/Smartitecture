@@ -113,28 +113,28 @@ namespace Smartitecture.Services
             return CreateFallbackResponse(question, ResearchType.Geography);
         }
 
-        private async Task<ResearchResult> ResearchWeather(string question)
+        private Task<ResearchResult> ResearchWeather(string question)
         {
             // Weather research - for now, provide helpful guidance
-            return new ResearchResult
+            return Task.FromResult(new ResearchResult
             {
                 Answer = "I'd love to help with weather information! For real-time weather, I recommend checking a weather app or website like Weather.com. In the future, I'll be able to get your local weather automatically.",
                 Confidence = 0.7,
                 Sources = new List<string> { "Weather guidance" },
                 ResearchType = ResearchType.Weather
-            };
+            });
         }
 
-        private async Task<ResearchResult> ResearchCurrentEvents(string question)
+        private Task<ResearchResult> ResearchCurrentEvents(string question)
         {
             // Current events research
-            return new ResearchResult
+            return Task.FromResult(new ResearchResult
             {
                 Answer = "For the most current news and events, I recommend checking reliable news sources like BBC, Reuters, or AP News. I'm working on getting real-time news capabilities!",
                 Confidence = 0.6,
                 Sources = new List<string> { "News guidance" },
                 ResearchType = ResearchType.CurrentEvents
-            };
+            });
         }
 
         private async Task<ResearchResult> ResearchScience(string question)
@@ -191,7 +191,7 @@ namespace Smartitecture.Services
             return CreateFallbackResponse(question, ResearchType.General);
         }
 
-        private async Task<string> SearchWikipedia(string searchTerm)
+        private async Task<string?> SearchWikipedia(string searchTerm)
         {
             try
             {

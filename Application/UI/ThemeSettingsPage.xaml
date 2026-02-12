@@ -9,6 +9,16 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="16"/>
+        </Style>
+    </Page.Resources>
+
     <Grid Padding="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,7 +30,7 @@
 
         <!-- Main content area -->
         <ScrollViewer Grid.Row="1">
-            <StackPanel Spacing="24" MaxWidth="800">
+            <StackPanel Spacing="24" MaxWidth="900" HorizontalAlignment="Center">
                 <!-- Introduction -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="Customize Smartitecture's Look" 
@@ -32,8 +42,8 @@
                 </StackPanel>
 
                 <!-- Theme Selection -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <Border Style="{StaticResource CardBorder}">
+                <StackPanel Spacing="16">
                     <TextBlock Text="Color Theme" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
@@ -90,7 +100,7 @@
                                     Background="White" 
                                     BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
                                     BorderThickness="1" 
-                                    CornerRadius="8" 
+                                    CornerRadius="10" 
                                     Margin="0,0,8,0"
                                     Padding="12">
                                 <StackPanel Spacing="8">
@@ -106,7 +116,7 @@
                                     Background="#202020" 
                                     BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
                                     BorderThickness="1" 
-                                    CornerRadius="8" 
+                                    CornerRadius="10" 
                                     Margin="8,0,0,0"
                                     Padding="12">
                                 <StackPanel Spacing="8">
@@ -119,10 +129,11 @@
                         </Grid>
                     </StackPanel>
                 </StackPanel>
+                </Border>
                 
                 <!-- Quick Theme Toggle -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <Border Style="{StaticResource CardBorder}">
+                <StackPanel Spacing="16">
                     <TextBlock Text="Quick Theme Toggle" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
@@ -143,10 +154,11 @@
                         </TextBlock>
                     </StackPanel>
                 </StackPanel>
+                </Border>
                 
                 <!-- Color Accent -->
-                <StackPanel Spacing="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                            BorderThickness="1" CornerRadius="8" Padding="16">
+                <Border Style="{StaticResource CardBorder}">
+                <StackPanel Spacing="16">
                     <TextBlock Text="Color Accent" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
@@ -181,6 +193,7 @@
                         </TextBlock>
                     </StackPanel>
                 </StackPanel>
+                </Border>
                 
                 <!-- Save Button -->
                 <Button Content="Save Appearance Settings" 

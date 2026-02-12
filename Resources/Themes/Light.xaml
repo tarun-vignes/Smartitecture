@@ -1,0 +1,47 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Color x:Key="Color.Primary">#4F46E5</Color>
+  <Color x:Key="Color.Secondary">#8B5CF6</Color>
+  <Color x:Key="Color.Success">#10B981</Color>
+  <Color x:Key="Color.Warning">#F59E0B</Color>
+  <Color x:Key="Color.Error">#EF4444</Color>
+  <Color x:Key="Color.Surface">#FFFFFF</Color>
+  <Color x:Key="Color.OnSurface">#1C1C28</Color>
+  <Color x:Key="Color.OnPrimary">#FFFFFF</Color>
+
+  <SolidColorBrush x:Key="Brush.Primary" Color="{StaticResource Color.Primary}"/>
+  <SolidColorBrush x:Key="Brush.Secondary" Color="{StaticResource Color.Secondary}"/>
+  <SolidColorBrush x:Key="Brush.Success" Color="{StaticResource Color.Success}"/>
+  <SolidColorBrush x:Key="Brush.Warning" Color="{StaticResource Color.Warning}"/>
+  <SolidColorBrush x:Key="Brush.Error" Color="{StaticResource Color.Error}"/>
+  <SolidColorBrush x:Key="Brush.Surface" Color="{StaticResource Color.Surface}"/>
+  <SolidColorBrush x:Key="Brush.OnSurface" Color="{StaticResource Color.OnSurface}"/>
+  <SolidColorBrush x:Key="Brush.OnPrimary" Color="{StaticResource Color.OnPrimary}"/>
+  <LinearGradientBrush x:Key="Brush.AppBackground" StartPoint="0,0" EndPoint="1,1">
+    <GradientStop Color="#F5F7FF" Offset="0"/>
+    <GradientStop Color="#EEF1FF" Offset="0.5"/>
+    <GradientStop Color="#E8ECFF" Offset="1"/>
+  </LinearGradientBrush>
+  <LinearGradientBrush x:Key="Brush.GlassCard" StartPoint="0,0" EndPoint="1,1" Opacity="0.9">
+    <GradientStop Color="#88FFFFFF" Offset="0"/>
+    <GradientStop Color="#66FFFFFF" Offset="1"/>
+  </LinearGradientBrush>
+  <LinearGradientBrush x:Key="Brush.GlassBorder" StartPoint="0,0" EndPoint="1,1" Opacity="0.9">
+    <GradientStop Color="#5A6BFF" Offset="0"/>
+    <GradientStop Color="#A3B0FF" Offset="1"/>
+  </LinearGradientBrush>
+
+  <SolidColorBrush x:Key="Brush.InputBackground" Color="#FFFFFFFF"/>
+  <SolidColorBrush x:Key="Brush.InputBorder" Color="#CCD3FF"/>
+  <SolidColorBrush x:Key="Brush.InputFocus" Color="#6A5AE6"/>
+  <SolidColorBrush x:Key="Brush.ItemHover" Color="#14000000"/>
+  <SolidColorBrush x:Key="Brush.ItemSelected" Color="#1E000000"/>
+
+  <SolidColorBrush x:Key="Brush.ChatBubbleUserBackground" Color="{StaticResource Color.Primary}"/>
+  <SolidColorBrush x:Key="Brush.ChatBubbleUserForeground" Color="{StaticResource Color.OnPrimary}"/>
+  <SolidColorBrush x:Key="Brush.ChatBubbleAssistantBackground" Color="#F1F3FF"/>
+  <SolidColorBrush x:Key="Brush.ChatBubbleAssistantForeground" Color="{StaticResource Color.OnSurface}"/>
+  <SolidColorBrush x:Key="Brush.ChatBubbleSystemBackground" Color="#E4E8FF"/>
+  <SolidColorBrush x:Key="Brush.ChatBubbleSystemForeground" Color="#2E3357"/>
+  <SolidColorBrush x:Key="Brush.Placeholder" Color="#6B6F9C"/>
+</ResourceDictionary>

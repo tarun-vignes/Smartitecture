@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="Smartitecture.UI.StartupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:Smartitecture.Controls"
+             Background="{DynamicResource Brush.AppBackground}"
+             Foreground="{DynamicResource Brush.OnSurface}"
+             Focusable="True"
+             PreviewKeyDown="Window_KeyDown">
+    <Grid Background="{DynamicResource Brush.AppBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- App bar -->
+        <controls:AppTopBar Grid.Row="0" Title="{DynamicResource Startup.Title}" ShowBack="False"
+                             BackClicked="TopBar_BackClicked" HomeClicked="TopBar_HomeClicked" SettingsClicked="TopBar_SettingsClicked"/>
+
+        <!-- Main content -->
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      CanContentScroll="False">
+            <Grid Margin="24,12,24,20" MaxWidth="1040" HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Hero -->
+                <StackPanel Grid.Row="0" Margin="0,10,0,16" HorizontalAlignment="Center">
+                    <ContentControl Style="{StaticResource Logo.Badge}" Width="88" Height="88" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource Startup.Title}" Style="{StaticResource Text.H1}" HorizontalAlignment="Center" Margin="0,12,0,2"/>
+                    <TextBlock Text="{DynamicResource Startup.Subtitle}" Style="{StaticResource Text.Body}" HorizontalAlignment="Center" FontSize="16"/>
+                    <TextBlock Text="{DynamicResource Startup.MetricLegend}" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" Opacity="0.9"/>
+                </StackPanel>
+
+                <!-- Overview header -->
+                <Border Grid.Row="1" Style="{StaticResource Card.Glass}" Padding="12" Margin="0,0,0,14">
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="{DynamicResource Startup.OverviewTitle}" Style="{StaticResource Text.H2}" />
+                        <TextBlock Name="LastUpdatedText" Text="--" Style="{StaticResource Text.Caption}" DockPanel.Dock="Right" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </Border>
+
+                <!-- Cards grid -->
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- CPU -->
+                    <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource Card.Glass}" Margin="0,0,12,12">
+                        <StackPanel>
+                            <TextBlock Text="{DynamicResource Startup.CpuTitle}" Style="{StaticResource Text.H2}"/>
+                            <TextBlock Name="CpuValueText" Text="0%" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
+                            <ProgressBar Name="CpuBar" Maximum="100" Value="0" Height="10" Margin="0,8,0,0" Style="{StaticResource ProgressBar.Glass}"/>
+                            <TextBlock Name="CpuSubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Memory -->
+                    <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource Card.Glass}" Margin="12,0,0,12">
+                        <StackPanel>
+                            <TextBlock Text="{DynamicResource Startup.MemoryTitle}" Style="{StaticResource Text.H2}"/>
+                            <TextBlock Name="MemoryValueText" Text="--" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
+                            <ProgressBar Name="MemoryBar" Maximum="100" Value="0" Height="10" Margin="0,8,0,0" Style="{StaticResource ProgressBar.Glass}"/>
+                            <TextBlock Name="MemorySubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Disk -->
+                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource Card.Glass}" Margin="0,12,12,0">
+                        <StackPanel>
+                            <TextBlock Text="{DynamicResource Startup.DiskTitle}" Style="{StaticResource Text.H2}"/>
+                            <TextBlock Name="DiskValueText" Text="--" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
+                            <ProgressBar Name="DiskBar" Maximum="100" Value="0" Height="10" Margin="0,8,0,0" Style="{StaticResource ProgressBar.Glass}"/>
+                            <TextBlock Name="DiskSubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Network -->
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource Card.Glass}" Margin="12,12,0,0">
+                        <StackPanel>
+                            <TextBlock Text="{DynamicResource Startup.NetworkTitle}" Style="{StaticResource Text.H2}"/>
+                            <TextBlock Name="NetworkValueText" Text="--" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
+                            <ProgressBar Name="NetworkBar" Maximum="100" Value="0" Height="10" Margin="0,8,0,0" Style="{StaticResource ProgressBar.Glass}"/>
+                            <TextBlock Name="NetworkSubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+
+        <!-- Navigation footer -->
+        <Border Grid.Row="2" Background="Transparent" Padding="12" Margin="16,0,16,16">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="{DynamicResource Startup.FooterStart}" Style="{StaticResource Button.Primary}" Click="LaunchDashboard_Click"/>
+                <Button Content="{DynamicResource Startup.FooterSettings}" Margin="10,0,0,0" Style="{StaticResource Button.Glass}" Click="OpenSettings_Click"/>
+                <Button Content="{DynamicResource Startup.FooterHealth}" Margin="10,0,0,0" Style="{StaticResource Button.Glass}" Click="HealthCheck_Click"/>
+                <Button Content="{DynamicResource Startup.FooterAbout}" Margin="10,0,0,0" Style="{StaticResource Button.Glass}" Click="OpenAbout_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

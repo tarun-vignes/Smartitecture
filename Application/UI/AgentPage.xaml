@@ -10,14 +10,22 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="12"/>
+        </Style>
+
         <DataTemplate x:Key="UserMessageTemplate" x:DataType="viewmodels:ChatMessageViewModel">
-            <Grid Margin="0,8,0,8" HorizontalAlignment="Right" MaxWidth="600">
+            <Grid Margin="0,8,0,8" HorizontalAlignment="Right" MaxWidth="720">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
-                <Border Background="{ThemeResource SystemAccentColor}" CornerRadius="8,0,8,8" Padding="12">
+                <Border Background="{ThemeResource SystemAccentColor}" CornerRadius="12,12,4,12" Padding="12">
                     <TextBlock Text="{x:Bind Content}" TextWrapping="Wrap" Foreground="White"/>
                 </Border>
                 
@@ -27,7 +35,7 @@
         </DataTemplate>
         
         <DataTemplate x:Key="AgentMessageTemplate" x:DataType="viewmodels:ChatMessageViewModel">
-            <Grid Margin="0,8,0,8" HorizontalAlignment="Left" MaxWidth="600">
+            <Grid Margin="0,8,0,8" HorizontalAlignment="Left" MaxWidth="720">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -37,7 +45,7 @@
                 <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
                         BorderThickness="1" 
-                        CornerRadius="0,8,8,8" 
+                        CornerRadius="12,12,12,4" 
                         Padding="12">
                     <TextBlock Text="{x:Bind Content}" TextWrapping="Wrap" 
                                Foreground="{x:Bind IsError, Converter={StaticResource BoolToErrorBrushConverter}}"/>
@@ -81,7 +89,7 @@
                              AgentTemplate="{StaticResource AgentMessageTemplate}"/>
     </Page.Resources>
 
-    <Grid Padding="16">
+    <Grid Padding="16" MaxWidth="1000" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -89,56 +97,67 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-            <TextBlock Text="Smartitecture Agent" Style="{StaticResource TitleTextBlockStyle}" VerticalAlignment="Center"/>
-            <Button Content="Clear Conversation" 
-                    Command="{x:Bind ViewModel.ClearConversationCommand}" 
-                    Margin="16,0,0,0"/>
-        </StackPanel>
-
-        <!-- Messages -->
-        <ScrollViewer Grid.Row="1" x:Name="MessagesScrollViewer" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}"
-                         ItemTemplateSelector="{StaticResource MessageTemplateSelector}"
-                         Margin="0,0,0,16">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
-
-        <!-- Input -->
-        <Grid Grid.Row="2">
+        <Grid Margin="0,0,0,16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-
-            <TextBox x:Name="InputTextBox"
-                    Text="{x:Bind ViewModel.UserInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    PlaceholderText="Type your message here..."
-                    TextWrapping="Wrap"
-                    MinHeight="40"
-                    MaxHeight="120"
-                    VerticalAlignment="Center"
-                    Margin="0,0,8,0"
-                    KeyDown="InputTextBox_KeyDown"/>
-
+            <StackPanel>
+                <TextBlock Text="Smartitecture Agent" Style="{StaticResource TitleTextBlockStyle}"/>
+                <TextBlock Text="Let Smartitecture take actions and explain results." Style="{StaticResource BodyTextBlockStyle}" Opacity="0.8"/>
+            </StackPanel>
             <Button Grid.Column="1"
-                   Content="Send"
-                   Command="{x:Bind ViewModel.SendMessageCommand}"
-                   IsEnabled="{x:Bind ViewModel.IsProcessing, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
-                   VerticalAlignment="Bottom"/>
-
-            <ProgressRing Grid.Column="1"
-                         IsActive="{x:Bind ViewModel.IsProcessing, Mode=OneWay}"
-                         Visibility="{x:Bind ViewModel.IsProcessing, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Width="20" Height="20"
-                         VerticalAlignment="Center"
-                         HorizontalAlignment="Center"
-                         Margin="0,0,0,0"/>
+                    Content="Clear Conversation" 
+                    Command="{x:Bind ViewModel.ClearConversationCommand}" 
+                    Margin="12,0,0,0"/>
         </Grid>
+
+        <!-- Messages -->
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Padding="12" Margin="0,0,0,12">
+            <ScrollViewer x:Name="MessagesScrollViewer" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}"
+                             ItemTemplateSelector="{StaticResource MessageTemplateSelector}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Input -->
+        <Border Grid.Row="2" Style="{StaticResource CardBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox x:Name="InputTextBox"
+                        Text="{x:Bind ViewModel.UserInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        PlaceholderText="Type your message here..."
+                        TextWrapping="Wrap"
+                        MinHeight="40"
+                        MaxHeight="120"
+                        VerticalAlignment="Center"
+                        Margin="0,0,8,0"
+                        KeyDown="InputTextBox_KeyDown"/>
+
+                <Button Grid.Column="1"
+                       Content="Send"
+                       Command="{x:Bind ViewModel.SendMessageCommand}"
+                       IsEnabled="{x:Bind ViewModel.IsProcessing, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                       VerticalAlignment="Bottom"/>
+
+                <ProgressRing Grid.Column="1"
+                             IsActive="{x:Bind ViewModel.IsProcessing, Mode=OneWay}"
+                             Visibility="{x:Bind ViewModel.IsProcessing, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Width="20" Height="20"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center"
+                             Margin="0,0,0,0"/>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

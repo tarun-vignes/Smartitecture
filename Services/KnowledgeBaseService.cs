@@ -284,7 +284,7 @@ namespace Smartitecture.Services
             return normalized;
         }
 
-        private VerifiedFact FindExactMatch(string normalizedQuestion)
+        private VerifiedFact? FindExactMatch(string normalizedQuestion)
         {
             // Check direct key matches
             if (_verifiedFacts.ContainsKey(normalizedQuestion))
@@ -307,7 +307,7 @@ namespace Smartitecture.Services
             return null;
         }
 
-        private (VerifiedFact fact, double confidence) FindFuzzyMatch(string normalizedQuestion)
+        private (VerifiedFact? fact, double confidence) FindFuzzyMatch(string normalizedQuestion)
         {
             var bestMatch = _verifiedFacts
                 .Select(kvp => new

@@ -12,10 +12,17 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="16"/>
+        </Style>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Page.Resources>
 
-    <Grid Padding="16">
+    <Grid Padding="16" MaxWidth="1000" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -27,7 +34,7 @@
 
         <!-- Main content area with tabs -->
         <Grid Grid.Row="1">
-            <Pivot>
+            <Pivot MaxWidth="900" HorizontalAlignment="Center">
                 <!-- Security Check Tab -->
                 <PivotItem Header="Security Check">
                     <ScrollViewer>
@@ -47,11 +54,7 @@
 
                             <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.IsSecurityResultVisible, Mode=OneWay}">
                                 <TextBlock Text="Results" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
-                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                        BorderThickness="1" 
-                                        CornerRadius="8" 
-                                        Padding="16">
+                                <Border Style="{StaticResource CardBorder}">
                                     <StackPanel>
                                         <TextBlock Text="{x:Bind ViewModel.SecurityResultTitle, Mode=OneWay}" 
                                                    Style="{StaticResource SubtitleTextBlockStyle}" 
@@ -72,11 +75,11 @@
                                     IsClosable="False"/>
                                 <TextBlock TextWrapping="Wrap">
                                     <Run FontWeight="SemiBold">Warning signs of a scam:</Run><LineBreak/>
-                                    • Popups saying your computer is infected and to call a number<LineBreak/>
-                                    • Someone calling you claiming to be from Microsoft or Apple<LineBreak/>
-                                    • Anyone asking for payment in gift cards<LineBreak/>
-                                    • Anyone asking for remote access to your computer<LineBreak/>
-                                    • Threats that your computer will be damaged if you don't act immediately
+                                    - Popups saying your computer is infected and to call a number<LineBreak/>
+                                    - Someone calling you claiming to be from Microsoft or Apple<LineBreak/>
+                                    - Anyone asking for payment in gift cards<LineBreak/>
+                                    - Anyone asking for remote access to your computer<LineBreak/>
+                                    - Threats that your computer will be damaged if you don't act immediately
                                 </TextBlock>
                             </StackPanel>
                         </StackPanel>
@@ -102,11 +105,7 @@
 
                             <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.IsOptimizationResultVisible, Mode=OneWay}">
                                 <TextBlock Text="Results" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
-                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                        BorderThickness="1" 
-                                        CornerRadius="8" 
-                                        Padding="16">
+                                <Border Style="{StaticResource CardBorder}">
                                     <StackPanel>
                                         <TextBlock Text="{x:Bind ViewModel.OptimizationResultTitle, Mode=OneWay}" 
                                                    Style="{StaticResource SubtitleTextBlockStyle}" 
@@ -121,12 +120,12 @@
                                 <TextBlock Text="Performance Tips" Style="{StaticResource SubtitleTextBlockStyle}"/>
                                 <TextBlock TextWrapping="Wrap">
                                     <Run FontWeight="SemiBold">Ways to keep your computer running smoothly:</Run><LineBreak/>
-                                    • Restart your computer at least once a week<LineBreak/>
-                                    • Uninstall programs you don't use<LineBreak/>
-                                    • Keep Windows updated<LineBreak/>
-                                    • Use an antivirus program and keep it updated<LineBreak/>
-                                    • Close browser tabs you're not using<LineBreak/>
-                                    • Consider adding more memory (RAM) if your computer is consistently slow
+                                    - Restart your computer at least once a week<LineBreak/>
+                                    - Uninstall programs you don't use<LineBreak/>
+                                    - Keep Windows updated<LineBreak/>
+                                    - Use an antivirus program and keep it updated<LineBreak/>
+                                    - Close browser tabs you're not using<LineBreak/>
+                                    - Consider adding more memory (RAM) if your computer is consistently slow
                                 </TextBlock>
                             </StackPanel>
                         </StackPanel>
@@ -159,11 +158,7 @@
 
                             <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.IsAlertExplanationVisible, Mode=OneWay}">
                                 <TextBlock Text="Explanation" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
-                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                        BorderThickness="1" 
-                                        CornerRadius="8" 
-                                        Padding="16">
+                                <Border Style="{StaticResource CardBorder}">
                                     <StackPanel>
                                         <TextBlock Text="{x:Bind ViewModel.AlertExplanationTitle, Mode=OneWay}" 
                                                    Style="{StaticResource SubtitleTextBlockStyle}" 

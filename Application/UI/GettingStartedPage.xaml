@@ -9,6 +9,16 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="16"/>
+        </Style>
+    </Page.Resources>
+
     <Grid Padding="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -39,13 +49,7 @@
         </StackPanel>
 
         <!-- Introduction -->
-        <Border Grid.Row="1" 
-                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
-                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                BorderThickness="1" 
-                CornerRadius="8" 
-                Padding="20" 
-                Margin="0,0,0,24">
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Margin="0,0,0,24">
             <TextBlock TextWrapping="Wrap" 
                        FontSize="18" 
                        LineHeight="28" 
@@ -61,7 +65,7 @@
 
         <!-- Main content area -->
         <ScrollViewer Grid.Row="2">
-            <StackPanel Spacing="24" MaxWidth="800">
+            <StackPanel Spacing="24" MaxWidth="900" HorizontalAlignment="Center">
 
                 <!-- How to Use -->
                 <StackPanel Spacing="16">
@@ -70,8 +74,8 @@
                                FontSize="20"/>
                     
                     <!-- Chat Feature -->
-                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                BorderThickness="1" CornerRadius="8" Padding="16">
+                    <Border Style="{StaticResource CardBorder}">
+                        <StackPanel Spacing="8">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <FontIcon Glyph="&#xE8BD;" FontSize="24"/>
                             <TextBlock Text="Ask Any Question" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
@@ -79,20 +83,21 @@
                         <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
                             Click on "Chat" and type any computer question. For example:
                             <LineBreak/><LineBreak/>
-                            • "How do I print a document?"
+                            - "How do I print a document?"
                             <LineBreak/>
-                            • "Why is my computer slow?"
+                            - "Why is my computer slow?"
                             <LineBreak/>
-                            • "How do I send an email with a photo?"
+                            - "How do I send an email with a photo?"
                             <LineBreak/><LineBreak/>
                             I'll give you simple, easy-to-follow answers.
                         </TextBlock>
                         <Button Content="Go to Chat" Click="GoToChat_Click" Style="{StaticResource AccentButtonStyle}"/>
-                    </StackPanel>
+                        </StackPanel>
+                    </Border>
                     
                     <!-- Security Feature -->
-                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                BorderThickness="1" CornerRadius="8" Padding="16">
+                    <Border Style="{StaticResource CardBorder}">
+                        <StackPanel Spacing="8">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <FontIcon Glyph="&#xE72E;" FontSize="24"/>
                             <TextBlock Text="Keep Your Computer Safe" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
@@ -100,18 +105,19 @@
                         <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
                             I can help protect you from scams and keep your computer running well:
                             <LineBreak/><LineBreak/>
-                            • Check if a popup or message is a scam
+                            - Check if a popup or message is a scam
                             <LineBreak/>
-                            • Make your computer run faster
+                            - Make your computer run faster
                             <LineBreak/>
-                            • Explain what security messages mean
+                            - Explain what security messages mean
                         </TextBlock>
                         <Button Content="Computer Security" Click="GoToSecurity_Click" Style="{StaticResource AccentButtonStyle}"/>
-                    </StackPanel>
+                        </StackPanel>
+                    </Border>
                     
                     <!-- Screen Analysis Feature -->
-                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                BorderThickness="1" CornerRadius="8" Padding="16">
+                    <Border Style="{StaticResource CardBorder}">
+                        <StackPanel Spacing="8">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <FontIcon Glyph="&#xE7F4;" FontSize="24"/>
                             <TextBlock Text="Understand What You See" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
@@ -119,18 +125,19 @@
                         <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
                             If you see something confusing on your screen, I can help explain it:
                             <LineBreak/><LineBreak/>
-                            • Explain what a message or popup means
+                            - Explain what a message or popup means
                             <LineBreak/>
-                            • Help you find the right button to click
+                            - Help you find the right button to click
                             <LineBreak/>
-                            • Read text that's hard to see
+                            - Read text that's hard to see
                         </TextBlock>
                         <Button Content="Screen Help" Click="GoToScreenAnalysis_Click" Style="{StaticResource AccentButtonStyle}"/>
-                    </StackPanel>
+                        </StackPanel>
+                    </Border>
                     
                     <!-- Agent Feature -->
-                    <StackPanel Spacing="8" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
-                                BorderThickness="1" CornerRadius="8" Padding="16">
+                    <Border Style="{StaticResource CardBorder}">
+                        <StackPanel Spacing="8">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <FontIcon Glyph="&#xE77B;" FontSize="24"/>
                             <TextBlock Text="Let Me Help You Directly" FontWeight="SemiBold" FontSize="18" VerticalAlignment="Center"/>
@@ -138,17 +145,19 @@
                         <TextBlock TextWrapping="Wrap" FontSize="16" LineHeight="24">
                             I can take actions to help you with your computer:
                             <LineBreak/><LineBreak/>
-                            • Find files for you
+                            - Find files for you
                             <LineBreak/>
-                            • Get information from the internet
+                            - Get information from the internet
                             <LineBreak/>
-                            • Check the weather or news
+                            - Check the weather or news
                         </TextBlock>
                         <Button Content="Computer Assistant" Click="GoToAgent_Click" Style="{StaticResource AccentButtonStyle}"/>
-                    </StackPanel>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
 
                 <!-- Common Tasks -->
+                <Border Style="{StaticResource CardBorder}">
                 <StackPanel Spacing="8">
                     <TextBlock Text="Common Computer Tasks" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
@@ -175,9 +184,11 @@
                         <Button Content="Video Calls" Grid.Column="1" Grid.Row="2" Margin="4" HorizontalAlignment="Stretch" Click="CommonTask_Click" Tag="video calls"/>
                     </Grid>
                 </StackPanel>
+                </Border>
 
                 <!-- Emergency Help -->
-                <StackPanel Spacing="8" Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}" Padding="16" CornerRadius="8">
+                <Border Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}" Padding="16" CornerRadius="10">
+                <StackPanel Spacing="8">
                     <TextBlock Text="Need Urgent Help?" 
                                Style="{StaticResource SubtitleTextBlockStyle}" 
                                FontSize="20"/>
@@ -186,6 +197,7 @@
                     </TextBlock>
                     <Button Content="Get Emergency Help" Click="EmergencyHelp_Click" Style="{StaticResource AccentButtonStyle}" Margin="0,8,0,0"/>
                 </StackPanel>
+                </Border>
 
                 <!-- Footer -->
                 <TextBlock TextWrapping="Wrap" FontSize="14" Opacity="0.7" Margin="0,16,0,0">

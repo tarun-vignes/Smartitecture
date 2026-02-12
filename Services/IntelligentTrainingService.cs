@@ -205,7 +205,7 @@ namespace Smartitecture.Services
             return GenerateFallbackResponse(userMessage, conversationContext);
         }
 
-        private TrainingPattern FindBestMatchingPattern(string message, List<string> history)
+        private TrainingPattern? FindBestMatchingPattern(string message, List<string> history)
         {
             var allPatterns = _humanInteractionPatterns.Values.SelectMany(p => p)
                 .Concat(_automationPatterns.Values.SelectMany(p => p))

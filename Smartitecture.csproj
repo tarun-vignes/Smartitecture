@@ -26,7 +26,6 @@
   <ItemGroup>
     <None Remove="App.xaml" />
     <None Remove="MainWindow.xaml" />
-    <None Remove="UI\ChatWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -37,13 +36,34 @@
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StartupWindow.xaml">
+    <Page Include="Controls\AppTopBar.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ChatWindow.xaml">
+    <Page Include="Assets\Logo\SmartitectureLogo.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="UI\StartupView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DashboardView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ChatView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\AboutView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Themes\Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Themes\Light.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Strings\*.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -53,12 +73,12 @@
     <Compile Include="Services\**\*.cs" />
     <Compile Include="Properties\**\*.cs" />
     <Compile Include="UI\**\*.cs" />
+    <Compile Include="Controls\**\*.cs" />
     
     <!-- -->
     <Compile Remove="Application\\**\\*.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Smartitecture\\Services\\ILLMService.cs" />
     <Compile Remove="Services\\AdvancedConversationalAgent.cs" />
     <Compile Remove="Services\\SmartitectureAIService.cs" />
     <Compile Remove="Services\\MockLLMService.cs" />
@@ -72,6 +92,7 @@
     <Resource Include="Assets\**\*.*" />
   </ItemGroup>
 </Project>
+
 
 
 

@@ -9,7 +9,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Padding="20">
+    <Page.Resources>
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="12"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Padding="16" MaxWidth="900" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -24,50 +34,52 @@
             Margin="0,0,0,20"/>
 
         <!-- Description -->
-        <TextBlock 
+        <TextBlock
             Grid.Row="1"
             Text="Choose your preferred language. Smartitecture will use this language for the user interface."
             TextWrapping="Wrap"
             Margin="0,0,0,20"/>
 
         <!-- Language selection list -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <ListView 
-                x:Name="LanguagesList"
-                SelectionMode="Single"
-                SelectionChanged="LanguagesList_SelectionChanged">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Padding="12" MinWidth="300">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            
-                            <!-- Native language name (large) -->
-                            <TextBlock 
-                                Grid.Row="0"
-                                Text="{Binding NativeName}" 
-                                Style="{StaticResource SubtitleTextBlockStyle}"
-                                Margin="0,0,0,4"/>
-                            
-                            <!-- English language name (smaller) -->
-                            <TextBlock 
-                                Grid.Row="1"
-                                Text="{Binding Name}" 
-                                Style="{StaticResource BodyTextBlockStyle}"
-                                Opacity="0.7"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        <Setter Property="Margin" Value="0,2"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
-        </ScrollViewer>
+        <Border Grid.Row="2" Style="{StaticResource CardBorder}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ListView 
+                    x:Name="LanguagesList"
+                    SelectionMode="Single"
+                    SelectionChanged="LanguagesList_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="12" MinWidth="300">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                
+                                <!-- Native language name (large) -->
+                                <TextBlock 
+                                    Grid.Row="0"
+                                    Text="{Binding NativeName}" 
+                                    Style="{StaticResource SubtitleTextBlockStyle}"
+                                    Margin="0,0,0,4"/>
+                                
+                                <!-- English language name (smaller) -->
+                                <TextBlock 
+                                    Grid.Row="1"
+                                    Text="{Binding Name}" 
+                                    Style="{StaticResource BodyTextBlockStyle}"
+                                    Opacity="0.7"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Margin" Value="0,2"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </ScrollViewer>
+        </Border>
 
         <!-- Loading overlay -->
         <Grid x:Name="LoadingOverlay" 

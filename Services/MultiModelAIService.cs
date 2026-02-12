@@ -18,12 +18,12 @@ namespace Smartitecture.Services
         private readonly Dictionary<string, List<ConversationMessage>> _conversations;
         private readonly HttpClient _httpClient;
         private readonly Random _random;
-        private Dictionary<string, AIModelConfig> _modelConfigs;
+        private Dictionary<string, AIModelConfig> _modelConfigs = new();
         private readonly IntelligentTrainingService _trainingService;
         private readonly KnowledgeBaseService _knowledgeBase;
         private readonly ConfigurationService _configService;
         private readonly HumanLikeConversationEngine _humanConversation;
-        private OpenAIService _openAIService;
+        private OpenAIService? _openAIService;
 
         public string CurrentModel { get; private set; } = "Advanced AI Assistant";
 
@@ -39,7 +39,7 @@ namespace Smartitecture.Services
             "System Expert Mode"
         };
 
-        public event EventHandler<ModelSwitchedEventArgs> ModelSwitched;
+        public event EventHandler<ModelSwitchedEventArgs>? ModelSwitched;
 
         public MultiModelAIService()
         {
@@ -108,13 +108,13 @@ namespace Smartitecture.Services
             };
         }
 
-        public async Task<string> GetResponseAsync(string message, string conversationId = null)
+        public async Task<string> GetResponseAsync(string message, string? conversationId = null)
         {
             await Task.Delay(_random.Next(200, 800));
             return await GenerateAdvancedResponse(message, conversationId);
         }
 
-        public async Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, string conversationId = null)
+        public async Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, string? conversationId = null)
         {
             await StoreMessageAsync(conversationId, "user", message);
             
@@ -164,7 +164,7 @@ namespace Smartitecture.Services
             return fullResponse;
         }
 
-        private async Task<string> GenerateAdvancedResponse(string message, string conversationId)
+        private async Task<string> GenerateAdvancedResponse(string message, string? conversationId)
         {
             var lowerMessage = message.ToLower();
             
@@ -207,7 +207,7 @@ namespace Smartitecture.Services
                     return await _humanConversation.GetResponseAsync(message, "openai-fallback", context);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Error with OpenAI - fallback to human-like conversation
                 return await _humanConversation.GetResponseAsync(message, "openai-error", context);
@@ -252,7 +252,7 @@ namespace Smartitecture.Services
                    "What system task would you like assistance with?";
         }
 
-        private async Task<string> GetSystemDiagnostics()
+        private Task<string> GetSystemDiagnostics()
         {
             try
             {
@@ -276,15 +276,15 @@ namespace Smartitecture.Services
                 
                 diagnostics.AppendLine("Would you like more detailed diagnostics for any specific component?");
                 
-                return diagnostics.ToString();
+                return Task.FromResult(diagnostics.ToString());
             }
             catch (Exception ex)
             {
-                return $"⚠️ Error gathering system diagnostics: {ex.Message}";
+                return Task.FromResult($"⚠️ Error gathering system diagnostics: {ex.Message}");
             }
         }
 
-        private async Task<string> GetProcessInformation()
+        private Task<string> GetProcessInformation()
         {
             try
             {
@@ -310,11 +310,11 @@ namespace Smartitecture.Services
                 }
                 
                 info.AppendLine("\nWould you like me to help manage any specific processes?");
-                return info.ToString();
+                return Task.FromResult(info.ToString());
             }
             catch (Exception ex)
             {
-                return $"⚠️ Error gathering process information: {ex.Message}";
+                return Task.FromResult($"⚠️ Error gathering process information: {ex.Message}");
             }
         }
 
@@ -468,7 +468,7 @@ namespace Smartitecture.Services
         }
 
         // Additional methods for conversation management, command parsing, etc.
-        public async Task<(string commandName, Dictionary<string, object> parameters)> ParseCommandAsync(string message)
+        public async Task<(string? commandName, Dictionary<string, object>? parameters)> ParseCommandAsync(string message)
         {
             await Task.Delay(100);
             var lowerMessage = message.ToLower();
@@ -494,7 +494,7 @@ namespace Smartitecture.Services
             return (null, null);
         }
 
-        public async Task<List<ConversationMessage>> GetConversationHistoryAsync(string conversationId)
+        public async Task<List<ConversationMessage>> GetConversationHistoryAsync(string? conversationId)
         {
             await Task.Delay(50);
             return string.IsNullOrEmpty(conversationId) || !_conversations.ContainsKey(conversationId) 
@@ -502,12 +502,12 @@ namespace Smartitecture.Services
                 : new List<ConversationMessage>(_conversations[conversationId]);
         }
 
-        private async Task<List<ConversationMessage>> GetConversationContext(string conversationId)
+        private async Task<List<ConversationMessage>> GetConversationContext(string? conversationId)
         {
             return await GetConversationHistoryAsync(conversationId);
         }
 
-        public async Task ClearConversationAsync(string conversationId)
+        public async Task ClearConversationAsync(string? conversationId)
         {
             await Task.Delay(50);
             if (!string.IsNullOrEmpty(conversationId) && _conversations.ContainsKey(conversationId))
@@ -535,7 +535,7 @@ namespace Smartitecture.Services
             return false;
         }
 
-        private async Task StoreMessageAsync(string conversationId, string role, string content)
+        private async Task StoreMessageAsync(string? conversationId, string role, string content)
         {
             if (string.IsNullOrEmpty(conversationId)) return;
 

@@ -11,7 +11,7 @@ namespace Smartitecture.Services
     public class ConfigurationService
     {
         private readonly string _configPath;
-        private AppConfig _config;
+        private AppConfig _config = new AppConfig();
 
         public ConfigurationService()
         {

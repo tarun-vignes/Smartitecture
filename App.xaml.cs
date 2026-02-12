@@ -57,11 +57,28 @@ namespace Smartitecture
 
             _serviceProvider = services.BuildServiceProvider();
 
-            // Show Startup window first
-            var startup = new StartupWindow();
-            this.MainWindow = startup;
-            _window = startup;
-            startup.Show();
+            // Apply localization + theme from preferences then show Startup window
+            try
+            {
+                var prefsService = new Smartitecture.Services.PreferencesService();
+                var prefs = prefsService.Load();
+
+                Smartitecture.Services.LocalizationManager.Apply(prefs.Language);
+
+                var themeString = prefs.Theme ?? "Dark";
+                Smartitecture.Services.AppColorTheme theme = themeString.Equals("Light", StringComparison.OrdinalIgnoreCase)
+                    ? Smartitecture.Services.AppColorTheme.Light
+                    : themeString.Equals("System", StringComparison.OrdinalIgnoreCase)
+                        ? Smartitecture.Services.AppColorTheme.System
+                        : Smartitecture.Services.AppColorTheme.Dark;
+                Smartitecture.Services.ThemeManager.Apply(theme);
+            }
+            catch { }
+
+            var main = new MainWindow();
+            this.MainWindow = main;
+            _window = main;
+            main.Show();
         }
 
     }

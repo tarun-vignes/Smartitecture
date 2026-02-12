@@ -25,7 +25,7 @@ namespace Smartitecture.Services
             _contexts = new Dictionary<string, ConversationContext>();
         }
 
-        public async Task<string> GetResponseAsync(string message, string conversationId = "default", List<ConversationMessage> history = null)
+        public async Task<string> GetResponseAsync(string message, string conversationId = "default", List<ConversationMessage>? history = null)
         {
             var context = GetOrCreateContext(conversationId);
             var analysis = AnalyzeMessage(message, context);
@@ -490,14 +490,14 @@ namespace Smartitecture.Services
     public class ConversationContext
     {
         public string ConversationId { get; }
-        public List<(string role, string message, DateTime timestamp, MessageAnalysis analysis)> Messages { get; }
+        public List<(string role, string message, DateTime timestamp, MessageAnalysis? analysis)> Messages { get; }
         public int MessageCount => Messages.Count;
         public DateTime LastInteraction => Messages.LastOrDefault().timestamp;
 
         public ConversationContext(string conversationId)
         {
             ConversationId = conversationId;
-            Messages = new List<(string, string, DateTime, MessageAnalysis)>();
+            Messages = new List<(string, string, DateTime, MessageAnalysis?)>();
         }
 
         public void AddUserMessage(string message, MessageAnalysis analysis)

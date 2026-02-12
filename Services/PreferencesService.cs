@@ -8,6 +8,18 @@ namespace Smartitecture.Services
     {
         public string Theme { get; set; } = "Dark"; // Dark | Light
         public bool NotificationsEnabled { get; set; } = true;
+        public string Language { get; set; } = "en-US";
+        public string Region { get; set; } = "US";
+        public string TimeFormat { get; set; } = "12h";
+        public string Units { get; set; } = "Metric";
+        public string TextSize { get; set; } = "Default";
+        public bool StartWithWindows { get; set; } = false;
+        public bool StartMinimized { get; set; } = false;
+        public bool ReduceMotion { get; set; } = false;
+        public bool AutoUpdate { get; set; } = true;
+        public string UpdateChannel { get; set; } = "Stable";
+        public bool ShareDiagnostics { get; set; } = false;
+        public int ApiPort { get; set; } = 8080;
     }
 
     public class PreferencesService
@@ -47,4 +59,3 @@ namespace Smartitecture.Services
         }
     }
 }
-

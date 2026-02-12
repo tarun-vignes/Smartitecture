@@ -23,7 +23,7 @@ namespace Smartitecture.Services
             _knowledgeBase = new KnowledgeBaseService();
         }
 
-        public async Task<string> GetResponseAsync(string message, List<ConversationMessage> conversationHistory = null)
+        public async Task<string> GetResponseAsync(string message, List<ConversationMessage>? conversationHistory = null)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace Smartitecture.Services
             }
         }
 
-        public async Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, List<ConversationMessage> conversationHistory = null)
+        public async Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, List<ConversationMessage>? conversationHistory = null)
         {
             try
             {

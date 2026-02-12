@@ -46,3 +46,21 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+
+# Project cleanup
+deploy/
+deployment/
+output/
+debug-app/
+temp-deploy/
+Website/dist/
+build_errors.log
+msbuild.log
+build_out*.txt
+build_err*.txt
+build_check.txt
+*.bak
+backend-python/venv/
+backend-python/.venv/
+**/venv/
+**/.venv/

@@ -16,14 +16,14 @@ Implements a modern interface with navigation between:
     mc:Ignorable="d">
 
     <!-- Main layout grid with two rows: title bar and content area -->
-    <Grid>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>  <!-- Title bar -->
             <RowDefinition Height="*"/>    <!-- Content area -->
         </Grid.RowDefinitions>
 
         <!-- Custom title bar for modern Windows app look -->
-        <Grid x:Name="AppTitleBar" Height="32" Grid.Row="0">
+        <Grid x:Name="AppTitleBar" Height="40" Grid.Row="0" Padding="12,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -34,7 +34,7 @@ Implements a modern interface with navigation between:
             <Rectangle x:Name="AppLogo"
                       Width="24" 
                       Height="24" 
-                      Margin="8,0,8,0"
+                      Margin="0,0,8,0"
                       Fill="{StaticResource SmartitectureLogoBrush}"
                       VerticalAlignment="Center"/>
             
@@ -44,12 +44,12 @@ Implements a modern interface with navigation between:
                        Text="Smartitecture"
                        VerticalAlignment="Center"
                        Margin="0,0,0,0"
-                       Style="{StaticResource CaptionTextBlockStyle}"/>
+                       Style="{StaticResource SubtitleTextBlockStyle}"/>
                        
             <!-- Theme toggle button -->
             <ToggleButton x:Name="ThemeToggleButton" 
                          Grid.Column="2"
-                         Margin="0,0,12,0"
+                         Margin="0,0,4,0"
                          VerticalAlignment="Center"
                          Click="ThemeToggleButton_Click"
                          ToolTipService.ToolTip="Toggle Light/Dark Mode">

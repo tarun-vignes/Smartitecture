@@ -1,0 +1,273 @@
+﻿<UserControl x:Class="Smartitecture.UI.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:Smartitecture.Controls"
+             Background="{DynamicResource Brush.AppBackground}"
+             Foreground="{DynamicResource Brush.OnSurface}">
+  <Grid Background="{DynamicResource Brush.AppBackground}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <controls:AppTopBar Grid.Row="0" Title="{DynamicResource Settings.Title}" ShowBack="True"
+                         BackClicked="BackClicked" HomeClicked="HomeClicked" />
+
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <Grid Margin="24,12,24,24" MaxWidth="960" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,0,12">
+          <ContentControl Style="{StaticResource Logo.Badge}" Width="28" Height="28" Margin="0,0,10,0"/>
+          <TextBlock Text="{DynamicResource Settings.Title}" Style="{StaticResource Text.H1}" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource Card.Glass}" Padding="20" MinHeight="520">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left column: Appearance -->
+            <StackPanel Grid.Column="0" Margin="0,0,14,0">
+              <TextBlock Text="{DynamicResource Settings.Appearance}" Style="{StaticResource Text.H2}" Margin="0,0,0,10"/>
+
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="{DynamicResource Settings.Theme}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
+                <ComboBox x:Name="ThemeComboBox" Width="200" SelectionChanged="ThemeComboBox_SelectionChanged" Style="{StaticResource ComboBox.Glass}">
+                  <ComboBoxItem Tag="Dark" Content="{DynamicResource Theme.Dark}" IsSelected="True"/>
+                  <ComboBoxItem Tag="Light" Content="{DynamicResource Theme.Light}"/>
+                  <ComboBoxItem Tag="System" Content="{DynamicResource Theme.System}"/>
+                </ComboBox>
+              </StackPanel>
+
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="{DynamicResource Settings.Language}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
+                <ComboBox x:Name="LanguageComboBox" Width="200" SelectionChanged="LanguageComboBox_SelectionChanged" Style="{StaticResource ComboBox.Glass}">
+                  <ComboBoxItem Tag="af-ZA" Content="Afrikaans"/>
+                  <ComboBoxItem Tag="am-ET" Content="Amharic"/>
+                  <ComboBoxItem Tag="ar" Content="Arabic"/>
+                  <ComboBoxItem Tag="az-Latn-AZ" Content="Azerbaijani"/>
+                  <ComboBoxItem Tag="eu-ES" Content="Basque"/>
+                  <ComboBoxItem Tag="bn-BD" Content="Bengali"/>
+                  <ComboBoxItem Tag="bg-BG" Content="Bulgarian"/>
+                  <ComboBoxItem Tag="my-MM" Content="Burmese"/>
+                  <ComboBoxItem Tag="ca-ES" Content="Catalan"/>
+                  <ComboBoxItem Tag="zh-CN" Content="Chinese (Simplified)"/>
+                  <ComboBoxItem Tag="zh-TW" Content="Chinese (Traditional)"/>
+                  <ComboBoxItem Tag="hr-HR" Content="Croatian"/>
+                  <ComboBoxItem Tag="cs-CZ" Content="Czech"/>
+                  <ComboBoxItem Tag="da-DK" Content="Danish"/>
+                  <ComboBoxItem Tag="nl-NL" Content="Dutch"/>
+                  <ComboBoxItem Tag="en-US" Content="English (US)"/>
+                  <ComboBoxItem Tag="en-GB" Content="English (UK)"/>
+                  <ComboBoxItem Tag="en-CA" Content="English (Canada)"/>
+                  <ComboBoxItem Tag="en-AU" Content="English (Australia)"/>
+                  <ComboBoxItem Tag="en-IN" Content="English (India)"/>
+                  <ComboBoxItem Tag="et-EE" Content="Estonian"/>
+                  <ComboBoxItem Tag="fil-PH" Content="Filipino"/>
+                  <ComboBoxItem Tag="fi-FI" Content="Finnish"/>
+                  <ComboBoxItem Tag="fr-FR" Content="French"/>
+                  <ComboBoxItem Tag="gl-ES" Content="Galician"/>
+                  <ComboBoxItem Tag="de-DE" Content="German"/>
+                  <ComboBoxItem Tag="el-GR" Content="Greek"/>
+                  <ComboBoxItem Tag="gu-IN" Content="Gujarati"/>
+                  <ComboBoxItem Tag="he-IL" Content="Hebrew"/>
+                  <ComboBoxItem Tag="hi-IN" Content="Hindi"/>
+                  <ComboBoxItem Tag="hu-HU" Content="Hungarian"/>
+                  <ComboBoxItem Tag="is-IS" Content="Icelandic"/>
+                  <ComboBoxItem Tag="id-ID" Content="Indonesian"/>
+                  <ComboBoxItem Tag="it-IT" Content="Italian"/>
+                  <ComboBoxItem Tag="ja-JP" Content="Japanese"/>
+                  <ComboBoxItem Tag="kn-IN" Content="Kannada"/>
+                  <ComboBoxItem Tag="km-KH" Content="Khmer"/>
+                  <ComboBoxItem Tag="ko-KR" Content="Korean"/>
+                  <ComboBoxItem Tag="lv-LV" Content="Latvian"/>
+                  <ComboBoxItem Tag="lt-LT" Content="Lithuanian"/>
+                  <ComboBoxItem Tag="ms-MY" Content="Malay"/>
+                  <ComboBoxItem Tag="ml-IN" Content="Malayalam"/>
+                  <ComboBoxItem Tag="mr-IN" Content="Marathi"/>
+                  <ComboBoxItem Tag="ne-NP" Content="Nepali"/>
+                  <ComboBoxItem Tag="nb-NO" Content="Norwegian"/>
+                  <ComboBoxItem Tag="fa-IR" Content="Persian"/>
+                  <ComboBoxItem Tag="pl-PL" Content="Polish"/>
+                  <ComboBoxItem Tag="pt-PT" Content="Portuguese (Portugal)"/>
+                  <ComboBoxItem Tag="pt-BR" Content="Portuguese (Brazil)"/>
+                  <ComboBoxItem Tag="pa-IN" Content="Punjabi"/>
+                  <ComboBoxItem Tag="ro-RO" Content="Romanian"/>
+                  <ComboBoxItem Tag="ru-RU" Content="Russian"/>
+                  <ComboBoxItem Tag="sr-RS" Content="Serbian"/>
+                  <ComboBoxItem Tag="si-LK" Content="Sinhala"/>
+                  <ComboBoxItem Tag="sk-SK" Content="Slovak"/>
+                  <ComboBoxItem Tag="sl-SI" Content="Slovenian"/>
+                  <ComboBoxItem Tag="es-ES" Content="Spanish"/>
+                  <ComboBoxItem Tag="sw-KE" Content="Swahili"/>
+                  <ComboBoxItem Tag="sv-SE" Content="Swedish"/>
+                  <ComboBoxItem Tag="ta-IN" Content="Tamil"/>
+                  <ComboBoxItem Tag="te-IN" Content="Telugu"/>
+                  <ComboBoxItem Tag="th-TH" Content="Thai"/>
+                  <ComboBoxItem Tag="tr-TR" Content="Turkish"/>
+                  <ComboBoxItem Tag="uk-UA" Content="Ukrainian"/>
+                  <ComboBoxItem Tag="ur-PK" Content="Urdu"/>
+                  <ComboBoxItem Tag="vi-VN" Content="Vietnamese"/>
+                  <ComboBoxItem Tag="zu-ZA" Content="Zulu"/>
+                </ComboBox>
+              </StackPanel>
+
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="{DynamicResource Settings.Region}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
+                <ComboBox x:Name="RegionComboBox" Width="200" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
+                  <ComboBoxItem Tag="US" Content="{DynamicResource Region.US}"/>
+                  <ComboBoxItem Tag="UK" Content="{DynamicResource Region.UK}"/>
+                  <ComboBoxItem Tag="CA" Content="{DynamicResource Region.Canada}"/>
+                  <ComboBoxItem Tag="AU" Content="{DynamicResource Region.Australia}"/>
+                  <ComboBoxItem Tag="DE" Content="{DynamicResource Region.Germany}"/>
+                </ComboBox>
+              </StackPanel>
+
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="{DynamicResource Settings.TimeFormat}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
+                <ComboBox x:Name="TimeFormatComboBox" Width="200" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
+                  <ComboBoxItem Tag="12h" Content="{DynamicResource TimeFormat.12}"/>
+                  <ComboBoxItem Tag="24h" Content="{DynamicResource TimeFormat.24}"/>
+                </ComboBox>
+              </StackPanel>
+
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="{DynamicResource Settings.Units}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
+                <ComboBox x:Name="UnitsComboBox" Width="200" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
+                  <ComboBoxItem Tag="Metric" Content="{DynamicResource Units.Metric}"/>
+                  <ComboBoxItem Tag="Imperial" Content="{DynamicResource Units.Imperial}"/>
+                </ComboBox>
+              </StackPanel>
+
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="{DynamicResource Settings.TextSize}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
+                <ComboBox x:Name="TextSizeComboBox" Width="200" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
+                  <ComboBoxItem Tag="Small" Content="{DynamicResource TextSize.Small}"/>
+                  <ComboBoxItem Tag="Default" Content="{DynamicResource TextSize.Default}"/>
+                  <ComboBoxItem Tag="Large" Content="{DynamicResource TextSize.Large}"/>
+                </ComboBox>
+              </StackPanel>
+            </StackPanel>
+
+            <!-- Right column: System & Privacy -->
+            <StackPanel Grid.Column="1" Margin="14,0,0,0">
+              <TextBlock Text="{DynamicResource Settings.SystemPrivacy}" Style="{StaticResource Text.H2}" Margin="0,0,0,10"/>
+
+              <TextBlock Text="{DynamicResource Settings.Startup}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
+              <CheckBox x:Name="AutoStartCheckBox" Content="{DynamicResource Settings.StartWithWindows}" Margin="0,0,0,6" Style="{StaticResource CheckBox.Glass}" Checked="SettingChanged" Unchecked="SettingChanged"/>
+              <CheckBox x:Name="StartMinimizedCheckBox" Content="{DynamicResource Settings.StartMinimized}" Margin="0,0,0,12" Style="{StaticResource CheckBox.Glass}" Checked="SettingChanged" Unchecked="SettingChanged"/>
+
+              <TextBlock Text="{DynamicResource Settings.Behavior}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
+              <CheckBox x:Name="NotificationsCheckBox" Content="{DynamicResource Settings.EnableNotifications}" Margin="0,0,0,6" Style="{StaticResource CheckBox.Glass}" Checked="SettingChanged" Unchecked="SettingChanged"/>
+              <CheckBox x:Name="ReduceMotionCheckBox" Content="{DynamicResource Settings.ReduceMotion}" Margin="0,0,0,12" Style="{StaticResource CheckBox.Glass}" Checked="SettingChanged" Unchecked="SettingChanged"/>
+
+              <TextBlock Text="{DynamicResource Settings.Updates}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
+              <CheckBox x:Name="AutoUpdateCheckBox" Content="{DynamicResource Settings.AutoUpdate}" Margin="0,0,0,6" Style="{StaticResource CheckBox.Glass}" Checked="SettingChanged" Unchecked="SettingChanged"/>
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                <TextBlock Text="{DynamicResource Settings.Channel}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
+                <ComboBox x:Name="UpdateChannelComboBox" Width="200" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
+                  <ComboBoxItem Tag="Stable" Content="{DynamicResource UpdateChannel.Stable}"/>
+                  <ComboBoxItem Tag="Beta" Content="{DynamicResource UpdateChannel.Beta}"/>
+                </ComboBox>
+              </StackPanel>
+
+              <TextBlock Text="{DynamicResource Settings.Network}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                <TextBlock Text="{DynamicResource Settings.ApiPort}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
+                <TextBox x:Name="PortTextBox" Width="120" Text="8080" Style="{StaticResource TextBox.Glass}" TextChanged="SettingChanged"/>
+              </StackPanel>
+
+              <TextBlock Text="{DynamicResource Settings.Privacy}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
+              <CheckBox x:Name="DiagnosticsCheckBox" Content="{DynamicResource Settings.ShareDiagnostics}" Margin="0,0,0,0" Style="{StaticResource CheckBox.Glass}" Checked="SettingChanged" Unchecked="SettingChanged"/>
+            </StackPanel>
+
+            <!-- Change toast -->
+            <Border x:Name="SettingsToast"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,2,2,0"
+                    Padding="10,6"
+                    Background="{DynamicResource Brush.GlassCard}"
+                    BorderBrush="{DynamicResource Brush.GlassBorder}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Opacity="0"
+                    Visibility="Collapsed"
+                    IsHitTestVisible="False">
+              <Border.RenderTransform>
+                <TranslateTransform Y="6"/>
+              </Border.RenderTransform>
+              <TextBlock x:Name="SettingsToastText" Text="{DynamicResource Settings.ChangesPending}" Style="{StaticResource Text.Caption}"/>
+            </Border>
+          </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+          <Button Content="{DynamicResource Nav.Back}" Margin="0,0,8,0" Click="BackClicked" Style="{StaticResource Button.Glass}"/>
+          <Button Content="{DynamicResource Settings.Save}" HorizontalAlignment="Right" Click="Save_Click" Style="{StaticResource Button.Primary}"/>
+        </StackPanel>
+      </Grid>
+    </ScrollViewer>
+
+    <!-- Save popup -->
+    <Grid x:Name="SavePopupOverlay"
+          Grid.RowSpan="2"
+          Background="#66000000"
+          Visibility="Collapsed"
+          Opacity="0"
+          IsHitTestVisible="True">
+      <Border x:Name="SavePopupCard"
+              Style="{StaticResource Card.Glass}"
+              Width="420"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Padding="20"
+              RenderTransformOrigin="0.5,0.5">
+        <Border.RenderTransform>
+          <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
+        </Border.RenderTransform>
+        <TextBlock x:Name="SavePopupText"
+                   Text="{DynamicResource Settings.SavedMessage}"
+                   Style="{StaticResource Text.Body}"
+                   TextAlignment="Center"
+                   TextWrapping="Wrap"/>
+      </Border>
+    </Grid>
+
+    <!-- Unsaved changes popup -->
+    <Grid x:Name="UnsavedPopupOverlay"
+          Grid.RowSpan="2"
+          Background="#66000000"
+          Visibility="Collapsed"
+          Opacity="0"
+          IsHitTestVisible="True">
+      <Border x:Name="UnsavedPopupCard"
+              Style="{StaticResource Card.Glass}"
+              Width="440"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Padding="20"
+              RenderTransformOrigin="0.5,0.5">
+        <Border.RenderTransform>
+          <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
+        </Border.RenderTransform>
+        <StackPanel>
+          <TextBlock Text="{DynamicResource Settings.UnsavedTitle}" Style="{StaticResource Text.H2}" TextAlignment="Center"/>
+          <TextBlock Text="{DynamicResource Settings.UnsavedMessage}" Style="{StaticResource Text.Body}" TextAlignment="Center" TextWrapping="Wrap" Margin="0,8,0,0"/>
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,0">
+            <Button Content="✕" Width="44" Height="44" Click="UnsavedCancel_Click" Style="{StaticResource Button.Glass}" ToolTip="{DynamicResource Settings.UnsavedCancel}"/>
+            <Button Content="✓" Width="44" Height="44" Margin="10,0,0,0" Click="UnsavedConfirm_Click" Style="{StaticResource Button.Primary}" ToolTip="{DynamicResource Settings.UnsavedConfirm}"/>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Grid>
+</UserControl>

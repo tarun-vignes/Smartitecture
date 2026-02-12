@@ -10,7 +10,17 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Padding="16">
+    <Page.Resources>
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="12"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Padding="16" MaxWidth="1000" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -18,66 +28,76 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <TextBlock Text="Smartitecture Chat" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,16"/>
+        <StackPanel Margin="0,0,0,16">
+            <TextBlock Text="Smartitecture Chat" Style="{StaticResource TitleTextBlockStyle}"/>
+            <TextBlock Text="Ask anything or describe what you need help with." Style="{StaticResource BodyTextBlockStyle}" Opacity="0.8"/>
+        </StackPanel>
 
         <!-- Scrollable chat message area with message bubbles -->
-        <ScrollViewer Grid.Row="1" Padding="0,0,0,16">
-            <!-- ItemsControl for displaying chat messages with data binding -->
-            <ItemsControl ItemsSource="{x:Bind ViewModel.Messages}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Padding="12" Margin="0,0,0,12">
+            <ScrollViewer>
+                <!-- ItemsControl for displaying chat messages with data binding -->
+                <ItemsControl ItemsSource="{x:Bind ViewModel.Messages}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <!-- Avatar -->
-                            <PersonPicture Width="32" Height="32"
-                                          Margin="0,0,8,0"
-                                          ProfilePicture="{Binding AvatarUri}"/>
+                                <!-- Avatar -->
+                                <PersonPicture Width="32" Height="32"
+                                              Margin="0,0,8,0"
+                                              ProfilePicture="{Binding AvatarUri}"/>
 
-                            <!-- Message Bubble -->
-                            <Border Grid.Column="1"
-                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="8"
-                                    Padding="12">
-                                <TextBlock Text="{Binding Content}"
-                                           TextWrapping="Wrap"/>
-                            </Border>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                                <!-- Message Bubble -->
+                                <Border Grid.Column="1"
+                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="12"
+                                        Padding="12"
+                                        MaxWidth="720">
+                                    <TextBlock Text="{Binding Content}"
+                                               TextWrapping="Wrap"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
 
         <!-- Bottom input area with text box and buttons -->
-        <Grid Grid.Row="2" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Padding="12">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>      <!-- Text input takes most space -->
-                <ColumnDefinition Width="Auto"/>   <!-- Voice button -->
-                <ColumnDefinition Width="Auto"/>   <!-- Send button -->
-            </Grid.ColumnDefinitions>
+        <Border Grid.Row="2" Style="{StaticResource CardBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="InputBox"
-                     PlaceholderText="Type a message..."
-                     Text="{x:Bind ViewModel.InputText, Mode=TwoWay}"
-                     KeyDown="InputBox_KeyDown"/>
+                <TextBox x:Name="InputBox"
+                         PlaceholderText="Type a message..."
+                         Text="{x:Bind ViewModel.InputText, Mode=TwoWay}"
+                         KeyDown="InputBox_KeyDown"/>
 
-            <Button Grid.Column="1"
-                    Margin="8,0,0,0"
-                    Click="VoiceButton_Click">
-                <FontIcon Glyph="&#xE720;"/>
-            </Button>
+                <Button Grid.Column="1"
+                        Margin="8,0,0,0"
+                        Click="VoiceButton_Click"
+                        ToolTipService.ToolTip="Voice input">
+                    <FontIcon Glyph="&#xE720;"/>
+                </Button>
 
-            <Button Grid.Column="2"
-                    Margin="8,0,0,0"
-                    Style="{StaticResource AccentButtonStyle}"
-                    Click="SendButton_Click">
-                <FontIcon Glyph="&#xE724;"/>
-            </Button>
-        </Grid>
+                <Button Grid.Column="2"
+                        Margin="8,0,0,0"
+                        Style="{StaticResource AccentButtonStyle}"
+                        Click="SendButton_Click"
+                        ToolTipService.ToolTip="Send">
+                    <FontIcon Glyph="&#xE724;"/>
+                </Button>
+            </Grid>
+        </Border>
     </Grid>
 </Page>
