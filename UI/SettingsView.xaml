@@ -49,73 +49,73 @@
               <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                 <TextBlock Text="{DynamicResource Settings.Language}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
                 <ComboBox x:Name="LanguageComboBox" Width="200" SelectionChanged="LanguageComboBox_SelectionChanged" Style="{StaticResource ComboBox.Glass}">
-                  <ComboBoxItem Tag="af-ZA" Content="Afrikaans"/>
-                  <ComboBoxItem Tag="am-ET" Content="Amharic"/>
-                  <ComboBoxItem Tag="ar" Content="Arabic"/>
-                  <ComboBoxItem Tag="az-Latn-AZ" Content="Azerbaijani"/>
-                  <ComboBoxItem Tag="eu-ES" Content="Basque"/>
-                  <ComboBoxItem Tag="bn-BD" Content="Bengali"/>
-                  <ComboBoxItem Tag="bg-BG" Content="Bulgarian"/>
-                  <ComboBoxItem Tag="my-MM" Content="Burmese"/>
-                  <ComboBoxItem Tag="ca-ES" Content="Catalan"/>
-                  <ComboBoxItem Tag="zh-CN" Content="Chinese (Simplified)"/>
-                  <ComboBoxItem Tag="zh-TW" Content="Chinese (Traditional)"/>
-                  <ComboBoxItem Tag="hr-HR" Content="Croatian"/>
-                  <ComboBoxItem Tag="cs-CZ" Content="Czech"/>
-                  <ComboBoxItem Tag="da-DK" Content="Danish"/>
-                  <ComboBoxItem Tag="nl-NL" Content="Dutch"/>
-                  <ComboBoxItem Tag="en-US" Content="English (US)"/>
-                  <ComboBoxItem Tag="en-GB" Content="English (UK)"/>
-                  <ComboBoxItem Tag="en-CA" Content="English (Canada)"/>
-                  <ComboBoxItem Tag="en-AU" Content="English (Australia)"/>
-                  <ComboBoxItem Tag="en-IN" Content="English (India)"/>
-                  <ComboBoxItem Tag="et-EE" Content="Estonian"/>
-                  <ComboBoxItem Tag="fil-PH" Content="Filipino"/>
-                  <ComboBoxItem Tag="fi-FI" Content="Finnish"/>
-                  <ComboBoxItem Tag="fr-FR" Content="French"/>
-                  <ComboBoxItem Tag="gl-ES" Content="Galician"/>
-                  <ComboBoxItem Tag="de-DE" Content="German"/>
-                  <ComboBoxItem Tag="el-GR" Content="Greek"/>
-                  <ComboBoxItem Tag="gu-IN" Content="Gujarati"/>
-                  <ComboBoxItem Tag="he-IL" Content="Hebrew"/>
-                  <ComboBoxItem Tag="hi-IN" Content="Hindi"/>
-                  <ComboBoxItem Tag="hu-HU" Content="Hungarian"/>
-                  <ComboBoxItem Tag="is-IS" Content="Icelandic"/>
-                  <ComboBoxItem Tag="id-ID" Content="Indonesian"/>
-                  <ComboBoxItem Tag="it-IT" Content="Italian"/>
-                  <ComboBoxItem Tag="ja-JP" Content="Japanese"/>
-                  <ComboBoxItem Tag="kn-IN" Content="Kannada"/>
-                  <ComboBoxItem Tag="km-KH" Content="Khmer"/>
-                  <ComboBoxItem Tag="ko-KR" Content="Korean"/>
-                  <ComboBoxItem Tag="lv-LV" Content="Latvian"/>
-                  <ComboBoxItem Tag="lt-LT" Content="Lithuanian"/>
-                  <ComboBoxItem Tag="ms-MY" Content="Malay"/>
-                  <ComboBoxItem Tag="ml-IN" Content="Malayalam"/>
-                  <ComboBoxItem Tag="mr-IN" Content="Marathi"/>
-                  <ComboBoxItem Tag="ne-NP" Content="Nepali"/>
-                  <ComboBoxItem Tag="nb-NO" Content="Norwegian"/>
-                  <ComboBoxItem Tag="fa-IR" Content="Persian"/>
-                  <ComboBoxItem Tag="pl-PL" Content="Polish"/>
-                  <ComboBoxItem Tag="pt-PT" Content="Portuguese (Portugal)"/>
-                  <ComboBoxItem Tag="pt-BR" Content="Portuguese (Brazil)"/>
-                  <ComboBoxItem Tag="pa-IN" Content="Punjabi"/>
-                  <ComboBoxItem Tag="ro-RO" Content="Romanian"/>
-                  <ComboBoxItem Tag="ru-RU" Content="Russian"/>
-                  <ComboBoxItem Tag="sr-RS" Content="Serbian"/>
-                  <ComboBoxItem Tag="si-LK" Content="Sinhala"/>
-                  <ComboBoxItem Tag="sk-SK" Content="Slovak"/>
-                  <ComboBoxItem Tag="sl-SI" Content="Slovenian"/>
-                  <ComboBoxItem Tag="es-ES" Content="Spanish"/>
-                  <ComboBoxItem Tag="sw-KE" Content="Swahili"/>
-                  <ComboBoxItem Tag="sv-SE" Content="Swedish"/>
-                  <ComboBoxItem Tag="ta-IN" Content="Tamil"/>
-                  <ComboBoxItem Tag="te-IN" Content="Telugu"/>
-                  <ComboBoxItem Tag="th-TH" Content="Thai"/>
-                  <ComboBoxItem Tag="tr-TR" Content="Turkish"/>
-                  <ComboBoxItem Tag="uk-UA" Content="Ukrainian"/>
-                  <ComboBoxItem Tag="ur-PK" Content="Urdu"/>
-                  <ComboBoxItem Tag="vi-VN" Content="Vietnamese"/>
-                  <ComboBoxItem Tag="zu-ZA" Content="Zulu"/>
+                  <ComboBoxItem Tag="af-ZA" Content="{DynamicResource Lang.Afrikaans}"/>
+                  <ComboBoxItem Tag="am-ET" Content="{DynamicResource Lang.Amharic}"/>
+                  <ComboBoxItem Tag="ar" Content="{DynamicResource Lang.Arabic}"/>
+                  <ComboBoxItem Tag="az-Latn-AZ" Content="{DynamicResource Lang.Azerbaijani}"/>
+                  <ComboBoxItem Tag="eu-ES" Content="{DynamicResource Lang.Basque}"/>
+                  <ComboBoxItem Tag="bn-BD" Content="{DynamicResource Lang.Bengali}"/>
+                  <ComboBoxItem Tag="bg-BG" Content="{DynamicResource Lang.Bulgarian}"/>
+                  <ComboBoxItem Tag="my-MM" Content="{DynamicResource Lang.Burmese}"/>
+                  <ComboBoxItem Tag="ca-ES" Content="{DynamicResource Lang.Catalan}"/>
+                  <ComboBoxItem Tag="zh-CN" Content="{DynamicResource Lang.ChineseSimplified}"/>
+                  <ComboBoxItem Tag="zh-TW" Content="{DynamicResource Lang.ChineseTraditional}"/>
+                  <ComboBoxItem Tag="hr-HR" Content="{DynamicResource Lang.Croatian}"/>
+                  <ComboBoxItem Tag="cs-CZ" Content="{DynamicResource Lang.Czech}"/>
+                  <ComboBoxItem Tag="da-DK" Content="{DynamicResource Lang.Danish}"/>
+                  <ComboBoxItem Tag="nl-NL" Content="{DynamicResource Lang.Dutch}"/>
+                  <ComboBoxItem Tag="en-US" Content="{DynamicResource Lang.EnglishUS}"/>
+                  <ComboBoxItem Tag="en-GB" Content="{DynamicResource Lang.EnglishUK}"/>
+                  <ComboBoxItem Tag="en-CA" Content="{DynamicResource Lang.EnglishCanada}"/>
+                  <ComboBoxItem Tag="en-AU" Content="{DynamicResource Lang.EnglishAustralia}"/>
+                  <ComboBoxItem Tag="en-IN" Content="{DynamicResource Lang.EnglishIndia}"/>
+                  <ComboBoxItem Tag="et-EE" Content="{DynamicResource Lang.Estonian}"/>
+                  <ComboBoxItem Tag="fil-PH" Content="{DynamicResource Lang.Filipino}"/>
+                  <ComboBoxItem Tag="fi-FI" Content="{DynamicResource Lang.Finnish}"/>
+                  <ComboBoxItem Tag="fr-FR" Content="{DynamicResource Lang.French}"/>
+                  <ComboBoxItem Tag="gl-ES" Content="{DynamicResource Lang.Galician}"/>
+                  <ComboBoxItem Tag="de-DE" Content="{DynamicResource Lang.German}"/>
+                  <ComboBoxItem Tag="el-GR" Content="{DynamicResource Lang.Greek}"/>
+                  <ComboBoxItem Tag="gu-IN" Content="{DynamicResource Lang.Gujarati}"/>
+                  <ComboBoxItem Tag="he-IL" Content="{DynamicResource Lang.Hebrew}"/>
+                  <ComboBoxItem Tag="hi-IN" Content="{DynamicResource Lang.Hindi}"/>
+                  <ComboBoxItem Tag="hu-HU" Content="{DynamicResource Lang.Hungarian}"/>
+                  <ComboBoxItem Tag="is-IS" Content="{DynamicResource Lang.Icelandic}"/>
+                  <ComboBoxItem Tag="id-ID" Content="{DynamicResource Lang.Indonesian}"/>
+                  <ComboBoxItem Tag="it-IT" Content="{DynamicResource Lang.Italian}"/>
+                  <ComboBoxItem Tag="ja-JP" Content="{DynamicResource Lang.Japanese}"/>
+                  <ComboBoxItem Tag="kn-IN" Content="{DynamicResource Lang.Kannada}"/>
+                  <ComboBoxItem Tag="km-KH" Content="{DynamicResource Lang.Khmer}"/>
+                  <ComboBoxItem Tag="ko-KR" Content="{DynamicResource Lang.Korean}"/>
+                  <ComboBoxItem Tag="lv-LV" Content="{DynamicResource Lang.Latvian}"/>
+                  <ComboBoxItem Tag="lt-LT" Content="{DynamicResource Lang.Lithuanian}"/>
+                  <ComboBoxItem Tag="ms-MY" Content="{DynamicResource Lang.Malay}"/>
+                  <ComboBoxItem Tag="ml-IN" Content="{DynamicResource Lang.Malayalam}"/>
+                  <ComboBoxItem Tag="mr-IN" Content="{DynamicResource Lang.Marathi}"/>
+                  <ComboBoxItem Tag="ne-NP" Content="{DynamicResource Lang.Nepali}"/>
+                  <ComboBoxItem Tag="nb-NO" Content="{DynamicResource Lang.Norwegian}"/>
+                  <ComboBoxItem Tag="fa-IR" Content="{DynamicResource Lang.Persian}"/>
+                  <ComboBoxItem Tag="pl-PL" Content="{DynamicResource Lang.Polish}"/>
+                  <ComboBoxItem Tag="pt-PT" Content="{DynamicResource Lang.PortuguesePortugal}"/>
+                  <ComboBoxItem Tag="pt-BR" Content="{DynamicResource Lang.PortugueseBrazil}"/>
+                  <ComboBoxItem Tag="pa-IN" Content="{DynamicResource Lang.Punjabi}"/>
+                  <ComboBoxItem Tag="ro-RO" Content="{DynamicResource Lang.Romanian}"/>
+                  <ComboBoxItem Tag="ru-RU" Content="{DynamicResource Lang.Russian}"/>
+                  <ComboBoxItem Tag="sr-RS" Content="{DynamicResource Lang.Serbian}"/>
+                  <ComboBoxItem Tag="si-LK" Content="{DynamicResource Lang.Sinhala}"/>
+                  <ComboBoxItem Tag="sk-SK" Content="{DynamicResource Lang.Slovak}"/>
+                  <ComboBoxItem Tag="sl-SI" Content="{DynamicResource Lang.Slovenian}"/>
+                  <ComboBoxItem Tag="es-ES" Content="{DynamicResource Lang.Spanish}"/>
+                  <ComboBoxItem Tag="sw-KE" Content="{DynamicResource Lang.Swahili}"/>
+                  <ComboBoxItem Tag="sv-SE" Content="{DynamicResource Lang.Swedish}"/>
+                  <ComboBoxItem Tag="ta-IN" Content="{DynamicResource Lang.Tamil}"/>
+                  <ComboBoxItem Tag="te-IN" Content="{DynamicResource Lang.Telugu}"/>
+                  <ComboBoxItem Tag="th-TH" Content="{DynamicResource Lang.Thai}"/>
+                  <ComboBoxItem Tag="tr-TR" Content="{DynamicResource Lang.Turkish}"/>
+                  <ComboBoxItem Tag="uk-UA" Content="{DynamicResource Lang.Ukrainian}"/>
+                  <ComboBoxItem Tag="ur-PK" Content="{DynamicResource Lang.Urdu}"/>
+                  <ComboBoxItem Tag="vi-VN" Content="{DynamicResource Lang.Vietnamese}"/>
+                  <ComboBoxItem Tag="zu-ZA" Content="{DynamicResource Lang.Zulu}"/>
                 </ComboBox>
               </StackPanel>
 

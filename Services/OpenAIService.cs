@@ -23,7 +23,7 @@ namespace Smartitecture.Services
             _knowledgeBase = new KnowledgeBaseService();
         }
 
-        public async Task<string> GetResponseAsync(string message, List<ConversationMessage>? conversationHistory = null)
+        public async Task<string> GetResponseAsync(string message, List<ConversationMessage>? conversationHistory = null, string? systemPrompt = null)
         {
             try
             {
@@ -39,6 +39,7 @@ namespace Smartitecture.Services
                 
                 // System prompt for accuracy and helpfulness
                 messages.Add(new SystemChatMessage(
+                    systemPrompt ??
                     "You are Smartitecture AI Assistant, a helpful and accurate AI that can help with system automation, " +
                     "programming, and general questions. Be concise, accurate, and helpful. If you're not sure about " +
                     "something, say so rather than guessing."
@@ -70,13 +71,11 @@ namespace Smartitecture.Services
             }
             catch (Exception ex)
             {
-                // Fallback to knowledge base or error message
-                return $"I'm having trouble connecting to OpenAI right now. Error: {ex.Message}\n\n" +
-                       "Please check your API key configuration or try again later.";
+                return $"This model is temporarily unavailable. ({ex.Message})";
             }
         }
 
-        public async Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, List<ConversationMessage>? conversationHistory = null)
+        public async Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, List<ConversationMessage>? conversationHistory = null, string? systemPrompt = null)
         {
             try
             {
@@ -103,7 +102,7 @@ namespace Smartitecture.Services
                 var messages = new List<ChatMessage>();
                 
                 messages.Add(new SystemChatMessage(
-                    "You are Smartitecture AI Assistant. Be helpful, accurate, and concise."
+                    systemPrompt ?? "You are Smartitecture AI Assistant. Be helpful, accurate, and concise."
                 ));
 
                 if (conversationHistory != null && conversationHistory.Any())
@@ -139,7 +138,7 @@ namespace Smartitecture.Services
             }
             catch (Exception ex)
             {
-                var errorMessage = $"OpenAI connection error: {ex.Message}";
+                var errorMessage = $"Model unavailable: {ex.Message}";
                 onTokenReceived?.Invoke(errorMessage);
                 return errorMessage;
             }

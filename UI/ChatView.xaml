@@ -44,16 +44,9 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="{DynamicResource Chat.ModelLabel}" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <ComboBox Name="ModelSelector" Width="260" SelectionChanged="ModelSelector_SelectionChanged" Style="{StaticResource ComboBox.Glass}">
-                                    <ComboBoxItem Content="Advanced AI Assistant" IsSelected="True"/>
-                                    <ComboBoxItem Content="OpenAI GPT-4"/>
-                                    <ComboBoxItem Content="OpenAI GPT-3.5-Turbo"/>
-                                    <ComboBoxItem Content="Azure OpenAI GPT-4"/>
-                                    <ComboBoxItem Content="Anthropic Claude"/>
-                                    <ComboBoxItem Content="Google Gemini"/>
-                                    <ComboBoxItem Content="Local Ollama Model"/>
-                                    <ComboBoxItem Content="System Expert Mode"/>
-                                </ComboBox>
+                                <ComboBox Name="ModelSelector" Width="240" SelectionChanged="ModelSelector_SelectionChanged" Style="{StaticResource ComboBox.Glass}"/>
+                                <TextBlock Text="{DynamicResource Chat.ModeLabel}" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" Margin="16,0,8,0"/>
+                                <ComboBox Name="ModeSelector" Width="150" SelectionChanged="ModeSelector_SelectionChanged" Style="{StaticResource ComboBox.Glass}"/>
                                 <TextBlock Name="ModelStatusText" Text="{DynamicResource Chat.ModelLoading}" Style="{StaticResource Text.Subtle}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center">
@@ -125,85 +118,173 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="{DynamicResource Chat.HistoryTitle}"
-                                   Style="{StaticResource Text.H2}" Margin="0,0,0,10"/>
+                        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                            <TextBlock Text="{DynamicResource Chat.HistoryTitle}"
+                                       Style="{StaticResource Text.H2}" Margin="0,0,0,8"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="HistoryTabButton" Content="{DynamicResource Chat.HistoryTab}"
+                                        MinWidth="110" Height="30"
+                                        Style="{StaticResource Button.Glass}" Click="HistoryTabButton_Click" Margin="0,0,8,0"/>
+                                <Button x:Name="DeletedTabButton" Content="{DynamicResource Chat.DeletedTab}"
+                                        MinWidth="110" Height="30"
+                                        Style="{StaticResource Button.Glass}" Click="DeletedTabButton_Click"/>
+                            </StackPanel>
+                        </StackPanel>
 
                         <Border Grid.Row="1" Style="{StaticResource Card.Glass}" Padding="8" Margin="0,0,0,10">
                             <Grid>
-                                <ListBox x:Name="HistoryList" SelectionChanged="HistoryList_SelectionChanged"
-                                         Background="Transparent" BorderThickness="0">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="4">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-                                                <StackPanel Grid.Column="0">
-                                                    <TextBlock Text="{Binding Title}" Style="{StaticResource Text.Body}"/>
-                                                    <TextBlock Text="{Binding Time}" Style="{StaticResource Text.Subtle}"/>
-                                                </StackPanel>
-                                                <Button Grid.Column="1" Content="🗑" Width="30" Height="28"
-                                                        Margin="8,0,0,0"
-                                                        ToolTip="{DynamicResource Chat.HistoryDelete}"
-                                                        Style="{StaticResource Button.Glass}"
-                                                        Tag="{Binding Id}"
-                                                        Click="DeleteHistory_Click"/>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                                <TextBlock x:Name="HistoryEmptyText" Text="{DynamicResource Chat.HistoryEmpty}"
-                                           Style="{StaticResource Text.Subtle}" HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <Grid x:Name="HistoryListContainer">
+                                    <ListBox x:Name="HistoryList" SelectionChanged="HistoryList_SelectionChanged"
+                                             Background="Transparent" BorderThickness="0">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="4">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock Text="{Binding Title}" Style="{StaticResource Text.Body}"/>
+                                                        <TextBlock Text="{Binding Time}" Style="{StaticResource Text.Subtle}"/>
+                                                    </StackPanel>
+                                                    <Button Grid.Column="1" Content="🗑" Width="30" Height="28"
+                                                            Margin="8,0,0,0"
+                                                            ToolTip="{DynamicResource Chat.HistoryDelete}"
+                                                            Style="{StaticResource Button.Glass}"
+                                                            Tag="{Binding Id}"
+                                                            Click="DeleteHistory_Click"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <TextBlock x:Name="HistoryEmptyText" Text="{DynamicResource Chat.HistoryEmpty}"
+                                               Style="{StaticResource Text.Subtle}" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" Visibility="Collapsed"/>
+                                </Grid>
+
+                                <Grid x:Name="DeletedListContainer" Visibility="Collapsed">
+                                    <ListBox x:Name="DeletedList" SelectionChanged="DeletedList_SelectionChanged"
+                                             Background="Transparent" BorderThickness="0">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="4">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock Text="{Binding Title}" Style="{StaticResource Text.Body}"/>
+                                                        <TextBlock Text="{Binding Time}" Style="{StaticResource Text.Subtle}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
+                                                        <Button Content="↩" Width="30" Height="28" Margin="0,0,6,0"
+                                                                ToolTip="{DynamicResource Chat.Recover}"
+                                                                Style="{StaticResource Button.Glass}"
+                                                                Tag="{Binding Id}"
+                                                                Click="RecoverDeleted_Click"/>
+                                                        <Button Content="🗑" Width="30" Height="28"
+                                                                ToolTip="{DynamicResource Chat.DeleteForever}"
+                                                                Style="{StaticResource Button.Glass}"
+                                                                Tag="{Binding Id}"
+                                                                Click="DeleteForever_Click"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <TextBlock x:Name="DeletedEmptyText" Text="{DynamicResource Chat.DeletedEmpty}"
+                                               Style="{StaticResource Text.Subtle}" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" Visibility="Collapsed"/>
+                                </Grid>
                             </Grid>
                         </Border>
 
                         <Border Grid.Row="2" Style="{StaticResource Card.Glass}" Padding="8">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <StackPanel x:Name="HistoryPreviewPanel" Margin="4"/>
-                            </ScrollViewer>
+                            <Grid>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <StackPanel x:Name="HistoryPreviewPanel" Margin="4"/>
+                                </ScrollViewer>
+
+                                <!-- Delete confirmation (fills preview box only) -->
+                                <Border x:Name="DeleteConfirmCard"
+                                        Background="{DynamicResource Brush.Surface}"
+                                        BorderBrush="{DynamicResource Brush.GlassBorder}"
+                                        BorderThickness="1"
+                                        CornerRadius="12"
+                                        Padding="16"
+                                        Visibility="Collapsed"
+                                        Opacity="0"
+                                        Panel.ZIndex="2"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        RenderTransformOrigin="0.5,0.5">
+                                    <Border.RenderTransform>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Border.RenderTransform>
+                                    <Grid>
+                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="260">
+                                            <TextBlock x:Name="DeleteConfirmTitleText" Text="{DynamicResource Chat.DeleteTitle}" Style="{StaticResource Text.H2}" TextAlignment="Center" Margin="0,0,0,6"/>
+                                            <TextBlock x:Name="DeleteConfirmWarningText" Text="{DynamicResource Chat.DeleteWarning}" Style="{StaticResource Text.Body}" TextWrapping="Wrap" TextAlignment="Center"/>
+                                            <TextBlock x:Name="DeleteConfirmRecoveryText" Text="{DynamicResource Chat.DeleteRecovery}" Style="{StaticResource Text.Caption}" Margin="0,8,0,0" TextWrapping="Wrap" TextAlignment="Center"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,12,0,0">
+                                                <Button Content="✖" Width="44" Height="36" Margin="0,0,10,0"
+                                                        ToolTip="{DynamicResource Chat.DeleteCancel}"
+                                                        Style="{StaticResource Button.Glass}" Click="DeleteCancel_Click"/>
+                                                <Button Content="✔" Width="44" Height="36"
+                                                        ToolTip="{DynamicResource Chat.DeleteConfirm}"
+                                                        Style="{StaticResource Button.Primary}" Click="DeleteConfirm_Click"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </Grid>
                         </Border>
 
                         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
                             <Button Content="{DynamicResource Chat.HistoryClose}" Style="{StaticResource Button.Glass}"
                                     Click="HistoryClose_Click" Margin="0,0,8,0"/>
-                            <Button Content="{DynamicResource Chat.HistoryOpen}" Style="{StaticResource Button.Primary}"
+                            <Button x:Name="HistoryOpenButton" Content="{DynamicResource Chat.HistoryOpen}" Style="{StaticResource Button.Primary}"
                                     Click="HistoryOpen_Click"/>
                         </StackPanel>
 
-                        <!-- Delete confirmation popup -->
-                        <Border x:Name="DeleteConfirmCard"
-                                Grid.RowSpan="4"
-                                Width="320"
-                                Padding="16"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource Card.Glass}"
-                                Visibility="Collapsed"
-                                Opacity="0"
-                                Panel.ZIndex="2"
-                                RenderTransformOrigin="0.5,0.5">
-                            <Border.RenderTransform>
-                                <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
-                            </Border.RenderTransform>
-                            <StackPanel>
-                                <TextBlock Text="{DynamicResource Chat.DeleteTitle}" Style="{StaticResource Text.H2}" Margin="0,0,0,6"/>
-                                <TextBlock Text="{DynamicResource Chat.DeleteWarning}" Style="{StaticResource Text.Body}" TextWrapping="Wrap"/>
-                                <TextBlock Text="{DynamicResource Chat.DeleteRecovery}" Style="{StaticResource Text.Caption}" Margin="0,8,0,0" TextWrapping="Wrap"/>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-                                    <Button Content="✖" Width="36" Height="32" Margin="0,0,8,0"
-                                            ToolTip="{DynamicResource Chat.DeleteCancel}"
-                                            Style="{StaticResource Button.Glass}" Click="DeleteCancel_Click"/>
-                                    <Button Content="✔" Width="36" Height="32"
-                                            ToolTip="{DynamicResource Chat.DeleteConfirm}"
-                                            Style="{StaticResource Button.Primary}" Click="DeleteConfirm_Click"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
                     </Grid>
                 </Border>
             </Grid>
+        </Grid>
+
+        <!-- Tool confirmation overlay -->
+        <Grid x:Name="ToolConfirmOverlay"
+              Background="#66000000"
+              Visibility="Collapsed"
+              Opacity="0"
+              IsHitTestVisible="True"
+              Panel.ZIndex="20">
+            <Border x:Name="ToolConfirmCard"
+                    Style="{StaticResource Card.Glass}"
+                    Width="420"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="18"
+                    RenderTransformOrigin="0.5,0.5">
+                <Border.RenderTransform>
+                    <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
+                </Border.RenderTransform>
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Chat.ToolConfirmTitle}" Style="{StaticResource Text.H2}" TextAlignment="Center"/>
+                    <TextBlock x:Name="ToolConfirmMessage"
+                               Text="{DynamicResource Chat.ToolConfirmMessage}"
+                               Style="{StaticResource Text.Body}"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,0">
+                        <Button Content="✕" Width="44" Height="44" Click="ToolConfirmCancel_Click"
+                                Style="{StaticResource Button.Glass}" ToolTip="{DynamicResource Chat.ToolConfirmCancel}"/>
+                        <Button Content="✓" Width="44" Height="44" Margin="10,0,0,0" Click="ToolConfirmConfirm_Click"
+                                Style="{StaticResource Button.Primary}" ToolTip="{DynamicResource Chat.ToolConfirmConfirm}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>

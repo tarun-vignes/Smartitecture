@@ -59,6 +59,8 @@ msbuild.log
 build_out*.txt
 build_err*.txt
 build_check.txt
+_run_app.out
+_run_app.err
 *.bak
 backend-python/venv/
 backend-python/.venv/

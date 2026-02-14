@@ -50,12 +50,38 @@ namespace Smartitecture.Services
             }
         }
 
+        public IReadOnlyList<ChatHistorySession> GetDeletedSessions()
+        {
+            lock (_lock)
+            {
+                PurgeExpiredDeletions();
+                return _cache
+                    .Where(s => s.IsDeleted)
+                    .OrderByDescending(s => s.DeletedAt ?? s.LastUpdated)
+                    .ToList();
+            }
+        }
+
         public ChatHistorySession? GetSession(string id)
         {
             lock (_lock)
             {
                 var session = _cache.FirstOrDefault(s => s.Id == id);
                 if (session == null || session.IsDeleted)
+                {
+                    return null;
+                }
+
+                return session;
+            }
+        }
+
+        public ChatHistorySession? GetDeletedSession(string id)
+        {
+            lock (_lock)
+            {
+                var session = _cache.FirstOrDefault(s => s.Id == id);
+                if (session == null || !session.IsDeleted)
                 {
                     return null;
                 }
@@ -137,6 +163,35 @@ namespace Smartitecture.Services
                 session.IsDeleted = true;
                 session.DeletedAt = DateTime.Now;
                 SaveInternal();
+            }
+        }
+
+        public void Restore(string sessionId)
+        {
+            lock (_lock)
+            {
+                var session = _cache.FirstOrDefault(s => s.Id == sessionId);
+                if (session == null)
+                {
+                    return;
+                }
+
+                session.IsDeleted = false;
+                session.DeletedAt = null;
+                session.LastUpdated = DateTime.Now;
+                SaveInternal();
+            }
+        }
+
+        public void DeletePermanently(string sessionId)
+        {
+            lock (_lock)
+            {
+                var removed = _cache.RemoveAll(s => s.Id == sessionId);
+                if (removed > 0)
+                {
+                    SaveInternal();
+                }
             }
         }
 

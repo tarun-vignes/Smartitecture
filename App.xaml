@@ -36,7 +36,7 @@
 
             <!-- Typography -->
             <Style x:Key="Text.H1" TargetType="TextBlock">
-                <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI, Arial"/>
+                <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI, Nirmala UI, Microsoft YaHei UI, Meiryo, Malgun Gothic, Arial"/>
                 <Setter Property="FontSize" Value="26"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="Foreground" Value="{DynamicResource Brush.OnSurface}"/>
@@ -46,7 +46,7 @@
                 <Setter Property="FontWeight" Value="SemiBold"/>
             </Style>
             <Style x:Key="Text.Body" TargetType="TextBlock">
-                <Setter Property="FontFamily" Value="Segoe UI Variable Text, Segoe UI, Arial"/>
+                <Setter Property="FontFamily" Value="Segoe UI Variable Text, Segoe UI, Nirmala UI, Microsoft YaHei UI, Meiryo, Malgun Gothic, Arial"/>
                 <Setter Property="FontSize" Value="15"/>
                 <Setter Property="Foreground" Value="{DynamicResource Brush.OnSurface}"/>
                 <Setter Property="Opacity" Value="0.96"/>

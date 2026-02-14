@@ -44,11 +44,28 @@ namespace Smartitecture.Services
         IEnumerable<string> AvailableModels { get; }
 
         /// <summary>
+        /// Gets the current chat mode
+        /// </summary>
+        Smartitecture.Services.Core.AIModeType CurrentMode { get; }
+
+        /// <summary>
+        /// Gets available chat modes
+        /// </summary>
+        IEnumerable<Smartitecture.Services.Core.AIModeType> AvailableModes { get; }
+
+        /// <summary>
         /// Switches to a different AI model
         /// </summary>
         /// <param name="modelName">The name of the model to switch to</param>
         /// <returns>True if successful, false otherwise</returns>
         Task<bool> SwitchModelAsync(string modelName);
+
+        /// <summary>
+        /// Switches to a different chat mode
+        /// </summary>
+        /// <param name="mode">The mode to switch to</param>
+        /// <returns>True if successful, false otherwise</returns>
+        Task<bool> SwitchModeAsync(Smartitecture.Services.Core.AIModeType mode);
 
         /// <summary>
         /// Gets conversation history for a specific conversation
@@ -67,6 +84,11 @@ namespace Smartitecture.Services
         /// Event fired when the AI model is switched
         /// </summary>
         event EventHandler<ModelSwitchedEventArgs>? ModelSwitched;
+
+        /// <summary>
+        /// Event fired when the chat mode is switched
+        /// </summary>
+        event EventHandler<ModeSwitchedEventArgs>? ModeSwitched;
     }
 
     /// <summary>
@@ -88,6 +110,16 @@ namespace Smartitecture.Services
     {
         public string PreviousModel { get; set; } = "";
         public string NewModel { get; set; } = "";
+        public DateTime SwitchTime { get; set; } = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Event arguments for mode switching
+    /// </summary>
+    public class ModeSwitchedEventArgs : EventArgs
+    {
+        public Smartitecture.Services.Core.AIModeType PreviousMode { get; set; }
+        public Smartitecture.Services.Core.AIModeType NewMode { get; set; }
         public DateTime SwitchTime { get; set; } = DateTime.UtcNow;
     }
 }
