@@ -1,15 +1,18 @@
-﻿# Smartitecture - AI-Powered System Intelligence (In Development)
+# Smartitecture - AI-Powered System Intelligence (In Development)
 
-Premium WPF desktop assistant with a glassmorphic UI, startup wizard, and modular AI orchestration across LUMEN (general), FORTIS (security), and NEXA (performance).
+Smartitecture is a premium Windows WPF desktop assistant with a glassmorphic UI, a guided startup wizard, and modular AI orchestration across LUMEN (general), FORTIS (security), and NEXA (performance).
 
 Status: In active development. Expect frequent changes and rapid iteration.
 
-## Features
+## Key Features
 
-- Modern UI: glassmorphism, gradient backgrounds, smooth animations, premium typography
-- Startup Wizard: first-time setup, readiness checks, quick configuration
-- AI Orchestrator: multi-model switching; cloud and local placeholders
-- Security and Performance: planned connectors for Defender, Firewall, and basic metrics
+- Modern UI: glassmorphism, gradients, smooth transitions, premium typography
+- Live System Insights: CPU, memory, disk, and network tiles
+- Chat Assistant: multi-model selector, chat history, deleted chat recovery
+- AI Modes: LUMEN (general), FORTIS (security), NEXA (performance)
+- Themes: Light, Dark, System
+- Localization: app strings via resource dictionaries
+- Safety: confirmations for destructive system actions
 
 ## Getting Started
 
@@ -18,19 +21,44 @@ Prerequisites
 - .NET SDK 8.0+
 - Visual Studio 2022 or VS Code with C# Dev Kit
 
-Build and Run
-- git clone https://github.com/tarun-vignes/Smartitecture.git
-- cd Smartitecture
-- dotnet restore Smartitecture.csproj
-- dotnet build -c Debug Smartitecture.csproj
-- dotnet run --project Smartitecture.csproj
+Build and Run (App)
+```powershell
+git clone https://github.com/tarun-vignes/Smartitecture.git
+cd Smartitecture
+dotnet restore Smartitecture.csproj
+dotnet build -c Debug Smartitecture.csproj
+dotnet run --project Smartitecture.csproj
+```
+
+## Optional Local Backend
+
+The app can connect to a local backend API (for cloud model access). This is optional and can be replaced with other providers later.
+
+Set Environment Variables
+```powershell
+$env:OPENAI_API_KEY="YOUR_OPENAI_KEY"
+# Optional: protect backend with a shared key
+$env:SMARTITECTURE_BACKEND_KEY="YOUR_BACKEND_KEY"
+```
+
+Run Backend
+```powershell
+dotnet run --project .\backend\Smartitecture.Backend\Smartitecture.Backend.csproj -- --urls http://127.0.0.1:8089
+```
+
+Point the App to Backend
+```powershell
+$env:Backend__BaseUrl="http://127.0.0.1:8089"
+# Only if you set a backend key:
+$env:Backend__ApiKey="YOUR_BACKEND_KEY"
+```
 
 ## Architecture Overview
 
 - App entry: App.xaml -> StartupWindow (welcome and wizard) -> MainWindow (dashboard) -> UI/ChatWindow (assistant)
 - Modes and services: Services/ (Core, Modes, Connectors, Safety, Hardware)
 - UI: MainWindow.xaml, StartupWindow.xaml, UI/ChatWindow.xaml, SettingsWindow.xaml, Controls/AppTopBar.xaml
-- Theme: Dynamic Light, Dark, System via Services/ThemeManager.cs and Resources/Themes/*.xaml
+- Theme: Resources/Themes/*.xaml via Services/ThemeManager.cs
 - Backend: backend/Smartitecture.Backend (optional local API)
 - Website: Website/ (Vite)
 
@@ -79,7 +107,9 @@ Pull Requests
 
 ## Testing
 
-- dotnet test --collect:"XPlat Code Coverage"
+```powershell
+dotnet test --collect:"XPlat Code Coverage"
+```
 
 ## Roadmap (Short-term)
 
