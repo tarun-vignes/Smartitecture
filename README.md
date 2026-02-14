@@ -1,4 +1,4 @@
-# Smartitecture — AI-Powered System Intelligence (In Development)
+ï»¿# Smartitecture - AI-Powered System Intelligence (In Development)
 
 Premium WPF desktop assistant with a glassmorphic UI, startup wizard, and modular AI orchestration across LUMEN (general), FORTIS (security), and NEXA (performance).
 
@@ -6,10 +6,10 @@ Status: In active development. Expect frequent changes and rapid iteration.
 
 ## Features
 
-- Modern UI: Glassmorphism, gradient backgrounds, smooth animations, premium typography
-- Startup Wizard: First-time setup, readiness checks, quick configuration
-- AI Orchestrator: Multi-model switching; Azure OpenAI/local placeholders
-- Security + Performance: Planned connectors for Defender/Firewall/basic metrics
+- Modern UI: glassmorphism, gradient backgrounds, smooth animations, premium typography
+- Startup Wizard: first-time setup, readiness checks, quick configuration
+- AI Orchestrator: multi-model switching; cloud and local placeholders
+- Security and Performance: planned connectors for Defender, Firewall, and basic metrics
 
 ## Getting Started
 
@@ -27,29 +27,37 @@ Build and Run
 
 ## Architecture Overview
 
-- App entry: App.xaml ? StartupWindow (welcome/wizard) ? MainWindow (dashboard) ? UI/ChatWindow (assistant)
-- Modes and services: see Services/ (Core, Modes, Connectors, Safety, Hardware)
+- App entry: App.xaml -> StartupWindow (welcome and wizard) -> MainWindow (dashboard) -> UI/ChatWindow (assistant)
+- Modes and services: Services/ (Core, Modes, Connectors, Safety, Hardware)
 - UI: MainWindow.xaml, StartupWindow.xaml, UI/ChatWindow.xaml, SettingsWindow.xaml, Controls/AppTopBar.xaml
-- Theme: Dynamic Light/Dark/System via Services/ThemeManager.cs and Resources/Themes/*.xaml
+- Theme: Dynamic Light, Dark, System via Services/ThemeManager.cs and Resources/Themes/*.xaml
+- Backend: backend/Smartitecture.Backend (optional local API)
+- Website: Website/ (Vite)
 
 Key Files
-- Controls/AppTopBar.xaml: Shared top bar with back/home/settings
-- Services/NavigationService.cs: Fade transitions for navigation
-- Services/ThemeManager.cs: Applies theme dictionaries (Light/Dark/System)
-- StartupWindow.xaml: Welcome + readiness and quick setup
-- MainWindow.xaml: Clean dashboard with quick actions and tips
-- UI/ChatWindow.xaml: Chat experience with model selector and typing indicator
+- Controls/AppTopBar.xaml: shared top bar with back, home, settings
+- Services/NavigationService.cs: fade transitions for navigation
+- Services/ThemeManager.cs: applies theme dictionaries
+- StartupWindow.xaml: welcome and readiness setup
+- MainWindow.xaml: dashboard with quick actions
+- UI/ChatWindow.xaml: chat experience with model selector and typing indicator
+
+## Repo Layout
+
+- archive/legacy: historical experiments and older code paths
+- tools/maintenance: one-off fix scripts
 
 ## Team Workflow
 
 Branching
-- pplication: integration branch for app changes
-- eature/*: short-lived feature branches
-- Create PRs from eature/* to pplication
+- main: stable integration
+- application: app-only work
+- website: site-only work
+- feature/*: short-lived feature branches
+- Create PRs from feature/* to application or website, then merge to main
 
 Commits
-- Use Conventional Commits: eat:, ix:, docs:, 
-efactor:, chore:
+- Use Conventional Commits: feat:, fix:, docs:, refactor:, chore:
 
 Pull Requests
 - Include description, validation steps, and screenshots for UI changes
@@ -57,13 +65,13 @@ Pull Requests
 
 ## Coding Conventions
 
-- C# latest, ImplicitUsings + Nullable enabled (see Directory.Build.props)
-- Indentation 4 spaces; one type per file; filename matches type
-- Naming: PascalCase (types/methods), camelCase (locals/params), _camelCase (private fields)
+- C# latest, ImplicitUsings and Nullable enabled (see Directory.Build.props)
+- Indentation: 4 spaces; one type per file; filename matches type
+- Naming: PascalCase (types and methods), camelCase (locals and params), _camelCase (private fields)
 - Async methods end with Async
 - XAML: keep UI in XAML; logic in code-behind or ViewModels with thin code-behind
 
-## Configuration & Secrets
+## Configuration and Secrets
 
 - Do not commit secrets. Use environment variables or dotnet user-secrets
 - API Keys: OPENAI_API_KEY, ANTHROPIC_API_KEY
@@ -71,6 +79,7 @@ Pull Requests
 
 ## Testing
 
+- dotnet test --collect:"XPlat Code Coverage"
 
 ## Roadmap (Short-term)
 
@@ -78,9 +87,3 @@ Pull Requests
 - Live theme switching across windows
 - Richer health checks and diagnostics
 - Fluent icons and micro-interactions
-
-## License
-
-This project is in development; license to be finalized.
-
-For repo-wide conventions and deeper architecture details, see AGENTS.md.

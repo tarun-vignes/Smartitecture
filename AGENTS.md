@@ -1,23 +1,23 @@
-# Repository Guidelines
+﻿# Repository Guidelines
 
 ## Project Structure & Module Organization
 - `Smartitecture.sln`, `Smartitecture.csproj`: WPF app entry (net8.0-windows).
-- `Application/`: UI XAML pages, ViewModels, Commands, API adapters.
+- `UI/`: WPF pages and views (XAML + code-behind).
 - `Services/`: AI services and helpers; `Services/Core` (router, enums), `Services/Interfaces` (contracts), `Services/Modes` (LUMEN/FORTIS/NEXA).
-- `Assets/`, `deploy/`, `deployment/`: branding and packaging. `temp-deploy/` is build output.
-- Optional: `Website/` (Vite site), `backend-python/` (experiments).
+- `Assets/`, `deployment/`: branding and packaging scripts.
+- `Website/`: Vite site; `backend/`: local API; `archive/legacy`: historical experiments; `tools/maintenance`: one-off fix scripts.
 
 ## Build, Test, and Development Commands
-- Restore/build: `dotnet restore` • `dotnet build -c Debug`
+- Restore/build: `dotnet restore` and `dotnet build -c Debug`
 - Run app: `dotnet run --project Smartitecture.csproj`
 - Format code: `dotnet format`
-- Website (optional): `cd Website && npm ci && npm run dev` • build: `npm run build`
+- Website (optional): `cd Website && npm ci && npm run dev` â€¢ build: `npm run build`
 
 ## Coding Style & Naming Conventions
 - C# latest with `ImplicitUsings` and `Nullable` enabled (see `Directory.Build.props`).
 - Indentation: 4 spaces. One type per file; filename matches type.
 - Naming: PascalCase (types/methods), camelCase (locals/params), `_camelCase` (private fields), `I*` (interfaces), `*Async` (async methods).
-- XAML: keep UI in `Application/UI`; logic in ViewModels. Keep code-behind thin.
+- XAML: keep UI in `UI/`; logic in ViewModels. Keep code-behind thin.
 
 ## Testing Guidelines
 - Test names: `Class_Method_ShouldBehavior`. Prefer service/command tests over UI. Mock external calls.
@@ -128,3 +128,4 @@
    - `UserConfirmationService.cs` - Approval workflows
    - `AuditLogger.cs` - Complete operation logging
    - `RollbackManager.cs` - Undo system changes
+
