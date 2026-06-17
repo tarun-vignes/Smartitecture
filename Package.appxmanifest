@@ -10,7 +10,7 @@
   <Identity
     Name="Smartitecture"
     Publisher="CN=Smartitecture"
-    Version="1.0.0.0" />
+    Version="1.0.0.1" />
 
   <mp:PhoneIdentity PhoneProductId="4b0c1a7a-5c3e-4b0c-8d8a-7a5c3e4b0c8d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

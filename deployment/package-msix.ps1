@@ -1,7 +1,7 @@
 param(
     [string]$Configuration = "Release",
     [string]$Runtime = "win-x64",
-    [string]$Version = "1.0.0.0",
+    [string]$Version = "1.0.0.1",
     [string]$Publisher = "CN=Smartitecture",
     [string]$OutputPath = "artifacts/msix",
     [string]$CertificatePath = "",

@@ -22,6 +22,7 @@ Use this before every desktop release.
 ## Desktop Install
 
 - Install the MSIX or run the published `Smartitecture.exe`.
+- Confirm beta handoff steps in `docs/release/BETA_TESTING.md` match the package version and backend URL.
 - For dev-signed MSIX builds, trust the `.cer` first. If Windows reports `0x800B0109`, import it into `Cert:\LocalMachine\Root` from an elevated PowerShell window.
 - On a clean machine or fresh Windows user profile, run `.\deployment\qa-clean-machine.ps1 -BackendUrl <url> -BackendApiKey <key> -LaunchApp`.
 - Open Settings > AI Server.

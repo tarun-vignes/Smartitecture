@@ -4,7 +4,7 @@ Use this on a Windows 10/11 machine or fresh Windows user profile before sending
 
 ## Inputs
 
-- MSIX package: `artifacts/msix-beta/Smartitecture-1.0.0.0-win-x64.msix`
+- MSIX package: `artifacts/msix-beta/Smartitecture-1.0.0.1-win-x64.msix`
 - Dev certificate: `artifacts/certs/Smartitecture-dev-signing.cer`
 - Backend URL: `https://smartitecture-backend.onrender.com`
 - Backend API key: the value configured in Render as `SMARTITECTURE_BACKEND_API_KEY`
@@ -22,7 +22,7 @@ Import-Certificate -FilePath .\artifacts\certs\Smartitecture-dev-signing.cer -Ce
 Install the package:
 
 ```powershell
-Add-AppxPackage -Path .\artifacts\msix-beta\Smartitecture-1.0.0.0-win-x64.msix
+Add-AppxPackage -Path .\artifacts\msix-beta\Smartitecture-1.0.0.1-win-x64.msix
 ```
 
 Confirm it is registered:

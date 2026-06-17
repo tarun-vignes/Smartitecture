@@ -131,7 +131,7 @@ Create a signed development MSIX:
 Install locally:
 
 ```powershell
-Add-AppxPackage .\artifacts\msix\Smartitecture-1.0.0.0-win-x64.msix
+Add-AppxPackage .\artifacts\msix\Smartitecture-1.0.0.1-win-x64.msix
 ```
 
 For public release, replace the development certificate with a trusted code-signing certificate and update the manifest publisher to match the certificate subject.
