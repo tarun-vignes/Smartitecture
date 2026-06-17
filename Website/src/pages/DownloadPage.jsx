@@ -1,207 +1,118 @@
 import { motion } from 'framer-motion'
 import './DownloadPage.css'
 
+const packageDetails = [
+  ['Version', '1.0.0.1 beta'],
+  ['Platform', 'Windows 10 / Windows 11'],
+  ['Backend', 'https://smartitecture-backend.onrender.com'],
+  ['Package SHA256', 'F8D6F60785F5A5B10ED4FE63E9821A808E74CF0ACB79143311BAAFA353D3E2ED'],
+  ['Portable ZIP SHA256', 'F632F4D6D3D661F35859D24029D0E149B331CB2169A57E8E7EA47C98E8274374']
+]
+
 function DownloadPage() {
   return (
     <div className="download-page">
-      <section className="hero download-hero">
+      <section className="download-hero">
         <div className="container">
-          <motion.div 
-            className="hero-content"
-            initial={{ opacity: 0, y: 20 }}
+          <motion.div
+            className="download-hero-copy"
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.45 }}
           >
-            <h1>Download Smartitecture</h1>
-            <p>Get your intelligent system assistant today</p>
+            <p className="eyebrow">Beta release</p>
+            <h1>Download Smartitecture for Windows</h1>
+            <p>
+              Use the signed MSIX package for normal beta testing, or the portable ZIP when you need
+              a no-installer build.
+            </p>
           </motion.div>
         </div>
       </section>
-      
+
       <section className="section download-main">
-        <div className="container">
-          <div className="download-grid">
-            <motion.div 
-              className="download-info"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <h2>Smartitecture for Windows</h2>
-              <p className="version">Version 1.0.0</p>
-              <p className="release-date">Released: May 15, 2025</p>
-              <p className="description">
-                Smartitecture is designed to help users understand their computer systems with confidence. 
-                With clear explanations, security protection, and intelligent assistance, Smartitecture makes technology 
-                accessible to everyone.
-              </p>
-              
-              <div className="system-requirements">
-                <h3>System Requirements</h3>
-                <ul>
-                  <li><strong>Operating System:</strong> Windows 10 or Windows 11</li>
-                  <li><strong>Processor:</strong> 1.6 GHz or faster</li>
-                  <li><strong>Memory:</strong> 4 GB RAM</li>
-                  <li><strong>Storage:</strong> 500 MB available space</li>
-                  <li><strong>Internet:</strong> Broadband connection</li>
-                </ul>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              className="download-card"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <div className="download-logo">
-                <div className="logo-icon"></div>
-                <span className="logo-text">Smartitecture</span>
-              </div>
-              
-              <div className="download-buttons">
-                <a href="#" className="button large download-button">
-                  <span className="download-icon">⬇️</span>
-                  Download for Windows
-                </a>
-                <p className="file-info">Smartitecture_Setup.exe (45 MB)</p>
-              </div>
-              
-              <div className="alternative-downloads">
-                <h3>Alternative Downloads</h3>
-                <ul>
-                  <li>
-                    <a href="https://www.microsoft.com/store/search?q=Smartitecture" className="alt-download-link" target="_blank" rel="noopener noreferrer">
-                      Microsoft Store
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="alt-download-link">
-                      Portable Version (ZIP)
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="alt-download-link">
-                      Previous Versions
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </motion.div>
-          </div>
+        <div className="container download-layout">
+          <motion.article
+            className="download-card primary-download"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.1 }}
+          >
+            <h2>Recommended beta package</h2>
+            <p>
+              The current release artifact is generated locally and signed for beta validation. Upload
+              this MSIX to your release host before making this page public.
+            </p>
+            <a className="button large download-button" href="#" aria-disabled="true">
+              Smartitecture-1.0.0.1-win-x64.msix
+            </a>
+            <p className="download-note">Public file hosting is the next setup step.</p>
+          </motion.article>
+
+          <motion.article
+            className="download-card"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.2 }}
+          >
+            <h2>Portable build</h2>
+            <p>
+              The ZIP build is useful for internal testing and quick checks. It should be distributed
+              only with clear beta instructions.
+            </p>
+            <a className="button secondary large download-button" href="#" aria-disabled="true">
+              Smartitecture-win-x64.zip
+            </a>
+            <p className="download-note">Portable download link pending.</p>
+          </motion.article>
         </div>
       </section>
-      
-      <section className="section installation-guide">
-        <div className="container">
-          <motion.h2 
-            className="section-title"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            Installation Guide
-          </motion.h2>
-          
-          <motion.div 
-            className="steps-container"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="installation-step">
-              <div className="step-number">1</div>
-              <div className="step-content">
-                <h3>Download the Installer</h3>
-                <p>Click the "Download for Windows" button above to download the installation file.</p>
-                <div className="step-image"></div>
-              </div>
-            </div>
-            
-            <div className="installation-step">
-              <div className="step-number">2</div>
-              <div className="step-content">
-                <h3>Run the Installer</h3>
-                <p>Locate the downloaded file (usually in your Downloads folder) and double-click it to start the installation.</p>
-                <div className="step-image"></div>
-              </div>
-            </div>
-            
-            <div className="installation-step">
-              <div className="step-number">3</div>
-              <div className="step-content">
-                <h3>Follow the Instructions</h3>
-                <p>The installation wizard will guide you through the setup process. Click "Next" to proceed through each step.</p>
-                <div className="step-image"></div>
-              </div>
-            </div>
-            
-            <div className="installation-step">
-              <div className="step-number">4</div>
-              <div className="step-content">
-                <h3>Launch Smartitecture</h3>
-                <p>Once installation is complete, you can launch Smartitecture from your desktop or Start menu.</p>
-                <div className="step-image"></div>
-              </div>
-            </div>
-          </motion.div>
-          
-          <div className="installation-help">
-            <h3>Need Help?</h3>
-            <p>If you're having trouble installing Smartitecture, you can:</p>
-            <ul>
-              <li>View our <a href="#">detailed installation guide</a></li>
-              <li>Watch our <a href="#">installation video tutorial</a></li>
-              <li>Contact our <a href="/contact">support team</a></li>
+
+      <section className="section requirements-section">
+        <div className="container requirements-grid">
+          <div>
+            <h2>System requirements</h2>
+            <ul className="clean-list">
+              <li>Windows 10 or Windows 11</li>
+              <li>64-bit processor</li>
+              <li>4 GB RAM minimum, 8 GB recommended</li>
+              <li>Internet connection for AI server answers</li>
+              <li>Microphone permission for voice input</li>
             </ul>
           </div>
+          <div>
+            <h2>Current release details</h2>
+            <dl className="release-details">
+              {packageDetails.map(([key, value]) => (
+                <div key={key}>
+                  <dt>{key}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
       </section>
-      
-      <section className="section faq-section">
+
+      <section className="section install-section">
         <div className="container">
-          <motion.h2 
-            className="section-title"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            Frequently Asked Questions
-          </motion.h2>
-          
-          <motion.div 
-            className="faq-container"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="faq-item">
-              <h3>Is Smartitecture free to use?</h3>
-              <p>Yes, Smartitecture is completely free for personal use. There are no hidden fees or subscriptions required.</p>
-            </div>
-            
-            <div className="faq-item">
-              <h3>Does Smartitecture work offline?</h3>
-              <p>Smartitecture requires an internet connection for most features, but basic functionality is available offline.</p>
-            </div>
-            
-            <div className="faq-item">
-              <h3>Is my data secure with Smartitecture?</h3>
-              <p>Yes, Smartitecture prioritizes your privacy and security. All data is processed locally when possible, and any data sent to our servers is encrypted and never shared with third parties.</p>
-            </div>
-            
-            <div className="faq-item">
-              <h3>Can I uninstall Smartitecture if needed?</h3>
-              <p>Yes, you can easily uninstall Smartitecture through the Windows Control Panel or Settings app like any other program.</p>
-            </div>
-          </motion.div>
-          
-          <div className="faq-more">
-            <p>Have more questions? Visit our <a href="/faq">complete FAQ page</a>.</p>
+          <h2>Beta install checklist</h2>
+          <div className="install-grid">
+            <article>
+              <span>1</span>
+              <h3>Install the package</h3>
+              <p>Use the signed MSIX on a Windows test machine and confirm Smartitecture appears in Start.</p>
+            </article>
+            <article>
+              <span>2</span>
+              <h3>Connect the backend</h3>
+              <p>Open Settings, set the Smartitecture backend URL, and add the beta API key.</p>
+            </article>
+            <article>
+              <span>3</span>
+              <h3>Run the smoke tests</h3>
+              <p>Ask general questions, check performance, view scan results, and launch a few apps.</p>
+            </article>
           </div>
         </div>
       </section>

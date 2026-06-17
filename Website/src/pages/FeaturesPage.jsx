@@ -1,336 +1,84 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import HandIcon from '../components/HandIcon';
+import { motion } from 'framer-motion'
 import './FeaturesPage.css'
+
+const features = [
+  {
+    title: 'Server-backed chat',
+    body: 'General questions route through the configured Smartitecture backend, with local fallback when the server is unavailable.'
+  },
+  {
+    title: 'Performance checks',
+    body: 'Reads CPU, memory, process count, and top memory users so the assistant can explain why a PC may feel slow.'
+  },
+  {
+    title: 'Security checks',
+    body: 'Integrates with Microsoft Defender for scan status and quick scan requests on supported Windows machines.'
+  },
+  {
+    title: 'Network and battery status',
+    body: 'Reports active adapters, IP addresses, link speed, and current battery charge when Windows exposes that data.'
+  },
+  {
+    title: 'Application launching',
+    body: 'Launches common Windows tools and installed Start Menu apps from natural-language requests.'
+  },
+  {
+    title: 'Voice input',
+    body: 'Uses Windows speech recognition and microphone permission for spoken prompts where available.'
+  }
+]
 
 function FeaturesPage() {
   return (
     <div className="features-page">
-      <section className="hero features-hero">
+      <section className="features-hero">
         <div className="container">
-          <motion.div 
-            className="hero-content"
-            initial={{ opacity: 0, y: 20 }}
+          <motion.div
+            className="features-hero-copy"
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.45 }}
           >
-            <h1>Smartitecture Features</h1>
-            <p>Discover how Smartitecture can help you understand your computer system with confidence</p>
-          </motion.div>
-        </div>
-      </section>
-      
-      <section className="section features-overview">
-        <div className="container">
-          <motion.div 
-            className="overview-content"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2>Designed for Understanding</h2>
+            <p className="eyebrow">Current beta capabilities</p>
+            <h1>Built around one assistant, not separate modes.</h1>
             <p>
-              Smartitecture is designed with all users in mind. Our features focus on making 
-              computer systems understandable through clear explanations, step-by-step guidance, and proactive protection.
+              Smartitecture chooses the right path automatically: backend AI for broad answers,
+              local tools for PC diagnostics, and guarded automation for system actions.
             </p>
           </motion.div>
         </div>
       </section>
-      
+
       <section className="section feature-details">
-        <div className="container">
-          <div className="feature-item">
-            <motion.div 
-              className="feature-content"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+        <div className="container feature-grid">
+          {features.map((feature) => (
+            <motion.article
+              className="feature-card"
+              key={feature.title}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.35 }}
             >
-              <h2>Security & Privacy Protection</h2>
-              <p>
-                Smartitecture helps protect you from online scams, suspicious websites, and potential security threats. 
-                With simple explanations and alerts, you'll understand what's happening and how to stay safe.
-              </p>
-              <ul className="feature-list">
-                <li>Scam detection and warnings</li>
-                <li>Password strength assessment</li>
-                <li>Suspicious website alerts</li>
-                <li>Privacy setting recommendations</li>
-                <li>Malware detection and removal guidance</li>
-              </ul>
-            </motion.div>
-            <motion.div 
-              className="feature-image"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="feature-image-container">
-                <HandIcon size={300} className="feature-hand-icon" />
-              </div>
-            </motion.div>
-          </div>
-          
-          <div className="feature-item reverse">
-            <motion.div 
-              className="feature-content"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2>Wi-Fi & Network Assistance</h2>
-              <p>
-                Having trouble with your internet connection? Smartitecture can help you understand and solve common 
-                Wi-Fi problems with simple, jargon-free explanations and step-by-step troubleshooting.
-              </p>
-              <ul className="feature-list">
-                <li>Wi-Fi security assessment</li>
-                <li>Connection troubleshooting</li>
-                <li>Network terminology explanations</li>
-                <li>Router setup guidance</li>
-                <li>Internet speed optimization tips</li>
-              </ul>
-            </motion.div>
-            <motion.div 
-              className="feature-image"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="feature-image-container">
-                <HandIcon size={300} className="feature-hand-icon" />
-              </div>
-            </motion.div>
-          </div>
-          
-          <div className="feature-item">
-            <motion.div 
-              className="feature-content"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2>System Optimization</h2>
-              <p>
-                Is your computer running slowly? Smartitecture can help you understand why and provide simple solutions 
-                to improve performance without technical jargon.
-              </p>
-              <ul className="feature-list">
-                <li>Performance analysis and recommendations</li>
-                <li>Disk cleanup assistance</li>
-                <li>Startup program management</li>
-                <li>Memory usage optimization</li>
-                <li>Update management assistance</li>
-              </ul>
-            </motion.div>
-            <motion.div 
-              className="feature-image"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="feature-image-container">
-                <HandIcon size={300} className="feature-hand-icon" />
-              </div>
-            </motion.div>
-          </div>
-          
-          <div className="feature-item reverse">
-            <motion.div 
-              className="feature-content"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2>Screen Analysis & Guidance</h2>
-              <p>
-                Confused by what you're seeing on screen? Smartitecture can analyze what's on your screen and provide 
-                clear explanations and guidance without you needing to take screenshots or describe the problem.
-              </p>
-              <ul className="feature-list">
-                <li>Error message explanations</li>
-                <li>Interface navigation guidance</li>
-                <li>Button and menu explanations</li>
-                <li>Step-by-step task guidance</li>
-                <li>Visual element identification</li>
-              </ul>
-            </motion.div>
-            <motion.div 
-              className="feature-image"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="feature-image-container">
-                <HandIcon size={300} className="feature-hand-icon" />
-              </div>
-            </motion.div>
-          </div>
-          
-          <div className="feature-item">
-            <motion.div 
-              className="feature-content"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2>Accessibility Features</h2>
-              <p>
-                Smartitecture is designed to be accessible to users of all abilities, with features that make it easier 
-                to interact with your computer regardless of visual, hearing, or motor limitations.
-              </p>
-              <ul className="feature-list">
-                <li>Adjustable text size</li>
-                <li>High contrast mode</li>
-                <li>Voice interaction</li>
-                <li>Screen reader compatibility</li>
-                <li>Keyboard navigation support</li>
-              </ul>
-            </motion.div>
-            <motion.div 
-              className="feature-image"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="feature-image-container">
-                <HandIcon size={300} className="feature-hand-icon" />
-              </div>
-            </motion.div>
-          </div>
-          
-          <div className="feature-item reverse">
-            <motion.div 
-              className="feature-content"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2>Multi-Language Support</h2>
-              <p>
-                Smartitecture speaks your language! With support for 30 languages, you can communicate with Smartitecture 
-                in the language you're most comfortable with.
-              </p>
-              <ul className="feature-list">
-                <li>30 languages supported</li>
-                <li>Automatic language detection</li>
-                <li>Regional dialect understanding</li>
-                <li>Cultural context awareness</li>
-                <li>Language switching on demand</li>
-              </ul>
-            </motion.div>
-            <motion.div 
-              className="feature-image"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="feature-image-container">
-                <HandIcon size={300} className="feature-hand-icon" />
-              </div>
-            </motion.div>
-          </div>
+              <h2>{feature.title}</h2>
+              <p>{feature.body}</p>
+            </motion.article>
+          ))}
         </div>
       </section>
-      
-      <section className="section feature-comparison">
-        <div className="container">
-          <motion.h2 
-            className="section-title"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            Smartitecture vs. Other Assistants
-          </motion.h2>
-          
-          <motion.div 
-            className="comparison-table-container"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="comparison-table">
-              <div className="comparison-header">
-                <div className="comparison-cell header-cell">Features</div>
-                <div className="comparison-cell header-cell">Smartitecture</div>
-                <div className="comparison-cell header-cell">Generic Assistants</div>
-              </div>
-              
-              <div className="comparison-row">
-                <div className="comparison-cell">Elderly-Focused Design</div>
-                <div className="comparison-cell">✓</div>
-                <div className="comparison-cell">✗</div>
-              </div>
-              
-              <div className="comparison-row">
-                <div className="comparison-cell">Jargon-Free Explanations</div>
-                <div className="comparison-cell">✓</div>
-                <div className="comparison-cell">Limited</div>
-              </div>
-              
-              <div className="comparison-row">
-                <div className="comparison-cell">Screen Analysis</div>
-                <div className="comparison-cell">✓</div>
-                <div className="comparison-cell">✗</div>
-              </div>
-              
-              <div className="comparison-row">
-                <div className="comparison-cell">Wi-Fi Security Assessment</div>
-                <div className="comparison-cell">✓</div>
-                <div className="comparison-cell">✗</div>
-              </div>
-              
-              <div className="comparison-row">
-                <div className="comparison-cell">Scam Detection</div>
-                <div className="comparison-cell">✓</div>
-                <div className="comparison-cell">Limited</div>
-              </div>
-              
-              <div className="comparison-row">
-                <div className="comparison-cell">Step-by-Step Guidance</div>
-                <div className="comparison-cell">✓</div>
-                <div className="comparison-cell">Limited</div>
-              </div>
-              
-              <div className="comparison-row">
-                <div className="comparison-cell">Privacy-Focused</div>
-                <div className="comparison-cell">✓</div>
-                <div className="comparison-cell">Varies</div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-      
-      <section className="section cta-section">
-        <div className="container">
-          <motion.div 
-            className="cta-content"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2>Ready to Experience Smartitecture?</h2>
-            <p>Download today and start navigating technology with confidence.</p>
-            <a href="/download" className="button large">Download Now</a>
-          </motion.div>
+
+      <section className="section limitations-section">
+        <div className="container limitations-grid">
+          <div>
+            <p className="eyebrow">Beta boundaries</p>
+            <h2>Clear limits make this safer to test.</h2>
+          </div>
+          <ul>
+            <li>Windows is the only supported desktop platform for this beta.</li>
+            <li>Mac and Linux would need separate app shells and system connectors.</li>
+            <li>Destructive or sensitive actions should require confirmation before execution.</li>
+            <li>Public downloads still need hosted artifacts and release notes.</li>
+          </ul>
         </div>
       </section>
     </div>

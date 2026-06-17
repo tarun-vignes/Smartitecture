@@ -76,7 +76,7 @@ function Header({ darkMode, toggleDarkMode }) {
             onClick={toggleDarkMode}
             aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            {darkMode ? '☀️' : '🌙'}
+            {darkMode ? 'Light' : 'Dark'}
           </button>
         </nav>
       </div>
