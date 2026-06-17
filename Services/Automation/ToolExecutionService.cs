@@ -93,16 +93,47 @@ namespace Smartitecture.Services.Automation
             {
                 var parameters = ExtractParameters(toolName, args);
                 var success = await command.ExecuteAsync(parameters);
+                var target = toolName.Equals("launch", StringComparison.OrdinalIgnoreCase)
+                    ? ExtractTarget(args)
+                    : null;
                 return new ToolExecutionResult
                 {
                     Success = success,
-                    Message = success
-                        ? $"Tool '{toolName}' executed successfully."
-                        : $"Tool '{toolName}' failed to execute."
+                    Message = BuildCommandResultMessage(toolName, success, target)
                 };
             }
 
             return new ToolExecutionResult { Success = false, Message = $"Unknown tool '{toolName}'." };
+        }
+
+        private static string BuildCommandResultMessage(string toolName, bool success, string? target)
+        {
+            if (toolName.Equals("launch", StringComparison.OrdinalIgnoreCase))
+            {
+                var displayTarget = string.IsNullOrWhiteSpace(target) ? "that app" : target;
+                return success
+                    ? $"Opened {displayTarget}."
+                    : $"I couldn't open {displayTarget}. I tried Windows app aliases, executable names, Start Menu shortcuts, and installed Store apps. Check that the app is installed, or try the exact app name as it appears in the Start Menu.";
+            }
+
+            if (toolName.Equals("calculator", StringComparison.OrdinalIgnoreCase))
+            {
+                return success ? "Opened Calculator." : "I couldn't open Calculator.";
+            }
+
+            if (toolName.Equals("explorer", StringComparison.OrdinalIgnoreCase))
+            {
+                return success ? "Opened File Explorer." : "I couldn't open File Explorer.";
+            }
+
+            if (toolName.Equals("taskmgr", StringComparison.OrdinalIgnoreCase))
+            {
+                return success ? "Opened Task Manager." : "I couldn't open Task Manager.";
+            }
+
+            return success
+                ? $"Tool '{toolName}' executed successfully."
+                : $"Tool '{toolName}' failed to execute.";
         }
 
         public async Task<ToolExecutionResult> ExecuteToolAsync(string toolName, string argumentsJson, bool confirmed = false)

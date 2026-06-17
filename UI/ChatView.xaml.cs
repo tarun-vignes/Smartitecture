@@ -271,8 +271,13 @@ namespace Smartitecture.UI
                 }
                 else
                 {
-                    AddMessageToChat(result.Message, "system");
+                    if (ShouldShowToolResultAsAssistant(commandName))
+                    {
+                        AddMessageToChat(result.Message, "assistant");
+                        return;
+                    }
 
+                    AddMessageToChat(result.Message, "system");
                     // Ask the AI for troubleshooting guidance.
                     var aiResponse = await _llmService.GetResponseAsync(
                         $"The {commandName} command failed. Please help the user understand what might have gone wrong and suggest alternatives.",

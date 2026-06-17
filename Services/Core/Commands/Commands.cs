@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Smartitecture.Core.Commands
@@ -14,6 +16,26 @@ namespace Smartitecture.Core.Commands
 
     public sealed class LaunchAppCommand : IAppCommand
     {
+        private static readonly (string Alias, string Target)[] KnownAppAliases =
+        {
+            ("calculator", "calc"),
+            ("calc", "calc"),
+            ("camera", "microsoft.windows.camera:"),
+            ("windows camera", "microsoft.windows.camera:"),
+            ("settings", "ms-settings:"),
+            ("windows settings", "ms-settings:"),
+            ("microsoft store", "ms-windows-store:"),
+            ("store", "ms-windows-store:"),
+            ("photos", "ms-photos:"),
+            ("mail", "outlookmail:"),
+            ("calendar", "outlookcal:"),
+            ("notepad", "notepad"),
+            ("paint", "mspaint"),
+            ("task manager", "taskmgr"),
+            ("file explorer", "explorer"),
+            ("explorer", "explorer")
+        };
+
         public string CommandName => "launch";
         public string Description => "Launches a Windows application";
         public bool RequiresElevation => false;
@@ -26,22 +48,198 @@ namespace Smartitecture.Core.Commands
                 var target = parameters[0]?.Trim();
                 if (string.IsNullOrWhiteSpace(target)) return Task.FromResult(false);
 
-                // Common aliases
-                if (string.Equals(target, "calculator", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(target, "calc", StringComparison.OrdinalIgnoreCase))
+                target = NormalizeTarget(target);
+                var knownTarget = ResolveKnownAlias(target);
+                if (!string.IsNullOrWhiteSpace(knownTarget) && TryStart(knownTarget))
                 {
-                    Process.Start(new ProcessStartInfo { FileName = "calc", UseShellExecute = true });
                     return Task.FromResult(true);
                 }
 
-                // Try to shell-execute whatever was provided (path, URI, AppsFolder moniker, etc.)
-                Process.Start(new ProcessStartInfo { FileName = target, UseShellExecute = true });
-                return Task.FromResult(true);
+                if (TryStart(target))
+                {
+                    return Task.FromResult(true);
+                }
+
+                if (TryStartFromStartMenuShortcut(target))
+                {
+                    return Task.FromResult(true);
+                }
+
+                if (TryStartFromAppsFolder(target))
+                {
+                    return Task.FromResult(true);
+                }
+
+                return Task.FromResult(false);
             }
             catch
             {
                 return Task.FromResult(false);
             }
+        }
+
+        private static string NormalizeTarget(string target)
+        {
+            target = target.Trim().Trim('"', '\'').TrimEnd('.', ',', '!', '?', ';', ':');
+
+            foreach (var prefix in new[] { "open ", "launch ", "start ", "run " })
+            {
+                if (target.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    target = target.Substring(prefix.Length).Trim();
+                    break;
+                }
+            }
+
+            if (target.StartsWith("the ", StringComparison.OrdinalIgnoreCase))
+            {
+                target = target.Substring(4).Trim();
+            }
+
+            foreach (var suffix in new[] { " app", " application", " program" })
+            {
+                if (target.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
+                {
+                    target = target.Substring(0, target.Length - suffix.Length).Trim();
+                    break;
+                }
+            }
+
+            return target;
+        }
+
+        private static string? ResolveKnownAlias(string target)
+        {
+            return KnownAppAliases
+                .FirstOrDefault(alias => string.Equals(alias.Alias, target, StringComparison.OrdinalIgnoreCase))
+                .Target;
+        }
+
+        private static bool TryStart(string target)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo { FileName = target, UseShellExecute = true });
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool TryStartFromStartMenuShortcut(string target)
+        {
+            foreach (var root in GetStartMenuRoots())
+            {
+                if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
+                {
+                    continue;
+                }
+
+                var shortcut = Directory.EnumerateFiles(root, "*.*", SearchOption.AllDirectories)
+                    .Where(path => path.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase) ||
+                                   path.EndsWith(".appref-ms", StringComparison.OrdinalIgnoreCase))
+                    .Select(path => new FileInfo(path))
+                    .OrderBy(file => GetMatchScore(Path.GetFileNameWithoutExtension(file.Name), target))
+                    .FirstOrDefault(file => GetMatchScore(Path.GetFileNameWithoutExtension(file.Name), target) < 100);
+
+                if (shortcut != null && TryStart(shortcut.FullName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool TryStartFromAppsFolder(string target)
+        {
+            try
+            {
+                var escapedTarget = target.Replace("'", "''");
+                var command =
+                    "$target = '" + escapedTarget + "'; " +
+                    "$app = Get-StartApps | Where-Object { $_.Name -ieq $target } | Select-Object -First 1; " +
+                    "if (-not $app) { $app = Get-StartApps | Where-Object { $_.Name -like \"*$target*\" } | Select-Object -First 1 }; " +
+                    "if ($app) { $app.AppID }";
+
+                using var process = Process.Start(new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"{command}\"",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                });
+
+                if (process == null)
+                {
+                    return false;
+                }
+
+                var appId = process.StandardOutput.ReadToEnd().Trim();
+                process.WaitForExit(3000);
+
+                if (string.IsNullOrWhiteSpace(appId))
+                {
+                    return false;
+                }
+
+                return TryStartWithExplorer($"shell:AppsFolder\\{appId}");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool TryStartWithExplorer(string shellPath)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "explorer.exe",
+                    Arguments = shellPath,
+                    UseShellExecute = true
+                });
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static string[] GetStartMenuRoots()
+        {
+            return new[]
+            {
+                Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu)
+            };
+        }
+
+        private static int GetMatchScore(string candidate, string target)
+        {
+            if (string.Equals(candidate, target, StringComparison.OrdinalIgnoreCase))
+            {
+                return 0;
+            }
+
+            if (candidate.StartsWith(target, StringComparison.OrdinalIgnoreCase))
+            {
+                return 1;
+            }
+
+            if (candidate.Contains(target, StringComparison.OrdinalIgnoreCase))
+            {
+                return 2;
+            }
+
+            return 100;
         }
     }
 
