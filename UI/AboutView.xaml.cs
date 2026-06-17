@@ -16,6 +16,7 @@ namespace Smartitecture.UI
         {
             try
             {
+                // Prefer local docs if bundled; fallback to GitHub.
                 var local = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "docs", "ARCHITECTURE.md");
                 if (File.Exists(local))
                 {
@@ -31,11 +32,13 @@ namespace Smartitecture.UI
 
         private void BackClicked(object sender, RoutedEventArgs e)
         {
+            // Return to dashboard.
             Smartitecture.Services.NavigationService.GoDashboard();
         }
 
         private void HomeClicked(object sender, RoutedEventArgs e)
         {
+            // Return to startup/home.
             Smartitecture.Services.NavigationService.GoHome();
         }
     }

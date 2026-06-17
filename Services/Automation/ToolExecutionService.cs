@@ -21,6 +21,7 @@ namespace Smartitecture.Services.Automation
         private readonly UserConfirmationService _confirmation = new UserConfirmationService();
         private readonly AuditLogger _audit = new AuditLogger();
         private readonly WindowsDefenderConnector _defender = new WindowsDefenderConnector();
+        private readonly LocalSystemConnector _system = new LocalSystemConnector();
 
         private readonly Dictionary<string, IAppCommand> _commands = new(StringComparer.OrdinalIgnoreCase)
         {
@@ -68,8 +69,24 @@ namespace Smartitecture.Services.Automation
 
             switch (toolName.ToLowerInvariant())
             {
+                case "system_info":
+                    return await RunSystemInfoAsync();
+                case "performance_snapshot":
+                    return await RunPerformanceSnapshotAsync();
+                case "list_processes":
+                    return await RunListProcessesAsync(args);
+                case "network_adapters":
+                    return await RunNetworkAdaptersAsync();
+                case "battery_status":
+                    return await RunBatteryStatusAsync();
+                case "defender_status":
+                    return await RunDefenderStatusAsync();
+                case "defender_scan_status":
+                    return await RunDefenderScanStatusAsync();
                 case "defender_scan":
                     return await RunDefenderScanAsync(args);
+                case "kill_process":
+                    return await RunKillProcessAsync(args);
             }
 
             if (_commands.TryGetValue(toolName, out var command))
@@ -123,6 +140,127 @@ namespace Smartitecture.Services.Automation
             return new ToolExecutionResult
             {
                 Success = true,
+                Message = output
+            };
+        }
+
+        private async Task<ToolExecutionResult> RunDefenderStatusAsync()
+        {
+            var output = await _defender.GetStatusAsync();
+            return new ToolExecutionResult
+            {
+                Success = true,
+                Message = output
+            };
+        }
+
+        private async Task<ToolExecutionResult> RunDefenderScanStatusAsync()
+        {
+            var output = await _defender.GetScanStatusAsync();
+            return new ToolExecutionResult
+            {
+                Success = true,
+                Message = output
+            };
+        }
+
+        private async Task<ToolExecutionResult> RunSystemInfoAsync()
+        {
+            var output = await _system.GetSystemInfoAsync();
+            return new ToolExecutionResult
+            {
+                Success = true,
+                Message = output
+            };
+        }
+
+        private async Task<ToolExecutionResult> RunPerformanceSnapshotAsync()
+        {
+            var output = await _system.GetPerformanceSnapshotAsync();
+            return new ToolExecutionResult
+            {
+                Success = true,
+                Message = output
+            };
+        }
+
+        private async Task<ToolExecutionResult> RunListProcessesAsync(Dictionary<string, object?>? args)
+        {
+            var count = 12;
+            if (args != null && args.TryGetValue("count", out var countValue))
+            {
+                int.TryParse(countValue?.ToString(), out count);
+            }
+
+            var output = await _system.ListProcessesAsync(count <= 0 ? 12 : count);
+            return new ToolExecutionResult
+            {
+                Success = true,
+                Message = output
+            };
+        }
+
+        private async Task<ToolExecutionResult> RunNetworkAdaptersAsync()
+        {
+            var output = await _system.GetNetworkAdaptersAsync();
+            return new ToolExecutionResult
+            {
+                Success = true,
+                Message = output
+            };
+        }
+
+        private async Task<ToolExecutionResult> RunBatteryStatusAsync()
+        {
+            var output = await _system.GetBatteryStatusAsync();
+            return new ToolExecutionResult
+            {
+                Success = true,
+                Message = output
+            };
+        }
+
+        private async Task<ToolExecutionResult> RunKillProcessAsync(Dictionary<string, object?>? args)
+        {
+            if (args == null)
+            {
+                return new ToolExecutionResult
+                {
+                    Success = false,
+                    Message = "Tell me the process name or PID to stop."
+                };
+            }
+
+            int? pid = null;
+            if (args.TryGetValue("pid", out var pidValue) &&
+                int.TryParse(pidValue?.ToString(), out var parsedPid))
+            {
+                pid = parsedPid;
+            }
+
+            string? name = null;
+            if (args.TryGetValue("name", out var nameValue))
+            {
+                name = nameValue?.ToString();
+            }
+            else if (args.TryGetValue("process", out var processValue))
+            {
+                name = processValue?.ToString();
+            }
+
+            if (!pid.HasValue && string.IsNullOrWhiteSpace(name))
+            {
+                return new ToolExecutionResult
+                {
+                    Success = false,
+                    Message = "Tell me the process name or PID to stop."
+                };
+            }
+
+            var output = await _system.KillProcessAsync(pid, name);
+            return new ToolExecutionResult
+            {
+                Success = output.StartsWith("Stopped process", StringComparison.OrdinalIgnoreCase),
                 Message = output
             };
         }

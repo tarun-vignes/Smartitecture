@@ -10,67 +10,67 @@ namespace Smartitecture.Services
     {
         private const string StringsRoot = "Resources/Strings/";
 
-        private static readonly HashSet<string> SupportedLanguages = new(StringComparer.OrdinalIgnoreCase)
-        {
+        public sealed record LanguageOption(string Code, string DisplayName);
+
+        private static readonly string[] SupportedLanguageCodes =
+        [
             "af-ZA",
             "am-ET",
             "ar",
             "az-Latn-AZ",
-            "eu-ES",
-            "bn-BD",
             "bg-BG",
-            "my-MM",
+            "bn-BD",
             "ca-ES",
-            "zh-CN",
-            "zh-TW",
-            "hr-HR",
             "cs-CZ",
             "da-DK",
-            "nl-NL",
-            "en-US",
-            "en-GB",
-            "en-CA",
-            "en-AU",
-            "en-IN",
-            "et-EE",
-            "fil-PH",
-            "fi-FI",
-            "fr-FR",
-            "gl-ES",
             "de-DE",
             "el-GR",
+            "en-AU",
+            "en-CA",
+            "en-GB",
+            "en-IN",
+            "en-US",
+            "es-ES",
+            "et-EE",
+            "eu-ES",
+            "fa-IR",
+            "fi-FI",
+            "fil-PH",
+            "fr-FR",
+            "gl-ES",
             "gu-IN",
             "he-IL",
             "hi-IN",
+            "hr-HR",
             "hu-HU",
-            "is-IS",
             "id-ID",
+            "is-IS",
             "it-IT",
             "ja-JP",
-            "kn-IN",
             "km-KH",
+            "kn-IN",
             "ko-KR",
-            "lv-LV",
             "lt-LT",
-            "ms-MY",
+            "lv-LV",
             "ml-IN",
             "mr-IN",
-            "ne-NP",
+            "ms-MY",
+            "my-MM",
             "nb-NO",
-            "fa-IR",
-            "pl-PL",
-            "pt-PT",
-            "pt-BR",
+            "ne-NP",
+            "nl-NL",
             "pa-IN",
+            "pl-PL",
+            "pt-BR",
+            "pt-PT",
             "ro-RO",
             "ru-RU",
-            "sr-RS",
             "si-LK",
             "sk-SK",
             "sl-SI",
-            "es-ES",
-            "sw-KE",
+            "sr-RS",
             "sv-SE",
+            "sw-KE",
             "ta-IN",
             "te-IN",
             "th-TH",
@@ -78,8 +78,12 @@ namespace Smartitecture.Services
             "uk-UA",
             "ur-PK",
             "vi-VN",
-            "zu-ZA"
-        };
+            "zh-CN",
+            "zh-TW",
+            "zu-ZA",
+        ];
+
+        private static readonly HashSet<string> SupportedLanguages = new(SupportedLanguageCodes, StringComparer.OrdinalIgnoreCase);
 
         private static readonly Dictionary<string, string> DisplayNameMap =
             new(StringComparer.OrdinalIgnoreCase)
@@ -191,6 +195,18 @@ namespace Smartitecture.Services
             }
 
             TryApplyCulture(cultureName);
+            ApplyFlowDirection(cultureName);
+        }
+
+        public static IReadOnlyList<LanguageOption> GetSupportedLanguageOptions()
+        {
+            var options = new List<LanguageOption>(SupportedLanguageCodes.Length);
+            foreach (var code in SupportedLanguageCodes)
+            {
+                options.Add(new LanguageOption(code, GetDisplayName(code)));
+            }
+
+            return options;
         }
 
         private static (string file, string culture) ResolveLanguage(string? language)
@@ -214,6 +230,19 @@ namespace Smartitecture.Services
             return ("en-US.xaml", "en-US");
         }
 
+        private static string GetDisplayName(string code)
+        {
+            try
+            {
+                var culture = new CultureInfo(code);
+                return $"{culture.EnglishName} ({code})";
+            }
+            catch
+            {
+                return code;
+            }
+        }
+
         private static void TryApplyCulture(string cultureName)
         {
             try
@@ -223,6 +252,23 @@ namespace Smartitecture.Services
                 CultureInfo.DefaultThreadCurrentUICulture = culture;
                 Thread.CurrentThread.CurrentCulture = culture;
                 Thread.CurrentThread.CurrentUICulture = culture;
+            }
+            catch
+            {
+            }
+        }
+
+        private static void ApplyFlowDirection(string cultureName)
+        {
+            try
+            {
+                var culture = new CultureInfo(cultureName);
+                var direction = culture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+
+                foreach (Window window in Application.Current.Windows)
+                {
+                    window.FlowDirection = direction;
+                }
             }
             catch
             {

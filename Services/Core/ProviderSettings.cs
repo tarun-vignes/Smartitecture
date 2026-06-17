@@ -28,6 +28,17 @@ namespace Smartitecture.Services.Core
             config.GetSection("Ollama").Bind(settings.Ollama);
             config.GetSection("Backend").Bind(settings.Backend);
 
+            var preferences = new Smartitecture.Services.PreferencesService().Load();
+            if (!string.IsNullOrWhiteSpace(preferences.BackendBaseUrl))
+            {
+                settings.Backend.BaseUrl = preferences.BackendBaseUrl.Trim();
+            }
+
+            if (!string.IsNullOrWhiteSpace(preferences.BackendApiKey))
+            {
+                settings.Backend.ApiKey = preferences.BackendApiKey.Trim();
+            }
+
             return settings;
         }
     }
@@ -67,6 +78,7 @@ namespace Smartitecture.Services.Core
     {
         public string Endpoint { get; set; } = "http://localhost:11434";
         public string Model { get; set; } = "llama3";
+        public string SmallModel { get; set; } = string.Empty;
     }
 
     public sealed class BackendSettings

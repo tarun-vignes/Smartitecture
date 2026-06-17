@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Assets\Logo\SmartitectureApp.ico</ApplicationIcon>
     <AssemblyName>Smartitecture</AssemblyName>
     <RootNamespace>Smartitecture</RootNamespace>
     <StartupObject>Smartitecture.App</StartupObject>
+    <DefineConstants>$(DefineConstants);SMARTITECTURE_REAL_BUILD</DefineConstants>
     <EnableDefaultItems>false</EnableDefaultItems>
     
   </PropertyGroup>
@@ -17,13 +18,13 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-    <PackageReference Include="Anthropic.SDK" Version="*" />
+    <PackageReference Include="Anthropic.SDK" Version="5.10.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Management" Version="8.0.0" />
-    <PackageReference Include="OpenAI" Version="*" />
+    <PackageReference Include="OpenAI" Version="2.10.0" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="App.xaml" />
@@ -79,6 +80,36 @@
     
     <!-- -->
     <Compile Remove="Application\\**\\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Controls\AppTopBar.xaml.cs">
+      <DependentUpon>AppTopBar.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UI\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UI\ChatView.xaml.cs">
+      <DependentUpon>ChatView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UI\DashboardView.xaml.cs">
+      <DependentUpon>DashboardView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UI\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UI\StartupView.xaml.cs">
+      <DependentUpon>StartupView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Services\\AdvancedConversationalAgent.cs" />

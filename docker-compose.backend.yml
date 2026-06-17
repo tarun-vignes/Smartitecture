@@ -1,0 +1,18 @@
+services:
+  smartitecture-backend:
+    build:
+      context: ./backend/Smartitecture.Backend
+      dockerfile: Dockerfile
+    image: smartitecture-backend:local
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      SMARTITECTURE_AI_PROVIDER: ${SMARTITECTURE_AI_PROVIDER:-gemini}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      SMARTITECTURE_BACKEND_API_KEY: ${SMARTITECTURE_BACKEND_API_KEY:-}
+      SMARTITECTURE_REQUIRE_BACKEND_API_KEY: ${SMARTITECTURE_REQUIRE_BACKEND_API_KEY:-false}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.1-flash-lite}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}

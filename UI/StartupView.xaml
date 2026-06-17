@@ -32,17 +32,21 @@
                 <!-- Hero -->
                 <StackPanel Grid.Row="0" Margin="0,10,0,16" HorizontalAlignment="Center">
                     <ContentControl Style="{StaticResource Logo.Badge}" Width="88" Height="88" HorizontalAlignment="Center"/>
-                    <TextBlock Text="{DynamicResource Startup.Title}" Style="{StaticResource Text.H1}" HorizontalAlignment="Center" Margin="0,12,0,2"/>
-                    <TextBlock Text="{DynamicResource Startup.Subtitle}" Style="{StaticResource Text.Body}" HorizontalAlignment="Center" FontSize="16"/>
-                    <TextBlock Text="{DynamicResource Startup.MetricLegend}" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" Opacity="0.9"/>
+                    <TextBlock Text="{DynamicResource Startup.Title}" Style="{StaticResource Text.H1}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,12,0,2"/>
+                    <TextBlock Text="{DynamicResource Startup.Subtitle}" Style="{StaticResource Text.Body}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" FontSize="16"/>
+                    <TextBlock Text="{DynamicResource Startup.MetricLegend}" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Opacity="0.9"/>
                 </StackPanel>
 
                 <!-- Overview header -->
                 <Border Grid.Row="1" Style="{StaticResource Card.Glass}" Padding="12" Margin="0,0,0,14">
-                    <DockPanel LastChildFill="False">
-                        <TextBlock Text="{DynamicResource Startup.OverviewTitle}" Style="{StaticResource Text.H2}" />
-                        <TextBlock Name="LastUpdatedText" Text="--" Style="{StaticResource Text.Caption}" DockPanel.Dock="Right" VerticalAlignment="Center"/>
-                    </DockPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Startup.OverviewTitle}" Style="{StaticResource Text.H2}" TextWrapping="Wrap" Margin="0,0,12,0"/>
+                        <TextBlock Grid.Column="1" Name="LastUpdatedText" Text="--" Style="{StaticResource Text.Caption}" VerticalAlignment="Center"/>
+                    </Grid>
                 </Border>
 
                 <!-- Cards grid -->
@@ -62,7 +66,7 @@
                             <TextBlock Text="{DynamicResource Startup.CpuTitle}" Style="{StaticResource Text.H2}"/>
                             <TextBlock Name="CpuValueText" Text="0%" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
                             <ProgressBar Name="CpuBar" Maximum="100" Value="0" Height="10" Margin="0,8,0,0" Style="{StaticResource ProgressBar.Glass}"/>
-                            <TextBlock Name="CpuSubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0"/>
+                            <TextBlock Name="CpuSubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Border>
 
@@ -72,7 +76,7 @@
                             <TextBlock Text="{DynamicResource Startup.MemoryTitle}" Style="{StaticResource Text.H2}"/>
                             <TextBlock Name="MemoryValueText" Text="--" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
                             <ProgressBar Name="MemoryBar" Maximum="100" Value="0" Height="10" Margin="0,8,0,0" Style="{StaticResource ProgressBar.Glass}"/>
-                            <TextBlock Name="MemorySubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0"/>
+                            <TextBlock Name="MemorySubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Border>
 
@@ -82,7 +86,7 @@
                             <TextBlock Text="{DynamicResource Startup.DiskTitle}" Style="{StaticResource Text.H2}"/>
                             <TextBlock Name="DiskValueText" Text="--" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
                             <ProgressBar Name="DiskBar" Maximum="100" Value="0" Height="10" Margin="0,8,0,0" Style="{StaticResource ProgressBar.Glass}"/>
-                            <TextBlock Name="DiskSubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0"/>
+                            <TextBlock Name="DiskSubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Border>
 
@@ -92,7 +96,7 @@
                             <TextBlock Text="{DynamicResource Startup.NetworkTitle}" Style="{StaticResource Text.H2}"/>
                             <TextBlock Name="NetworkValueText" Text="--" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
                             <ProgressBar Name="NetworkBar" Maximum="100" Value="0" Height="10" Margin="0,8,0,0" Style="{StaticResource ProgressBar.Glass}"/>
-                            <TextBlock Name="NetworkSubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0"/>
+                            <TextBlock Name="NetworkSubText" Text="--" Style="{StaticResource Text.Caption}" Margin="0,6,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -101,12 +105,12 @@
 
         <!-- Navigation footer -->
         <Border Grid.Row="2" Background="Transparent" Padding="12" Margin="16,0,16,16">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="{DynamicResource Startup.FooterStart}" Style="{StaticResource Button.Primary}" Click="LaunchDashboard_Click"/>
-                <Button Content="{DynamicResource Startup.FooterSettings}" Margin="10,0,0,0" Style="{StaticResource Button.Glass}" Click="OpenSettings_Click"/>
-                <Button Content="{DynamicResource Startup.FooterHealth}" Margin="10,0,0,0" Style="{StaticResource Button.Glass}" Click="HealthCheck_Click"/>
-                <Button Content="{DynamicResource Startup.FooterAbout}" Margin="10,0,0,0" Style="{StaticResource Button.Glass}" Click="OpenAbout_Click"/>
-            </StackPanel>
+            <WrapPanel HorizontalAlignment="Center">
+                <Button Content="{DynamicResource Startup.FooterStart}" Style="{StaticResource Button.Primary}" Click="LaunchDashboard_Click" Margin="0,0,8,8"/>
+                <Button Content="{DynamicResource Startup.FooterSettings}" Style="{StaticResource Button.Glass}" Click="OpenSettings_Click" Margin="0,0,8,8"/>
+                <Button Content="{DynamicResource Startup.FooterHealth}" Style="{StaticResource Button.Glass}" Click="HealthCheck_Click" Margin="0,0,8,8"/>
+                <Button Content="{DynamicResource Startup.FooterAbout}" Style="{StaticResource Button.Glass}" Click="OpenAbout_Click" Margin="0,0,8,8"/>
+            </WrapPanel>
         </Border>
     </Grid>
 </UserControl>

@@ -34,6 +34,53 @@ internal static class BackendHelpers
         });
     }
 
+    public static IResult? ValidateApiKey(HttpRequest request, BackendConfig config)
+    {
+        if (config.RequireApiKey && string.IsNullOrWhiteSpace(config.ApiKey))
+        {
+            return ErrorResponse(
+                "SMARTITECTURE_BACKEND_API_KEY is required when the backend is running in Production.",
+                StatusCodes.Status500InternalServerError,
+                "backend_api_key_required");
+        }
+
+        if (string.IsNullOrWhiteSpace(config.ApiKey))
+        {
+            return null;
+        }
+
+        return RequestHasApiKey(request, config.ApiKey)
+            ? null
+            : ErrorResponse("Invalid API key.", StatusCodes.Status401Unauthorized, "invalid_api_key");
+    }
+
+    public static async Task<bool> ValidateApiKeyForSseAsync(HttpRequest request, HttpResponse response, BackendConfig config)
+    {
+        if (config.RequireApiKey && string.IsNullOrWhiteSpace(config.ApiKey))
+        {
+            response.StatusCode = StatusCodes.Status500InternalServerError;
+            await WriteSseErrorAsync(
+                response,
+                "SMARTITECTURE_BACKEND_API_KEY is required when the backend is running in Production.",
+                "backend_api_key_required");
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(config.ApiKey))
+        {
+            return true;
+        }
+
+        if (RequestHasApiKey(request, config.ApiKey))
+        {
+            return true;
+        }
+
+        response.StatusCode = StatusCodes.Status401Unauthorized;
+        await WriteSseErrorAsync(response, "Invalid API key.", "invalid_api_key");
+        return false;
+    }
+
     public static IEnumerable<string> TokenizeForStream(string content)
     {
         if (string.IsNullOrWhiteSpace(content))
@@ -63,5 +110,17 @@ internal static class BackendHelpers
         }
 
         return $"ip:{context.Connection.RemoteIpAddress}";
+    }
+
+    private static bool RequestHasApiKey(HttpRequest request, string expectedApiKey)
+    {
+        var authHeader = request.Headers.Authorization.ToString();
+        var headerKey = request.Headers["X-API-Key"].ToString();
+        var bearerToken = authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)
+            ? authHeader.Substring("Bearer ".Length).Trim()
+            : string.Empty;
+
+        return string.Equals(headerKey, expectedApiKey, StringComparison.Ordinal) ||
+               string.Equals(bearerToken, expectedApiKey, StringComparison.Ordinal);
     }
 }

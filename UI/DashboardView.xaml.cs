@@ -11,6 +11,7 @@ namespace Smartitecture.UI
             InitializeComponent();
         }
 
+        // Top bar navigation.
         private void HomeClicked(object sender, RoutedEventArgs e)
         {
             Smartitecture.Services.NavigationService.GoHome();
@@ -21,6 +22,7 @@ namespace Smartitecture.UI
             Smartitecture.Services.NavigationService.GoSettings();
         }
 
+        // CTA buttons on the dashboard cards.
         private void OpenAbout_Click(object sender, RoutedEventArgs e)
         {
             Smartitecture.Services.NavigationService.GoAbout();
@@ -34,6 +36,7 @@ namespace Smartitecture.UI
             }
             catch (Exception ex)
             {
+                // Fail safe if navigation fails.
                 MessageBox.Show($"Error opening chat: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

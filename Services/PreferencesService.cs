@@ -20,6 +20,8 @@ namespace Smartitecture.Services
         public string UpdateChannel { get; set; } = "Stable";
         public bool ShareDiagnostics { get; set; } = false;
         public int ApiPort { get; set; } = 8080;
+        public string BackendBaseUrl { get; set; } = "";
+        public string BackendApiKey { get; set; } = "";
     }
 
     public class PreferencesService

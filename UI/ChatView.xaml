@@ -21,7 +21,7 @@
             <controls:AppTopBar Grid.Row="0" Title="{DynamicResource Chat.Title}" ShowBack="True"
                                  BackClicked="GoDashboard_Click" HomeClicked="GoHome_Click" SettingsClicked="OpenSettings_Click"/>
 
-            <Grid Grid.Row="1" Grid.RowSpan="4" Margin="24,8,24,16" MaxWidth="1240" HorizontalAlignment="Center">
+            <Grid Grid.Row="1" Grid.RowSpan="4" Margin="24,8,24,16" MaxWidth="1240" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -35,24 +35,51 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Model selector row -->
+                    <!-- Chat actions row -->
                     <Border Grid.Row="0" Style="{StaticResource Card.Glass}" Padding="12" Margin="0,0,0,10">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Chat.ModelLabel}" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                <ComboBox Name="ModelSelector" Width="240" SelectionChanged="ModelSelector_SelectionChanged" Style="{StaticResource ComboBox.Glass}"/>
-                                <TextBlock Text="{DynamicResource Chat.ModeLabel}" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" Margin="16,0,8,0"/>
-                                <ComboBox Name="ModeSelector" Width="150" SelectionChanged="ModeSelector_SelectionChanged" Style="{StaticResource ComboBox.Glass}"/>
-                                <TextBlock Name="ModelStatusText" Text="{DynamicResource Chat.ModelLoading}" Style="{StaticResource Text.Subtle}" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center">
-                                <Button Name="HistoryButton" Content="{DynamicResource Chat.History}" MinWidth="96" Height="32"
+                            <TextBlock Grid.Column="0"
+                                       Text="{DynamicResource Chat.UnifiedAssistantStatus}"
+                                       Style="{StaticResource Text.Caption}"
+                                       VerticalAlignment="Center"
+                                       Margin="4,0,12,0"
+                                       TextWrapping="Wrap"
+                                       TextTrimming="CharacterEllipsis"/>
+                            <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                <Border Name="ProviderStatusPill"
+                                        Background="{DynamicResource Brush.ChatBubbleSystemBackground}"
+                                        BorderBrush="{DynamicResource Brush.GlassBorder}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="10,6"
+                                        Margin="0,0,8,0"
+                                        VerticalAlignment="Center"
+                                        ToolTip="{DynamicResource Chat.ProviderStatusTooltip}">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Ellipse Name="ProviderStatusDot"
+                                                 Width="8"
+                                                 Height="8"
+                                                 Fill="{DynamicResource Brush.Warning}"
+                                                 Margin="0,0,7,0"/>
+                                        <TextBlock Name="ProviderStatusText"
+                                                   Text="{DynamicResource Chat.ProviderChecking}"
+                                                   Style="{StaticResource Text.Caption}"
+                                                   VerticalAlignment="Center"
+                                                   MaxWidth="190"
+                                                   TextWrapping="NoWrap"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                </Border>
+                                <Button Name="ProviderRefreshButton" Content="↻" Width="38" Height="36"
+                                        Click="ProviderRefreshButton_Click" Style="{StaticResource Button.Glass}" Margin="0,0,8,0"
+                                        ToolTip="{DynamicResource Chat.ProviderRefreshTooltip}"/>
+                                <Button Name="HistoryButton" Content="{DynamicResource Chat.History}" MinWidth="112" Height="36"
                                         Click="HistoryButton_Click" Style="{StaticResource Button.Glass}" Margin="0,0,8,0"/>
-                                <Button Name="ClearChatButton" Content="{DynamicResource Chat.ClearChat}" MinWidth="96" Height="32"
+                                <Button Name="ClearChatButton" Content="{DynamicResource Chat.ClearChat}" MinWidth="112" Height="36"
                                         Click="ClearChatButton_Click" Style="{StaticResource Button.Glass}"/>
                             </StackPanel>
                         </Grid>
@@ -88,15 +115,19 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBox Grid.Column="0" Name="MessageInput" Style="{StaticResource TextBox.Glass}" AcceptsReturn="True"
                                      VerticalAlignment="Center"
                                      MaxHeight="120" VerticalScrollBarVisibility="Auto" KeyDown="MessageInput_KeyDown" TextWrapping="Wrap"
                                      Text=""/>
-                            <Button Grid.Column="1" Name="AttachButton" Content="{DynamicResource Chat.Attach}" MinWidth="96" Height="32"
+                            <Button Grid.Column="1" Name="AttachButton" Content="{DynamicResource Chat.Attach}" MinWidth="112" Height="36"
                                     VerticalAlignment="Center" Margin="10,0,5,0"
                                     Style="{StaticResource Button.Glass}" Click="AttachButton_Click" ToolTip="{DynamicResource Chat.AttachTooltip}"/>
-                            <Button Grid.Column="2" Name="SendButton" Content="{DynamicResource Chat.Send}" MinWidth="96" Height="32"
+                            <Button Grid.Column="2" Name="VoiceButton" Content="{DynamicResource Chat.Voice}" MinWidth="112" Height="36"
+                                    VerticalAlignment="Center" Margin="5,0,5,0"
+                                    Style="{StaticResource Button.Glass}" Click="VoiceButton_Click" ToolTip="{DynamicResource Chat.VoiceTooltip}"/>
+                            <Button Grid.Column="3" Name="SendButton" Content="{DynamicResource Chat.Send}" MinWidth="112" Height="36"
                                     VerticalAlignment="Center" Style="{StaticResource Button.Primary}"
                                     Click="SendButton_Click" IsDefault="True"/>
                         </Grid>
@@ -104,7 +135,7 @@
                 </Grid>
 
                 <!-- History side panel -->
-                <Border x:Name="HistoryPanel" Grid.Column="1" Width="360" Padding="16" Margin="12,0,0,0"
+                <Border x:Name="HistoryPanel" Grid.Column="1" Width="390" Padding="16" Margin="12,0,0,0"
                         HorizontalAlignment="Right" VerticalAlignment="Stretch" Visibility="Collapsed" Opacity="0"
                         Style="{StaticResource Card.Glass}">
                     <Border.RenderTransform>
@@ -121,14 +152,18 @@
                         <StackPanel Grid.Row="0" Margin="0,0,0,10">
                             <TextBlock Text="{DynamicResource Chat.HistoryTitle}"
                                        Style="{StaticResource Text.H2}" Margin="0,0,0,8"/>
-                            <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
                                 <Button x:Name="HistoryTabButton" Content="{DynamicResource Chat.HistoryTab}"
-                                        MinWidth="110" Height="30"
+                                        Grid.Column="0" Height="32"
                                         Style="{StaticResource Button.Glass}" Click="HistoryTabButton_Click" Margin="0,0,8,0"/>
                                 <Button x:Name="DeletedTabButton" Content="{DynamicResource Chat.DeletedTab}"
-                                        MinWidth="110" Height="30"
+                                        Grid.Column="1" Height="32"
                                         Style="{StaticResource Button.Glass}" Click="DeletedTabButton_Click"/>
-                            </StackPanel>
+                            </Grid>
                         </StackPanel>
 
                         <Border Grid.Row="1" Style="{StaticResource Card.Glass}" Padding="8" Margin="0,0,0,10">
@@ -144,7 +179,7 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
                                                     <StackPanel Grid.Column="0">
-                                                        <TextBlock Text="{Binding Title}" Style="{StaticResource Text.Body}"/>
+                                                        <TextBlock Text="{Binding Title}" Style="{StaticResource Text.Body}" TextTrimming="CharacterEllipsis"/>
                                                         <TextBlock Text="{Binding Time}" Style="{StaticResource Text.Subtle}"/>
                                                     </StackPanel>
                                                     <Button Grid.Column="1" Content="🗑" Width="30" Height="28"
@@ -173,7 +208,7 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
                                                     <StackPanel Grid.Column="0">
-                                                        <TextBlock Text="{Binding Title}" Style="{StaticResource Text.Body}"/>
+                                                        <TextBlock Text="{Binding Title}" Style="{StaticResource Text.Body}" TextTrimming="CharacterEllipsis"/>
                                                         <TextBlock Text="{Binding Time}" Style="{StaticResource Text.Subtle}"/>
                                                     </StackPanel>
                                                     <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
@@ -242,9 +277,9 @@
 
                         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
                             <Button Content="{DynamicResource Chat.HistoryClose}" Style="{StaticResource Button.Glass}"
-                                    Click="HistoryClose_Click" Margin="0,0,8,0"/>
+                                    MinWidth="112" Click="HistoryClose_Click" Margin="0,0,8,0"/>
                             <Button x:Name="HistoryOpenButton" Content="{DynamicResource Chat.HistoryOpen}" Style="{StaticResource Button.Primary}"
-                                    Click="HistoryOpen_Click"/>
+                                    MinWidth="112" Click="HistoryOpen_Click"/>
                         </StackPanel>
 
                     </Grid>

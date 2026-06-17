@@ -5,12 +5,14 @@ namespace Smartitecture.Controls
 {
     public partial class AppTopBar : UserControl
     {
+        // Dependency properties allow XAML to bind Title/ShowBack and react to changes.
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
             nameof(Title), typeof(string), typeof(AppTopBar), new PropertyMetadata("Smartitecture", OnTitleChanged));
 
         public static readonly DependencyProperty ShowBackProperty = DependencyProperty.Register(
             nameof(ShowBack), typeof(bool), typeof(AppTopBar), new PropertyMetadata(false, OnShowBackChanged));
 
+        // Routed events so the parent view decides navigation.
         public event RoutedEventHandler? BackClicked;
         public event RoutedEventHandler? HomeClicked;
         public event RoutedEventHandler? SettingsClicked;
@@ -32,6 +34,7 @@ namespace Smartitecture.Controls
             InitializeComponent();
         }
 
+        // Update the visible title when the dependency property changes.
         private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is AppTopBar bar)
@@ -40,6 +43,7 @@ namespace Smartitecture.Controls
             }
         }
 
+        // Show/hide the back button based on the bound property.
         private static void OnShowBackChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is AppTopBar bar)
@@ -48,6 +52,7 @@ namespace Smartitecture.Controls
             }
         }
 
+        // Bubble clicks up to the parent view.
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             BackClicked?.Invoke(this, e);
@@ -64,4 +69,3 @@ namespace Smartitecture.Controls
         }
     }
 }
-

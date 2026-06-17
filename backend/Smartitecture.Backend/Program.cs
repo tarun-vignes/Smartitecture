@@ -53,24 +53,19 @@ app.MapGet("/health", () => Results.Ok(new
 app.MapPost("/v1/chat", async (HttpRequest request, IHttpClientFactory httpFactory) =>
 {
     var config = BackendConfig.Load();
-    if (string.IsNullOrWhiteSpace(config.OpenAIApiKey))
+    if (BackendHelpers.ValidateApiKey(request, config) is { } apiKeyError)
     {
-        return BackendHelpers.ErrorResponse("OPENAI_API_KEY is not configured on the backend.", StatusCodes.Status500InternalServerError, "backend_missing_key");
+        return apiKeyError;
     }
 
-    if (!string.IsNullOrWhiteSpace(config.ApiKey))
+    if (config.UsesGemini && string.IsNullOrWhiteSpace(config.GeminiApiKey))
     {
-        var authHeader = request.Headers.Authorization.ToString();
-        var headerKey = request.Headers["X-API-Key"].ToString();
-        var bearerToken = authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)
-            ? authHeader.Substring("Bearer ".Length).Trim()
-            : string.Empty;
+        return BackendHelpers.ErrorResponse("GEMINI_API_KEY is not configured on the backend.", StatusCodes.Status500InternalServerError, "backend_missing_key");
+    }
 
-        if (!string.Equals(headerKey, config.ApiKey, StringComparison.Ordinal) &&
-            !string.Equals(bearerToken, config.ApiKey, StringComparison.Ordinal))
-        {
-            return BackendHelpers.ErrorResponse("Invalid API key.", StatusCodes.Status401Unauthorized, "invalid_api_key");
-        }
+    if (config.UsesOpenAI && string.IsNullOrWhiteSpace(config.OpenAIApiKey))
+    {
+        return BackendHelpers.ErrorResponse("OPENAI_API_KEY is not configured on the backend.", StatusCodes.Status500InternalServerError, "backend_missing_key");
     }
 
     var payload = await JsonSerializer.DeserializeAsync<BackendChatRequest>(request.Body, Json.Options);
@@ -79,51 +74,83 @@ app.MapPost("/v1/chat", async (HttpRequest request, IHttpClientFactory httpFacto
         return BackendHelpers.ErrorResponse("Missing messages.", StatusCodes.Status400BadRequest, "missing_messages");
     }
 
-    var upstream = OpenAIRequest.FromBackend(payload, config);
-    var json = JsonSerializer.Serialize(upstream, Json.Options);
-
-    using var client = httpFactory.CreateClient("openai");
-    using var message = new HttpRequestMessage(HttpMethod.Post, config.OpenAIEndpoint);
-    message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", config.OpenAIApiKey);
-    message.Content = new StringContent(json, Encoding.UTF8, "application/json");
-
-    using var response = await client.SendAsync(message);
-    var responseJson = await response.Content.ReadAsStringAsync();
-
-    if (!response.IsSuccessStatusCode)
+    if (config.UsesGemini && CurrentFactAnswers.TryAnswer(payload, DateTimeOffset.Now) is { } currentFactAnswer)
     {
-        return BackendHelpers.ErrorResponse($"Upstream error: {responseJson}", (int)response.StatusCode, "upstream_error");
+        return Results.Ok(currentFactAnswer);
     }
 
-    var backendResponse = OpenAIResponse.ToBackend(responseJson);
-    return Results.Ok(backendResponse);
+    using var client = httpFactory.CreateClient("openai");
+
+    if (config.UsesGemini)
+    {
+        var geminiModel = GeminiRequest.ResolveModel(payload.Model, config);
+        var geminiRequest = GeminiRequest.FromBackend(payload, config);
+        var geminiJson = JsonSerializer.Serialize(geminiRequest, Json.Options);
+        var geminiUrl = $"{config.GeminiEndpointBase.TrimEnd('/')}/{geminiModel}:generateContent";
+
+        using var geminiMessage = new HttpRequestMessage(HttpMethod.Post, geminiUrl);
+        geminiMessage.Headers.Add("x-goog-api-key", config.GeminiApiKey);
+        geminiMessage.Content = new StringContent(geminiJson, Encoding.UTF8, "application/json");
+
+        using var geminiResponse = await client.SendAsync(geminiMessage);
+        var geminiResponseJson = await geminiResponse.Content.ReadAsStringAsync();
+
+        if (!geminiResponse.IsSuccessStatusCode)
+        {
+            if ((int)geminiResponse.StatusCode == StatusCodes.Status429TooManyRequests &&
+                GeminiRequest.RequiresSearchGrounding(payload))
+            {
+                return Results.Ok(new BackendChatResponse(
+                    "I need live web grounding to answer that reliably, but the Gemini search/quota limit is exhausted for this API key right now. Try again later or enable billing/quota for grounded search.",
+                    new List<BackendToolCall>()));
+            }
+
+            return BackendHelpers.ErrorResponse($"Gemini upstream error: {geminiResponseJson}", (int)geminiResponse.StatusCode, "upstream_error");
+        }
+
+        var geminiBackendResponse = GeminiResponse.ToBackend(geminiResponseJson);
+        return Results.Ok(geminiBackendResponse);
+    }
+
+    var openAiRequest = OpenAIRequest.FromBackend(payload, config);
+    var openAiJson = JsonSerializer.Serialize(openAiRequest, Json.Options);
+
+    using var openAiMessage = new HttpRequestMessage(HttpMethod.Post, config.OpenAIEndpoint);
+    openAiMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", config.OpenAIApiKey);
+    openAiMessage.Content = new StringContent(openAiJson, Encoding.UTF8, "application/json");
+
+    using var openAiResponse = await client.SendAsync(openAiMessage);
+    var openAiResponseJson = await openAiResponse.Content.ReadAsStringAsync();
+
+    if (!openAiResponse.IsSuccessStatusCode)
+    {
+        return BackendHelpers.ErrorResponse($"Upstream error: {openAiResponseJson}", (int)openAiResponse.StatusCode, "upstream_error");
+    }
+
+    var openAiBackendResponse = OpenAIResponse.ToBackend(openAiResponseJson);
+    return Results.Ok(openAiBackendResponse);
 });
 
 app.MapPost("/v1/chat/stream", async (HttpRequest request, HttpResponse response, IHttpClientFactory httpFactory) =>
 {
     var config = BackendConfig.Load();
-    if (string.IsNullOrWhiteSpace(config.OpenAIApiKey))
+    if (!await BackendHelpers.ValidateApiKeyForSseAsync(request, response, config))
+    {
+        return;
+    }
+
+    if (config.UsesGemini && string.IsNullOrWhiteSpace(config.GeminiApiKey))
+    {
+        response.StatusCode = StatusCodes.Status500InternalServerError;
+        await BackendHelpers.WriteSseErrorAsync(response, "GEMINI_API_KEY is not configured on the backend.", "backend_missing_key");
+        return;
+    }
+
+    if (config.UsesOpenAI && string.IsNullOrWhiteSpace(config.OpenAIApiKey))
     {
         response.StatusCode = StatusCodes.Status500InternalServerError;
         await BackendHelpers.WriteSseErrorAsync(response, "OPENAI_API_KEY is not configured on the backend.", "backend_missing_key");
         return;
-    }
-
-    if (!string.IsNullOrWhiteSpace(config.ApiKey))
-    {
-        var authHeader = request.Headers.Authorization.ToString();
-        var headerKey = request.Headers["X-API-Key"].ToString();
-        var bearerToken = authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)
-            ? authHeader.Substring("Bearer ".Length).Trim()
-            : string.Empty;
-
-        if (!string.Equals(headerKey, config.ApiKey, StringComparison.Ordinal) &&
-            !string.Equals(bearerToken, config.ApiKey, StringComparison.Ordinal))
-        {
-            response.StatusCode = StatusCodes.Status401Unauthorized;
-            await BackendHelpers.WriteSseErrorAsync(response, "Invalid API key.", "invalid_api_key");
-            return;
-        }
     }
 
     var payload = await JsonSerializer.DeserializeAsync<BackendChatRequest>(request.Body, Json.Options);
@@ -138,24 +165,94 @@ app.MapPost("/v1/chat/stream", async (HttpRequest request, HttpResponse response
     response.Headers.ContentType = "text/event-stream";
     response.Headers.Connection = "keep-alive";
 
-    var upstream = OpenAIRequest.FromBackend(payload, config, stream: true);
-    var json = JsonSerializer.Serialize(upstream, Json.Options);
-
-    using var client = httpFactory.CreateClient("openai");
-    using var message = new HttpRequestMessage(HttpMethod.Post, config.OpenAIEndpoint);
-    message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", config.OpenAIApiKey);
-    message.Content = new StringContent(json, Encoding.UTF8, "application/json");
-
-    using var upstreamResponse = await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead);
-    if (!upstreamResponse.IsSuccessStatusCode)
+    if (config.UsesGemini && CurrentFactAnswers.TryAnswer(payload, DateTimeOffset.Now) is { } currentFactAnswer)
     {
-        var responseJson = await upstreamResponse.Content.ReadAsStringAsync();
-        response.StatusCode = (int)upstreamResponse.StatusCode;
-        await BackendHelpers.WriteSseErrorAsync(response, $"Upstream error: {responseJson}", "upstream_error");
+        foreach (var token in BackendHelpers.TokenizeForStream(currentFactAnswer.Content))
+        {
+            await BackendHelpers.WriteSseAsync(response, new { token });
+            await Task.Delay(8);
+        }
+
+        await BackendHelpers.WriteSseAsync(response, new
+        {
+            done = true,
+            toolCalls = currentFactAnswer.ToolCalls
+        });
         return;
     }
 
-    await using var stream = await upstreamResponse.Content.ReadAsStreamAsync();
+    using var client = httpFactory.CreateClient("openai");
+
+    if (config.UsesGemini)
+    {
+        var geminiModel = GeminiRequest.ResolveModel(payload.Model, config);
+        var geminiRequest = GeminiRequest.FromBackend(payload, config);
+        var geminiJson = JsonSerializer.Serialize(geminiRequest, Json.Options);
+        var geminiUrl = $"{config.GeminiEndpointBase.TrimEnd('/')}/{geminiModel}:generateContent";
+
+        using var geminiMessage = new HttpRequestMessage(HttpMethod.Post, geminiUrl);
+        geminiMessage.Headers.Add("x-goog-api-key", config.GeminiApiKey);
+        geminiMessage.Content = new StringContent(geminiJson, Encoding.UTF8, "application/json");
+
+        using var geminiResponse = await client.SendAsync(geminiMessage);
+        var geminiResponseJson = await geminiResponse.Content.ReadAsStringAsync();
+        if (!geminiResponse.IsSuccessStatusCode)
+        {
+            if ((int)geminiResponse.StatusCode == StatusCodes.Status429TooManyRequests &&
+                GeminiRequest.RequiresSearchGrounding(payload))
+            {
+                var quotaMessage = "I need live web grounding to answer that reliably, but the Gemini search/quota limit is exhausted for this API key right now. Try again later or enable billing/quota for grounded search.";
+                foreach (var token in BackendHelpers.TokenizeForStream(quotaMessage))
+                {
+                    await BackendHelpers.WriteSseAsync(response, new { token });
+                    await Task.Delay(8);
+                }
+
+                await BackendHelpers.WriteSseAsync(response, new
+                {
+                    done = true,
+                    toolCalls = Array.Empty<BackendToolCall>()
+                });
+                return;
+            }
+
+            response.StatusCode = (int)geminiResponse.StatusCode;
+            await BackendHelpers.WriteSseErrorAsync(response, $"Gemini upstream error: {geminiResponseJson}", "upstream_error");
+            return;
+        }
+
+        var geminiBackendResponse = GeminiResponse.ToBackend(geminiResponseJson);
+        foreach (var token in BackendHelpers.TokenizeForStream(geminiBackendResponse.Content))
+        {
+            await BackendHelpers.WriteSseAsync(response, new { token });
+            await Task.Delay(8);
+        }
+
+        await BackendHelpers.WriteSseAsync(response, new
+        {
+            done = true,
+            toolCalls = geminiBackendResponse.ToolCalls
+        });
+        return;
+    }
+
+    var openAiRequest = OpenAIRequest.FromBackend(payload, config, stream: true);
+    var openAiJson = JsonSerializer.Serialize(openAiRequest, Json.Options);
+
+    using var openAiMessage = new HttpRequestMessage(HttpMethod.Post, config.OpenAIEndpoint);
+    openAiMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", config.OpenAIApiKey);
+    openAiMessage.Content = new StringContent(openAiJson, Encoding.UTF8, "application/json");
+
+    using var openAiResponse = await client.SendAsync(openAiMessage, HttpCompletionOption.ResponseHeadersRead);
+    if (!openAiResponse.IsSuccessStatusCode)
+    {
+        var openAiErrorJson = await openAiResponse.Content.ReadAsStringAsync();
+        response.StatusCode = (int)openAiResponse.StatusCode;
+        await BackendHelpers.WriteSseErrorAsync(response, $"Upstream error: {openAiErrorJson}", "upstream_error");
+        return;
+    }
+
+    await using var stream = await openAiResponse.Content.ReadAsStreamAsync();
     using var reader = new StreamReader(stream);
     var toolCalls = new Dictionary<int, ToolCallAccumulator>();
 

@@ -1,6 +1,6 @@
 # Smartitecture - AI-Powered System Intelligence (In Development)
 
-Smartitecture is a premium Windows WPF desktop assistant with a glassmorphic UI, a guided startup wizard, and modular AI orchestration across LUMEN (general), FORTIS (security), and NEXA (performance).
+Smartitecture is a premium Windows WPF desktop assistant with a glassmorphic UI, a guided startup wizard, a unified AI assistant, and local system tools for diagnostics, security checks, and automation.
 
 Status: In active development. Expect frequent changes and rapid iteration.
 
@@ -8,8 +8,8 @@ Status: In active development. Expect frequent changes and rapid iteration.
 
 - Modern UI: glassmorphism, gradients, smooth transitions, premium typography
 - Live System Insights: CPU, memory, disk, and network tiles
-- Chat Assistant: multi-model selector, chat history, deleted chat recovery
-- AI Modes: LUMEN (general), FORTIS (security), NEXA (performance)
+- Chat Assistant: one assistant with automatic local/server routing, voice input, chat history, and deleted chat recovery
+- Local Tools: system info, process listing, performance snapshots, Defender status, app launching
 - Themes: Light, Dark, System
 - Localization: app strings via resource dictionaries
 - Safety: confirmations for destructive system actions
@@ -30,34 +30,41 @@ dotnet build -c Debug Smartitecture.csproj
 dotnet run --project Smartitecture.csproj
 ```
 
-## Optional Local Backend
+## Optional AI Backend
 
-The app can connect to a local backend API (for cloud model access). This is optional and can be replaced with other providers later.
+The app can connect to a hosted or local backend API for broader model answers while keeping cloud secrets out of the desktop app.
 
 Set Environment Variables
 ```powershell
-$env:OPENAI_API_KEY="YOUR_OPENAI_KEY"
-# Optional: protect backend with a shared key
-$env:SMARTITECTURE_BACKEND_KEY="YOUR_BACKEND_KEY"
+$env:GEMINI_API_KEY="YOUR_GEMINI_KEY"
+$env:SMARTITECTURE_BACKEND_API_KEY="YOUR_BACKEND_KEY"
+# Hosted production requires the shared backend key. Local private testing can set this to false.
+$env:SMARTITECTURE_REQUIRE_BACKEND_API_KEY="true"
 ```
 
 Run Backend
 ```powershell
-dotnet run --project .\backend\Smartitecture.Backend\Smartitecture.Backend.csproj -- --urls http://127.0.0.1:8089
+dotnet run --project .\backend\Smartitecture.Backend\Smartitecture.Backend.csproj --urls http://127.0.0.1:8080
 ```
 
 Point the App to Backend
 ```powershell
-$env:Backend__BaseUrl="http://127.0.0.1:8089"
-# Only if you set a backend key:
+# Preferred: open Settings > AI Server in the desktop app.
+# Enter http://127.0.0.1:8080 and the optional backend API key, then click Test.
+#
+# Environment variables still work for development:
+$env:Backend__BaseUrl="http://127.0.0.1:8080"
 $env:Backend__ApiKey="YOUR_BACKEND_KEY"
 ```
 
+Deployment scripts and release steps are documented in `docs/release/DEPLOYMENT.md`.
+The repo also includes `render.yaml` for deploying the backend as a Render Docker web service.
+
 ## Architecture Overview
 
-- App entry: App.xaml -> StartupWindow (welcome and wizard) -> MainWindow (dashboard) -> UI/ChatWindow (assistant)
-- Modes and services: Services/ (Core, Modes, Connectors, Safety, Hardware)
-- UI: MainWindow.xaml, StartupWindow.xaml, UI/ChatWindow.xaml, SettingsWindow.xaml, Controls/AppTopBar.xaml
+- App entry: App.xaml -> MainWindow -> StartupView/DashboardView/ChatView
+- Services: Services/ (Core, Connectors, Providers, Safety)
+- UI: MainWindow.xaml, UI/StartupView.xaml, UI/DashboardView.xaml, UI/ChatView.xaml, UI/SettingsView.xaml, Controls/AppTopBar.xaml
 - Theme: Resources/Themes/*.xaml via Services/ThemeManager.cs
 - Backend: backend/Smartitecture.Backend (optional local API)
 - Website: Website/ (Vite)
@@ -66,9 +73,9 @@ Key Files
 - Controls/AppTopBar.xaml: shared top bar with back, home, settings
 - Services/NavigationService.cs: fade transitions for navigation
 - Services/ThemeManager.cs: applies theme dictionaries
-- StartupWindow.xaml: welcome and readiness setup
-- MainWindow.xaml: dashboard with quick actions
-- UI/ChatWindow.xaml: chat experience with model selector and typing indicator
+- UI/StartupView.xaml: welcome and live system overview
+- UI/DashboardView.xaml: dashboard with quick actions
+- UI/ChatView.xaml: unified assistant experience with voice input, local tools, history, and typing indicator
 
 ## Repo Layout
 
@@ -102,8 +109,9 @@ Pull Requests
 ## Configuration and Secrets
 
 - Do not commit secrets. Use environment variables or dotnet user-secrets
-- API Keys: OPENAI_API_KEY, ANTHROPIC_API_KEY
-- Startup wizard will later assist with saving keys locally
+- Backend server keys: `GEMINI_API_KEY` by default, or `OPENAI_API_KEY` when `SMARTITECTURE_AI_PROVIDER=openai`; use `SMARTITECTURE_BACKEND_API_KEY` for hosted backends
+- Desktop backend connection: configure in Settings > AI Server or via `Backend__BaseUrl` / `Backend__ApiKey`
+- Keep `appsettings.json` safe by default
 
 ## Testing
 

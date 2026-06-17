@@ -71,9 +71,9 @@ namespace Smartitecture.Services
             // Current Events - CAREFUL: Only include facts that are stable
             AddVerifiedFact("president usa current", new VerifiedFact
             {
-                Answer = "As of 2025, **Donald Trump** is the President of the United States, serving as the 47th president since January 20, 2025.",
-                Confidence = 0.9, // Slightly lower because this can change
-                Source = "Current as of 2025",
+                Answer = "I should not answer current political office holders from the offline knowledge base because that information can change. Use a web-enabled provider for current political facts.",
+                Confidence = 1.0,
+                Source = "Offline safety rule",
                 LastVerified = DateTime.Now,
                 Tags = new[] { "politics", "president", "usa", "current" }
             });
@@ -197,7 +197,15 @@ namespace Smartitecture.Services
             _synonyms["speed light"] = new List<string> { "speed of light", "light speed", "how fast is light" };
             _synonyms["water boiling point"] = new List<string> { "boiling point of water", "when does water boil", "water boil temperature" };
             _synonyms["pi value"] = new List<string> { "value of pi", "what is pi", "pi number" };
-            _synonyms["what is ai"] = new List<string> { "define ai", "artificial intelligence", "what is artificial intelligence", "ai definition" };
+            _synonyms["what is ai"] = new List<string>
+            {
+                "ai",
+                "define ai",
+                "explain ai",
+                "artificial intelligence",
+                "what is artificial intelligence",
+                "ai definition"
+            };
             
             // Geography synonyms
             _synonyms["capital florida"] = new List<string> { "capital of florida", "florida capital", "what is capital of florida" };

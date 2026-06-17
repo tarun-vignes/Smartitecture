@@ -13,6 +13,10 @@
 
             <conv:ProgressToWidthConverter x:Key="ProgressToWidthConverter"/>
 
+            <FontFamily x:Key="Font.Multilingual">
+                Segoe UI Variable Text, Segoe UI, Global User Interface, Nirmala UI, Ebrima, Gadugi, Leelawadee UI, Khmer UI, Myanmar Text, Microsoft Himalaya, Microsoft JhengHei UI, Microsoft YaHei UI, Malgun Gothic, Yu Gothic UI, Meiryo, Segoe UI Historic, Segoe UI Emoji, Arial Unicode MS, Arial
+            </FontFamily>
+
             <!-- Brand gradient (for logo badges) -->
             <LinearGradientBrush x:Key="Brush.BrandGradient" StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="#4F46E5" Offset="0"/>
@@ -35,8 +39,16 @@
             </Style>
 
             <!-- Typography -->
+            <Style TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
+                <Setter Property="TextOptions.TextFormattingMode" Value="Ideal"/>
+                <Setter Property="TextOptions.TextRenderingMode" Value="Auto"/>
+            </Style>
+            <Style TargetType="Control">
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
+            </Style>
             <Style x:Key="Text.H1" TargetType="TextBlock">
-                <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI, Nirmala UI, Microsoft YaHei UI, Meiryo, Malgun Gothic, Arial"/>
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
                 <Setter Property="FontSize" Value="26"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="Foreground" Value="{DynamicResource Brush.OnSurface}"/>
@@ -46,7 +58,7 @@
                 <Setter Property="FontWeight" Value="SemiBold"/>
             </Style>
             <Style x:Key="Text.Body" TargetType="TextBlock">
-                <Setter Property="FontFamily" Value="Segoe UI Variable Text, Segoe UI, Nirmala UI, Microsoft YaHei UI, Meiryo, Malgun Gothic, Arial"/>
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
                 <Setter Property="FontSize" Value="15"/>
                 <Setter Property="Foreground" Value="{DynamicResource Brush.OnSurface}"/>
                 <Setter Property="Opacity" Value="0.96"/>
@@ -92,6 +104,7 @@
                 <Setter Property="MinHeight" Value="40"/>
                 <Setter Property="MinWidth" Value="120"/>
                 <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -122,6 +135,7 @@
                 <Setter Property="MinHeight" Value="36"/>
                 <Setter Property="MinWidth" Value="110"/>
                 <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                 <Setter Property="Template">
@@ -181,6 +195,7 @@
                 <Setter Property="Padding" Value="10,6"/>
                 <Setter Property="MinHeight" Value="36"/>
                 <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="TextBox">
@@ -211,6 +226,7 @@
                 <Setter Property="Padding" Value="10,6"/>
                 <Setter Property="MinHeight" Value="36"/>
                 <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="PasswordBox">
@@ -241,6 +257,7 @@
                 <Setter Property="Padding" Value="10,6"/>
                 <Setter Property="MinHeight" Value="36"/>
                 <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
                 <Setter Property="ItemContainerStyle" Value="{DynamicResource ComboBoxItem.Glass}"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -330,6 +347,7 @@
             <Style x:Key="ComboBoxItem.Glass" TargetType="ComboBoxItem">
                 <Setter Property="Foreground" Value="{DynamicResource Brush.OnSurface}"/>
                 <Setter Property="Background" Value="{DynamicResource Brush.InputBackground}"/>
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
                 <Setter Property="Padding" Value="8,4"/>
                 <Setter Property="BorderBrush" Value="Transparent"/>
                 <Setter Property="BorderThickness" Value="0"/>
@@ -362,6 +380,7 @@
             </Style>
             <Style x:Key="CheckBox.Glass" TargetType="CheckBox">
                 <Setter Property="Foreground" Value="{DynamicResource Brush.OnSurface}"/>
+                <Setter Property="FontFamily" Value="{StaticResource Font.Multilingual}"/>
             </Style>
 
             <!-- Progress Bar -->

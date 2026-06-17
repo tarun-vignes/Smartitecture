@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Smartitecture.Services.Core;
@@ -8,22 +10,33 @@ namespace Smartitecture.Services.Providers
 {
     public sealed class LocalFallbackProvider : ILLMProvider
     {
-        private readonly KnowledgeBaseService _knowledgeBase = new KnowledgeBaseService();
+        private readonly NaturalConversationService _conversation = new NaturalConversationService();
 
         public string Name => "Local Fallback";
         public bool IsConfigured => true;
 
         public Task<LLMResponse> GetResponseAsync(LLMRequest request, CancellationToken cancellationToken)
         {
-            var kb = _knowledgeBase.GetAnswer(request.UserMessage);
-            var response = !string.IsNullOrWhiteSpace(kb)
-                ? kb
-                : "Smartitecture local assistant is active.";
-
-            return Task.FromResult(new LLMResponse { Content = response });
+            return GetResponseCoreAsync(request);
         }
 
-        public async IAsyncEnumerable<string> StreamResponseAsync(LLMRequest request, CancellationToken cancellationToken)
+        private async Task<LLMResponse> GetResponseCoreAsync(LLMRequest request)
+        {
+            var history = request.History
+                .Select(m => new ConversationMessage
+                {
+                    Role = m.Role,
+                    Content = m.Content
+                })
+                .ToList();
+
+            var response = ResponseTextCleaner.ForChatDisplay(
+                await _conversation.GetResponseAsync(request.UserMessage, history));
+
+            return new LLMResponse { Content = response };
+        }
+
+        public async IAsyncEnumerable<string> StreamResponseAsync(LLMRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var response = (await GetResponseAsync(request, cancellationToken)).Content;
             var words = response.Split(' ');

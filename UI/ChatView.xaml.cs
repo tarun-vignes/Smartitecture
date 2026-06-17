@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Microsoft.Win32;
 using Smartitecture.Services;
 using Smartitecture.Services.Automation;
 using Smartitecture.Services.Core;
@@ -16,10 +19,14 @@ namespace Smartitecture.UI
 {
     public partial class ChatView : UserControl
     {
+        // Core services (chat models, history, tool execution).
         private readonly ILLMService _llmService = null!;
         private readonly ChatHistoryService _historyService = new ChatHistoryService();
         private readonly ToolExecutionService _toolExecutor = new ToolExecutionService();
+        private readonly VoiceInputService _voiceInput = new VoiceInputService();
+        // Active conversation state.
         private string _conversationId;
+        // UI/interaction state.
         private readonly DispatcherTimer _typingTimer;
         private bool _isProcessing = false;
         private bool _isReplayingHistory = false;
@@ -28,6 +35,9 @@ namespace Smartitecture.UI
         private string? _pendingDeleteId;
         private DeleteConfirmMode _deleteConfirmMode = DeleteConfirmMode.Soft;
         private ToolCall? _pendingToolConfirmation;
+        private int _providerStatusCheckId = 0;
+        private string? _lastAssistantMessage;
+        private ToolMemory? _lastToolMemory;
 
         private enum DeleteConfirmMode
         {
@@ -41,44 +51,30 @@ namespace Smartitecture.UI
             _llmService = llmService ?? throw new ArgumentNullException(nameof(llmService));
             _conversationId = Guid.NewGuid().ToString();
 
-            // Setup typing animation timer
+            // Typing indicator animation timer.
             _typingTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(500)
             };
             _typingTimer.Tick += TypingTimer_Tick;
 
-            // Subscribe to model switching events
-            if (_llmService != null)
-            {
-                _llmService.ModelSwitched += OnModelSwitched;
-                _llmService.ModeSwitched += OnModeSwitched;
-                UpdateModelStatus();
-            }
-
-            // Setup placeholder text behavior
+            // Placeholder behavior.
             SetupPlaceholderText();
-            PopulateModelSelector();
-            PopulateModeSelector();
 
             Loaded += ChatView_Loaded;
             Unloaded += ChatView_Unloaded;
         }
 
-        private void ChatView_Loaded(object sender, RoutedEventArgs e)
+        private async void ChatView_Loaded(object sender, RoutedEventArgs e)
         {
             Focus();
             MessageInput.Focus();
+            await RefreshProviderStatusAsync();
         }
 
         private void ChatView_Unloaded(object sender, RoutedEventArgs e)
         {
             _typingTimer?.Stop();
-            if (_llmService != null)
-            {
-                _llmService.ModelSwitched -= OnModelSwitched;
-                _llmService.ModeSwitched -= OnModeSwitched;
-            }
         }
 
         private void GoDashboard_Click(object sender, RoutedEventArgs e)
@@ -110,6 +106,7 @@ namespace Smartitecture.UI
 
         private void SetupPlaceholderText()
         {
+            // Manual placeholder to keep glass textbox styling consistent.
             var placeholderText = GetString("Chat.Placeholder", "Type your message or command here...");
             MessageInput.Text = placeholderText;
             MessageInput.Foreground = GetPlaceholderBrush();
@@ -158,119 +155,6 @@ namespace Smartitecture.UI
             return TryFindResource("Brush.ChatBubbleSystemForeground") as Brush ?? GetOnSurfaceBrush();
         }
 
-        private void OnModelSwitched(object? sender, ModelSwitchedEventArgs e)
-        {
-            Dispatcher.Invoke(() => UpdateModelStatus());
-        }
-
-        private void OnModeSwitched(object? sender, ModeSwitchedEventArgs e)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                UpdateModelStatus();
-                SyncModeSelector();
-            });
-        }
-
-        private void UpdateModelStatus()
-        {
-            if (_llmService != null)
-            {
-                var modeLabel = GetModeDisplayName(_llmService.CurrentMode);
-                ModelStatusText.Text = $"({_llmService.CurrentModel} \u2022 {modeLabel})";
-            }
-        }
-
-        private void PopulateModelSelector()
-        {
-            if (ModelSelector == null)
-            {
-                return;
-            }
-
-            ModelSelector.Items.Clear();
-            ComboBoxItem? selected = null;
-
-            foreach (var model in _llmService.AvailableModels)
-            {
-                var item = new ComboBoxItem { Content = model };
-                ModelSelector.Items.Add(item);
-                if (string.Equals(model, _llmService.CurrentModel, StringComparison.OrdinalIgnoreCase))
-                {
-                    selected = item;
-                }
-            }
-
-            if (selected != null)
-            {
-                ModelSelector.SelectedItem = selected;
-            }
-            else if (ModelSelector.Items.Count > 0)
-            {
-                ModelSelector.SelectedIndex = 0;
-            }
-
-            UpdateModelStatus();
-        }
-
-        private void PopulateModeSelector()
-        {
-            if (ModeSelector == null)
-            {
-                return;
-            }
-
-            ModeSelector.Items.Clear();
-            ComboBoxItem? selected = null;
-
-            foreach (var mode in _llmService.AvailableModes)
-            {
-                var label = GetModeDisplayName(mode);
-                var item = new ComboBoxItem { Content = label, Tag = mode };
-                ModeSelector.Items.Add(item);
-                if (mode == _llmService.CurrentMode)
-                {
-                    selected = item;
-                }
-            }
-
-            if (selected != null)
-            {
-                ModeSelector.SelectedItem = selected;
-            }
-            else if (ModeSelector.Items.Count > 0)
-            {
-                ModeSelector.SelectedIndex = 0;
-            }
-        }
-
-        private void SyncModeSelector()
-        {
-            if (ModeSelector == null)
-            {
-                return;
-            }
-
-            foreach (var item in ModeSelector.Items.OfType<ComboBoxItem>())
-            {
-                if (item.Tag is AIModeType mode && mode == _llmService.CurrentMode)
-                {
-                    ModeSelector.SelectedItem = item;
-                    break;
-                }
-            }
-        }
-
-        private string GetModeDisplayName(AIModeType mode)
-        {
-            return mode switch
-            {
-                AIModeType.Fortis => GetString("Chat.ModeFortis", "FORTIS"),
-                AIModeType.Nexa => GetString("Chat.ModeNexa", "NEXA"),
-                _ => GetString("Chat.ModeLumen", "LUMEN")
-            };
-        }
-
         private async void SendButton_Click(object sender, RoutedEventArgs e)
         {
             await SendMessageAsync();
@@ -287,7 +171,7 @@ namespace Smartitecture.UI
 
         private async Task SendMessageAsync()
         {
-            var placeholderText = "Type your message or command here...";
+            var placeholderText = GetString("Chat.Placeholder", "Type your message or command here...");
             if (_isProcessing || string.IsNullOrWhiteSpace(MessageInput.Text) || MessageInput.Text == placeholderText)
                 return;
 
@@ -299,13 +183,29 @@ namespace Smartitecture.UI
 
             try
             {
-                // Add user message to chat
+                // Add user message bubble and save to history.
                 AddMessageToChat(userMessage, "user");
 
-                // Show typing indicator
+                // Show typing indicator while processing.
                 ShowTypingIndicator();
 
-                // Check if message contains a command
+                if (ShouldRefreshProcessListForCloseRequest(userMessage))
+                {
+                    await ExecuteCommandAsync(
+                        "list_processes",
+                        new Dictionary<string, object> { ["count"] = 12 },
+                        userMessage);
+                    return;
+                }
+
+                var contextualFollowUp = TryBuildContextualFollowUp(userMessage);
+                if (!string.IsNullOrWhiteSpace(contextualFollowUp))
+                {
+                    AddMessageToChat(contextualFollowUp, "assistant");
+                    return;
+                }
+
+                // Check if the message maps to a system command.
                 var (commandName, parameters) = await _llmService.ParseCommandAsync(userMessage);
 
                 if (!string.IsNullOrEmpty(commandName))
@@ -321,7 +221,7 @@ namespace Smartitecture.UI
             }
             catch (Exception ex)
             {
-                AddMessageToChat($"X Error: {ex.Message}", "system");
+                AddMessageToChat($"Something went wrong: {ex.Message}", "system");
             }
             finally
             {
@@ -336,13 +236,15 @@ namespace Smartitecture.UI
         {
             try
             {
-                AddMessageToChat($"Executing {commandName} command...", "system");
+                // Commands execute locally via ToolExecutionService.
+                AddMessageToChat(BuildCommandStatusMessage(commandName), "system");
 
                 var toolArgs = parameters?.ToDictionary(kvp => kvp.Key, kvp => (object?)kvp.Value);
                 var result = await _toolExecutor.ExecuteToolAsync(commandName, toolArgs);
 
                 if (result.RequiresConfirmation)
                 {
+                    // For sensitive actions, show confirmation before execution.
                     var argsJson = toolArgs == null ? "{}" : System.Text.Json.JsonSerializer.Serialize(toolArgs);
                     ShowToolConfirmation(new ToolCall { Name = commandName, ArgumentsJson = argsJson });
                     return;
@@ -350,9 +252,17 @@ namespace Smartitecture.UI
 
                 if (result.Success)
                 {
+                    RememberToolResult(commandName, result.Message, originalMessage);
+
+                    if (ShouldShowToolResultAsAssistant(commandName))
+                    {
+                        AddMessageToChat(BuildToolAssistantMessage(commandName, toolArgs, result.Message, originalMessage), "assistant");
+                        return;
+                    }
+
                     AddMessageToChat(result.Message, "system");
 
-                    // Also get AI commentary on the action
+                    // Ask the AI to summarize what happened.
                     var aiResponse = await _llmService.GetResponseAsync(
                         $"I just executed the {commandName} command for the user. Please provide a brief, helpful response about what was done.",
                         _conversationId);
@@ -363,7 +273,7 @@ namespace Smartitecture.UI
                 {
                     AddMessageToChat(result.Message, "system");
 
-                    // Get AI help for failed command
+                    // Ask the AI for troubleshooting guidance.
                     var aiResponse = await _llmService.GetResponseAsync(
                         $"The {commandName} command failed. Please help the user understand what might have gone wrong and suggest alternatives.",
                         _conversationId);
@@ -373,24 +283,708 @@ namespace Smartitecture.UI
             }
             catch (Exception ex)
             {
-                AddMessageToChat($"Executing command: {ex.Message}", "system");
+                AddMessageToChat($"I could not complete that action: {ex.Message}", "system");
             }
+        }
+
+        private static string BuildCommandStatusMessage(string commandName)
+        {
+            return commandName.ToLowerInvariant() switch
+            {
+                "system_info" => "Checking this PC...",
+                "performance_snapshot" => "Checking performance...",
+                "list_processes" => "Reading running processes...",
+                "network_adapters" => "Checking network adapters...",
+                "battery_status" => "Checking battery status...",
+                "defender_status" => "Checking Windows security...",
+                "defender_scan_status" => "Checking Defender scan results...",
+                "defender_scan" => "Preparing Windows Defender scan...",
+                "kill_process" => "Preparing to stop the process...",
+                "launch" => "Opening app...",
+                "calculator" => "Opening Calculator...",
+                "explorer" => "Opening File Explorer...",
+                "taskmgr" => "Opening Task Manager...",
+                _ => "Working on that..."
+            };
+        }
+
+        private static bool ShouldShowToolResultAsAssistant(string commandName)
+        {
+            return commandName.Equals("system_info", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("performance_snapshot", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("list_processes", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("network_adapters", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("battery_status", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("defender_status", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("defender_scan_status", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("defender_scan", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("launch", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("calculator", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("explorer", StringComparison.OrdinalIgnoreCase) ||
+                   commandName.Equals("taskmgr", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string BuildToolAssistantMessage(string commandName, Dictionary<string, object?>? args, string fallback, string originalMessage)
+        {
+            if (commandName.Equals("system_info", StringComparison.OrdinalIgnoreCase))
+            {
+                return $"Here is the basic profile for this PC.\n\n{fallback}";
+            }
+
+            if (commandName.Equals("performance_snapshot", StringComparison.OrdinalIgnoreCase))
+            {
+                return $"{BuildPerformanceSummary(fallback, originalMessage)}\n\n{fallback}";
+            }
+
+            if (commandName.Equals("list_processes", StringComparison.OrdinalIgnoreCase))
+            {
+                if (IsCloseRecommendationRequest(originalMessage.ToLowerInvariant()))
+                {
+                    return BuildCloseRecommendation(fallback);
+                }
+
+                return $"These are the processes using the most memory right now.\n\n{fallback}";
+            }
+
+            if (commandName.Equals("network_adapters", StringComparison.OrdinalIgnoreCase))
+            {
+                return $"Here are the active network adapters and addresses I can see.\n\n{fallback}";
+            }
+
+            if (commandName.Equals("battery_status", StringComparison.OrdinalIgnoreCase))
+            {
+                return $"Here is the current battery information I can read.\n\n{fallback}";
+            }
+
+            if (commandName.Equals("defender_status", StringComparison.OrdinalIgnoreCase))
+            {
+                return $"{BuildDefenderSummary(fallback)}\n\n{fallback}";
+            }
+
+            if (commandName.Equals("defender_scan_status", StringComparison.OrdinalIgnoreCase))
+            {
+                return fallback;
+            }
+
+            if (commandName.Equals("defender_scan", StringComparison.OrdinalIgnoreCase))
+            {
+                return fallback;
+            }
+
+            if (commandName.Equals("launch", StringComparison.OrdinalIgnoreCase))
+            {
+                var target = ExtractToolArg(args, "target") ??
+                             ExtractToolArg(args, "app") ??
+                             ExtractToolArg(args, "application") ??
+                             "the app";
+
+                return $"Opened {target}.";
+            }
+
+            if (commandName.Equals("calculator", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Opened Calculator.";
+            }
+
+            if (commandName.Equals("explorer", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Opened File Explorer.";
+            }
+
+            if (commandName.Equals("taskmgr", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Opened Task Manager.";
+            }
+
+            return fallback;
+        }
+
+        private static string BuildPerformanceSummary(string output, string originalMessage)
+        {
+            var question = originalMessage.ToLowerInvariant();
+            var askedAboutHeat = ContainsAny(question, "hot", "heat", "overheat", "overheating", "fan", "temperature");
+            var askedAboutSlowness = ContainsAny(question, "slow", "lag", "laggy", "freezing", "stutter", "performance");
+            var cpu = ExtractPercent(output, "CPU load:");
+            var memory = ExtractMemoryUsedPercent(output);
+
+            if (askedAboutHeat)
+            {
+                var reasons = new List<string>();
+                if (cpu.HasValue && cpu.Value >= 75)
+                {
+                    reasons.Add($"CPU load is high at {cpu.Value:0.#}%, which can make the machine run hot and spin up fans.");
+                }
+
+                if (memory.HasValue && memory.Value >= 85)
+                {
+                    reasons.Add($"Memory usage is high at {memory.Value:0.#}%, which can increase overall system pressure.");
+                }
+
+                if (reasons.Count == 0)
+                {
+                    reasons.Add("I do not have direct temperature sensor access in this build, and this snapshot does not show an obvious CPU or memory spike.");
+                    reasons.Add("If it still feels hot, check vents/fans, use a hard surface, close heavy apps, and look for dust or blocked airflow.");
+                }
+
+                return "Here is the likely heat picture from what I can read locally:\n- " + string.Join("\n- ", reasons);
+            }
+
+            if (askedAboutSlowness)
+            {
+                var reasons = new List<string>();
+                if (cpu.HasValue && cpu.Value >= 85)
+                {
+                    reasons.Add($"CPU load is very high at {cpu.Value:0.#}%, so the top processes below are the first suspects.");
+                }
+                else if (cpu.HasValue && cpu.Value >= 60)
+                {
+                    reasons.Add($"CPU load is moderately high at {cpu.Value:0.#}%, which can cause sluggishness while apps are busy.");
+                }
+
+                if (memory.HasValue && memory.Value >= 85)
+                {
+                    reasons.Add($"Memory usage is high at {memory.Value:0.#}%, so Windows may be compressing memory or paging to disk.");
+                }
+                else if (memory.HasValue && memory.Value >= 70)
+                {
+                    reasons.Add($"Memory usage is elevated at {memory.Value:0.#}%; closing heavy apps may help.");
+                }
+
+                if (reasons.Count == 0)
+                {
+                    reasons.Add("CPU and memory do not show an obvious bottleneck in this snapshot.");
+                    reasons.Add("If the PC still feels slow, the next checks are disk activity, startup apps, browser tabs/extensions, updates, and thermal throttling.");
+                }
+
+                return "Here is why the PC may feel slow right now:\n- " + string.Join("\n- ", reasons);
+            }
+
+            if (cpu.HasValue)
+            {
+                if (cpu.Value >= 85)
+                {
+                    return "Your CPU is under heavy load right now. The top process list below is the first place to look.";
+                }
+
+                if (cpu.Value >= 60)
+                {
+                    return "Your CPU is moderately busy. If the PC feels slow, check the top memory and CPU-related processes below.";
+                }
+
+                return "Your CPU load looks normal from this snapshot. If the PC still feels slow, memory, disk, startup apps, or heat may be involved.";
+            }
+
+            return "Here is a current performance snapshot. CPU load was not available, so use the process and memory details below as the main signal.";
+        }
+
+        private static bool ContainsAny(string value, params string[] patterns)
+        {
+            return patterns.Any(pattern => value.Contains(pattern, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private string? TryBuildContextualFollowUp(string userMessage)
+        {
+            var normalized = (userMessage ?? string.Empty).Trim().ToLowerInvariant();
+            if (!IsShortContextualFollowUp(normalized) || (_lastToolMemory == null && string.IsNullOrWhiteSpace(_lastAssistantMessage)))
+            {
+                return null;
+            }
+
+            if (_lastToolMemory != null)
+            {
+                var structured = TryBuildStructuredToolFollowUp(normalized, _lastToolMemory);
+                if (!string.IsNullOrWhiteSpace(structured))
+                {
+                    return structured;
+                }
+            }
+
+            var previous = _lastAssistantMessage ?? string.Empty;
+            var previousLower = previous.ToLowerInvariant();
+            var memory = ExtractMemoryUsedPercent(previous);
+            var cpu = ExtractPercent(previous, "CPU load:");
+            var asksWhatToClose = IsCloseRecommendationRequest(normalized);
+
+            if (asksWhatToClose)
+            {
+                return BuildCloseRecommendation(previous);
+            }
+
+            if (ContainsAny(previousLower, "memory usage is elevated", "memory usage is high", "ram", "memory:", "top memory processes"))
+            {
+                var details = new List<string>();
+                if (memory.HasValue)
+                {
+                    details.Add($"Memory is at {memory.Value:0.#}% used. That means apps and Windows are competing for working space.");
+                }
+                else
+                {
+                    details.Add("The previous result pointed at memory pressure, which can make the system feel slower even when CPU is not high.");
+                }
+
+                details.Add("When memory gets crowded, Windows may compress memory or move data to disk, and disk is much slower than RAM.");
+                details.Add("The top memory processes are the first things to inspect. Closing heavy apps, browser tabs, or extra editor windows should help if you do not need them open.");
+
+                return "Because the last performance check points more toward memory pressure than CPU pressure:\n- " + string.Join("\n- ", details);
+            }
+
+            if (ContainsAny(previousLower, "cpu load is high", "cpu load is very high", "cpu load is moderately high", "cpu load:"))
+            {
+                var details = new List<string>();
+                if (cpu.HasValue)
+                {
+                    details.Add($"CPU load was {cpu.Value:0.#}%. Sustained CPU load makes apps wait longer for processor time.");
+                }
+                else
+                {
+                    details.Add("The previous result pointed at CPU load, which can make the machine feel laggy while apps compete for processor time.");
+                }
+
+                details.Add("High CPU can also raise temperature, which may trigger fan noise or thermal throttling.");
+                details.Add("The next step is checking top CPU processes and closing, updating, or restarting the app causing the load.");
+
+                return "Because CPU pressure can directly slow down the system:\n- " + string.Join("\n- ", details);
+            }
+
+            if (ContainsAny(previousLower, "network adapters", "ip:", "wi-fi", "wifi", "ethernet"))
+            {
+                return "Because each adapter can represent a different connection path. The active adapter with a normal IP address is usually the one carrying traffic. Down adapters or link-local addresses can show disconnected hardware, virtual adapters, or connections that are not reaching your router.";
+            }
+
+            if (ContainsAny(previousLower, "defender", "antivirus", "windows security"))
+            {
+                return "Because security status tells us whether Windows has active protection available. If Defender is disabled, out of date, or blocked, scans and real-time protection may not catch threats reliably.";
+            }
+
+            return "Because the previous result was based on local signals from this PC. If you want, ask a more specific follow-up like \"why memory?\", \"why CPU?\", or \"what should I close?\" and I can narrow it down from the last check.";
+        }
+
+        private bool ShouldRefreshProcessListForCloseRequest(string userMessage)
+        {
+            var normalized = (userMessage ?? string.Empty).Trim().ToLowerInvariant();
+            if (!IsCloseRecommendationRequest(normalized))
+            {
+                return false;
+            }
+
+            if (_lastToolMemory == null)
+            {
+                return true;
+            }
+
+            return !_lastToolMemory.ToolName.Equals("performance_snapshot", StringComparison.OrdinalIgnoreCase) &&
+                   !_lastToolMemory.ToolName.Equals("list_processes", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private string? TryBuildStructuredToolFollowUp(string normalized, ToolMemory memory)
+        {
+            if (IsCloseRecommendationRequest(normalized))
+            {
+                return BuildCloseRecommendation(memory);
+            }
+
+            if (IsCloseBiggestRequest(normalized))
+            {
+                return PrepareCloseBiggestProcess(memory);
+            }
+
+            if (ContainsAny(normalized, "is that normal", "is this normal", "normal?"))
+            {
+                return BuildNormalityCheck(memory);
+            }
+
+            if (memory.ToolName.Equals("performance_snapshot", StringComparison.OrdinalIgnoreCase) ||
+                memory.ToolName.Equals("list_processes", StringComparison.OrdinalIgnoreCase))
+            {
+                return BuildPerformanceWhy(memory);
+            }
+
+            if (memory.ToolName.Equals("network_adapters", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Because each adapter can represent a different connection path. The active adapter with a normal IP address is usually the one carrying traffic. Down adapters or link-local addresses can show disconnected hardware, virtual adapters, or connections that are not reaching your router.";
+            }
+
+            if (memory.ToolName.Equals("defender_status", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Because security status tells us whether Windows has active antivirus protection registered and available. If protection is disabled, out of date, or blocked, scans and real-time protection may not catch threats reliably.";
+            }
+
+            return null;
+        }
+
+        private static string BuildPerformanceWhy(ToolMemory memory)
+        {
+            var details = new List<string>();
+            if (memory.MemoryUsedPercent.HasValue && memory.MemoryUsedPercent.Value >= 70)
+            {
+                details.Add($"Memory is at {memory.MemoryUsedPercent.Value:0.#}% used. That means apps and Windows are competing for working space.");
+                details.Add("When memory gets crowded, Windows may compress memory or move data to disk, and disk is much slower than RAM.");
+            }
+
+            if (memory.CpuPercent.HasValue && memory.CpuPercent.Value >= 60)
+            {
+                details.Add($"CPU load was {memory.CpuPercent.Value:0.#}%. Sustained CPU load makes apps wait longer for processor time.");
+            }
+
+            if (memory.Processes.Count > 0)
+            {
+                var topUserProcess = memory.Processes.FirstOrDefault(process => !IsSystemProcess(process.Name));
+                if (topUserProcess != null)
+                {
+                    details.Add($"{topUserProcess.Name} is the highest user-app memory consumer I saw at {topUserProcess.Memory}.");
+                }
+            }
+
+            if (details.Count == 0)
+            {
+                details.Add("The last local snapshot did not show an obvious CPU or memory bottleneck.");
+                details.Add("The next likely causes are disk activity, startup apps, browser extensions, Windows updates, or heat/thermal throttling.");
+            }
+
+            return "Because the last tool result points to these local signals:\n- " + string.Join("\n- ", details);
+        }
+
+        private static string BuildNormalityCheck(ToolMemory memory)
+        {
+            var notes = new List<string>();
+            if (memory.MemoryUsedPercent.HasValue)
+            {
+                if (memory.MemoryUsedPercent.Value >= 85)
+                {
+                    notes.Add($"Memory at {memory.MemoryUsedPercent.Value:0.#}% is high. It can be normal during heavy work, but it is worth reducing open apps if the PC feels slow.");
+                }
+                else if (memory.MemoryUsedPercent.Value >= 70)
+                {
+                    notes.Add($"Memory at {memory.MemoryUsedPercent.Value:0.#}% is elevated but not automatically dangerous.");
+                }
+                else
+                {
+                    notes.Add($"Memory at {memory.MemoryUsedPercent.Value:0.#}% looks normal.");
+                }
+            }
+
+            if (memory.CpuPercent.HasValue)
+            {
+                notes.Add(memory.CpuPercent.Value >= 80
+                    ? $"CPU at {memory.CpuPercent.Value:0.#}% is high if it stays there."
+                    : $"CPU at {memory.CpuPercent.Value:0.#}% looks reasonable for a momentary snapshot.");
+            }
+
+            if (memory.Processes.Any(process => process.Name.Contains("Memory Compression", StringComparison.OrdinalIgnoreCase)))
+            {
+                notes.Add("Memory Compression is a normal Windows process. Do not close it.");
+            }
+
+            if (notes.Count == 0)
+            {
+                notes.Add("I do not have enough structured signals from the last tool result to call it normal or abnormal.");
+            }
+
+            return string.Join(Environment.NewLine, notes);
+        }
+
+        private string PrepareCloseBiggestProcess(ToolMemory memory)
+        {
+            var candidate = GetSafeCloseCandidates(memory).FirstOrDefault();
+            if (candidate == null)
+            {
+                return "I do not see a safe user-app candidate to close from the last tool result. I will not suggest stopping Windows/system processes.";
+            }
+
+            if (!candidate.Pid.HasValue)
+            {
+                return $"The biggest safe user-app candidate is {candidate.Name} ({candidate.Memory}), but I do not have its PID from the last result. Type \"close {candidate.Name}\" if you want me to prepare a confirmed stop action.";
+            }
+
+            var argsJson = System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, object?>
+            {
+                ["pid"] = candidate.Pid.Value,
+                ["name"] = candidate.Name
+            });
+
+            ShowToolConfirmation(new ToolCall { Name = "kill_process", ArgumentsJson = argsJson });
+            return $"The biggest safe user-app candidate is {candidate.Name} ({candidate.Memory}, PID {candidate.Pid}). I opened a confirmation prompt before stopping it.";
+        }
+
+        private static string BuildCloseRecommendation(string previous)
+        {
+            var processes = ExtractProcessSummaries(previous)
+                .Where(IsSafeCloseCandidate)
+                .Take(5)
+                .ToList();
+
+            if (processes.Count == 0)
+            {
+                return "I do not see a safe user-app candidate in the last process list. Avoid closing Windows/system items like Memory Compression, Defender, service hosts, drivers, or virtual machine services unless you know exactly what they are doing.";
+            }
+
+            var lines = new List<string>
+            {
+                "Based on the last memory list, close or reduce these first if you are not actively using them:"
+            };
+
+            foreach (var process in processes)
+            {
+                lines.Add($"- {process.Name} ({process.Memory})");
+            }
+
+            lines.Add("");
+            lines.Add("Do not force-close Windows/system processes. Close apps normally first. For Code, close unused windows/extensions. For browsers, close heavy tabs. For Discord or Opera/Chrome, quit them if you do not need them right now.");
+            return string.Join(Environment.NewLine, lines);
+        }
+
+        private static string BuildCloseRecommendation(ToolMemory memory)
+        {
+            var processes = GetSafeCloseCandidates(memory)
+                .Take(5)
+                .ToList();
+
+            if (processes.Count == 0)
+            {
+                return "I do not see a safe user-app candidate in the last tool result. Avoid closing Windows/system items like Memory Compression, Defender, service hosts, drivers, or virtual machine services unless you know exactly what they are doing.";
+            }
+
+            var lines = new List<string>
+            {
+                "Based on the last tool result, close or reduce these first if you are not actively using them:"
+            };
+
+            foreach (var process in processes)
+            {
+                var pid = process.Pid.HasValue ? $", PID {process.Pid}" : string.Empty;
+                lines.Add($"- {process.Name} ({process.Memory}{pid})");
+            }
+
+            lines.Add("");
+            lines.Add("Close apps normally first. For Code, close unused windows/extensions. For browsers, close heavy tabs. For Discord or Opera/Chrome, quit them if you do not need them right now. If you ask me to stop one, I will ask for confirmation first.");
+            return string.Join(Environment.NewLine, lines);
+        }
+
+        private void RememberToolResult(string commandName, string output, string originalMessage)
+        {
+            _lastToolMemory = new ToolMemory(
+                commandName,
+                output,
+                originalMessage,
+                ExtractPercent(output, "CPU load:"),
+                ExtractMemoryUsedPercent(output),
+                ExtractProcessSummaries(output));
+        }
+
+        private static IEnumerable<ProcessSummary> GetSafeCloseCandidates(ToolMemory memory)
+        {
+            return memory.Processes
+                .Where(IsSafeCloseCandidate)
+                .OrderByDescending(process => process.MemoryMb);
+        }
+
+        private static bool IsSafeCloseCandidate(ProcessSummary process)
+        {
+            return !IsSystemProcess(process.Name);
+        }
+
+        private static List<ProcessSummary> ExtractProcessSummaries(string text)
+        {
+            var processes = new List<ProcessSummary>();
+            foreach (var rawLine in text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var line = rawLine.Trim();
+                if (!line.StartsWith("-", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var match = System.Text.RegularExpressions.Regex.Match(
+                    line,
+                    @"^-\s*(?<name>.+?)\s*(?:\|\s*PID\s*(?<pid1>\d+)\s*\||\(PID\s*(?<pid2>\d+)\))[:\s|]+(?<amount>\d+(?:\.\d+)?)\s*(?<unit>GB|MB)",
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                if (!match.Success)
+                {
+                    continue;
+                }
+
+                var amount = double.TryParse(match.Groups["amount"].Value, out var parsedAmount)
+                    ? parsedAmount
+                    : 0;
+                var unit = match.Groups["unit"].Value.ToUpperInvariant();
+                var memoryMb = unit == "GB" ? amount * 1024 : amount;
+                var pidText = match.Groups["pid1"].Success
+                    ? match.Groups["pid1"].Value
+                    : match.Groups["pid2"].Value;
+                int? pid = int.TryParse(pidText, out var parsedPid) ? parsedPid : null;
+
+                processes.Add(new ProcessSummary(
+                    match.Groups["name"].Value.Trim(),
+                    $"{amount:0.##} {unit}",
+                    pid,
+                    memoryMb));
+            }
+
+            return processes;
+        }
+
+        private static bool IsSystemProcess(string name)
+        {
+            return ContainsAny(name,
+                "memory compression",
+                "vmmem",
+                "windows",
+                "defender",
+                "msmpeng",
+                "system",
+                "registry",
+                "svchost",
+                "service host",
+                "dwm",
+                "explorer");
+        }
+
+        private static bool IsShortContextualFollowUp(string normalized)
+        {
+            return normalized is "why" or "why?" or "how come" or "how come?" or "explain" or "explain that" ||
+                   ContainsAny(normalized,
+                       "why is that",
+                       "what does that mean",
+                       "why does that matter",
+                       "what should i do",
+                       "what should i close",
+                       "what can i close",
+                       "what do i close",
+                       "what should i stop",
+                       "what can i stop",
+                       "close the biggest",
+                       "stop the biggest",
+                       "close biggest",
+                       "stop biggest",
+                       "close that",
+                       "stop that",
+                       "is that normal",
+                       "is this normal");
+        }
+
+        private static bool IsCloseRecommendationRequest(string normalized)
+        {
+            return ContainsAny(normalized,
+                "what should i close",
+                "what can i close",
+                "what do i close",
+                "what should i stop",
+                "what can i stop",
+                "what should i do");
+        }
+
+        private static bool IsCloseBiggestRequest(string normalized)
+        {
+            return ContainsAny(normalized,
+                "close the biggest",
+                "stop the biggest",
+                "close biggest",
+                "stop biggest",
+                "close that",
+                "stop that",
+                "close it",
+                "stop it");
+        }
+
+        private sealed record ToolMemory(
+            string ToolName,
+            string Output,
+            string OriginalMessage,
+            double? CpuPercent,
+            double? MemoryUsedPercent,
+            List<ProcessSummary> Processes);
+
+        private sealed record ProcessSummary(string Name, string Memory, int? Pid, double MemoryMb);
+
+        private static double? ExtractMemoryUsedPercent(string text)
+        {
+            var line = text
+                .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .FirstOrDefault(value => value.TrimStart().StartsWith("Memory:", StringComparison.OrdinalIgnoreCase));
+
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                return null;
+            }
+
+            var match = System.Text.RegularExpressions.Regex.Match(line, @"\((?<percent>\d+(?:\.\d+)?)%\s+used\)");
+            if (!match.Success)
+            {
+                return null;
+            }
+
+            return double.TryParse(match.Groups["percent"].Value, out var value) ? value : null;
+        }
+
+        private static string BuildDefenderSummary(string output)
+        {
+            if (output.Contains("Antivirus product:", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Windows reports an antivirus product is registered. Details are below.";
+            }
+
+            if (output.Contains("not found", StringComparison.OrdinalIgnoreCase))
+            {
+                return "I could not confirm Microsoft Defender from the command-line scanner path. Details are below.";
+            }
+
+            return "Here is the current Windows security status I could read.";
+        }
+
+        private static double? ExtractPercent(string text, string label)
+        {
+            var line = text
+                .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .FirstOrDefault(value => value.TrimStart().StartsWith(label, StringComparison.OrdinalIgnoreCase));
+
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                return null;
+            }
+
+            var percentIndex = line.IndexOf('%');
+            if (percentIndex < 0)
+            {
+                return null;
+            }
+
+            var start = percentIndex - 1;
+            while (start >= 0 && (char.IsDigit(line[start]) || line[start] == '.'))
+            {
+                start--;
+            }
+
+            var raw = line.Substring(start + 1, percentIndex - start - 1);
+            return double.TryParse(raw, out var value) ? value : null;
+        }
+
+        private static string? ExtractToolArg(Dictionary<string, object?>? args, string key)
+        {
+            if (args == null || !args.TryGetValue(key, out var value))
+            {
+                return null;
+            }
+
+            return string.IsNullOrWhiteSpace(value?.ToString()) ? null : value.ToString();
         }
 
         private async Task GetAIResponseAsync(string userMessage)
         {
             try
             {
+                // Stream tokens into the UI for a live typing effect.
                 var response = await _llmService.GetStreamingResponseAsync(
                     userMessage,
                     OnTokenReceived,
                     _conversationId);
 
-                HandleAssistantPostProcess(response);
+                // Post-process final response (e.g., tool confirmations).
+                var finalResponse = HandleAssistantPostProcess(response);
+                PersistAssistantMessage(finalResponse);
             }
             catch (Exception ex)
             {
-                AddMessageToChat($"X AI Error: {ex.Message}", "system");
+                AddMessageToChat($"I could not generate a response: {ex.Message}", "system");
             }
         }
 
@@ -403,7 +997,7 @@ namespace Smartitecture.UI
             {
                 if (_currentStreamingMessage == null)
                 {
-                    // Create new streaming message
+                    // First token: create the assistant bubble.
                     _currentStreamingTextBlock = new TextBlock
                     {
                         Foreground = GetChatAssistantForeground(),
@@ -422,30 +1016,47 @@ namespace Smartitecture.UI
                 }
                 else
                 {
-                    // Append to existing message
+                    // Append tokens to the current assistant bubble.
                     if (_currentStreamingTextBlock != null)
                     {
                         _currentStreamingTextBlock.Text += token;
                     }
                 }
 
-                // Auto-scroll to bottom
+                // Keep the newest content in view.
                 ChatScrollViewer.ScrollToEnd();
             });
         }
 
-        private void HandleAssistantPostProcess(string response)
+        private string HandleAssistantPostProcess(string response)
         {
+            var finalResponse = response;
             if (ToolConfirmationParser.TryExtractConfirmation(response, out var cleaned, out var call) && call != null)
             {
+                finalResponse = cleaned;
                 if (_currentStreamingTextBlock != null)
                 {
-                    _currentStreamingTextBlock.Text = cleaned;
+                    _currentStreamingTextBlock.Text = FormatChatDisplayText(finalResponse);
                 }
 
                 ShowToolConfirmation(call);
                 ChatScrollViewer.ScrollToEnd();
             }
+
+            var displayResponse = FormatChatDisplayText(finalResponse);
+            if (_currentStreamingTextBlock != null && _currentStreamingTextBlock.Text != displayResponse)
+            {
+                _currentStreamingTextBlock.Text = displayResponse;
+                ChatScrollViewer.ScrollToEnd();
+            }
+            else if (_currentStreamingTextBlock == null && !string.IsNullOrWhiteSpace(finalResponse))
+            {
+                ChatMessagesPanel.Children.Add(CreateMessageBubble(finalResponse, "assistant"));
+                ChatScrollViewer.ScrollToEnd();
+                return finalResponse;
+            }
+
+            return finalResponse;
         }
 
         private void AddMessageToChat(string message, string role)
@@ -455,10 +1066,16 @@ namespace Smartitecture.UI
                 return;
             }
 
+            if (role.Equals("assistant", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(message))
+            {
+                _lastAssistantMessage = message;
+            }
+
             if (!_isReplayingHistory)
             {
                 if (role.Equals("user", StringComparison.OrdinalIgnoreCase))
                 {
+                    // Only start a session after the first user message.
                     _hasUserMessages = true;
                     _historyService.AppendMessage(_conversationId, role, message);
                 }
@@ -470,15 +1087,28 @@ namespace Smartitecture.UI
 
             ChatMessagesPanel.Children.Add(CreateMessageBubble(message, role));
 
-            // Reset streaming message reference if this is a complete message
+            // Reset streaming state when a full message is added.
             if (role != "assistant" || _currentStreamingMessage == null)
             {
                 _currentStreamingMessage = null;
                 _currentStreamingTextBlock = null;
             }
 
-            // Auto-scroll to bottom
+            // Auto-scroll to bottom.
             ChatScrollViewer.ScrollToEnd();
+        }
+
+        private void PersistAssistantMessage(string message)
+        {
+            if (_isReplayingHistory || !_hasUserMessages || string.IsNullOrWhiteSpace(message))
+            {
+                return;
+            }
+
+            _historyService.AppendMessage(_conversationId, "assistant", message);
+            _lastAssistantMessage = message;
+            _currentStreamingMessage = null;
+            _currentStreamingTextBlock = null;
         }
 
         private void ShowTypingIndicator()
@@ -499,80 +1129,114 @@ namespace Smartitecture.UI
             TypingDots.Text = currentText.Length >= 6 ? "." : currentText + ".";
         }
 
-        private async void ModelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ProviderRefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ModelSelector.SelectedItem == null)
-                return;
+            await RefreshProviderStatusAsync();
+        }
 
-            if (ModelSelector.SelectedItem is not ComboBoxItem selectedItem)
-                return;
+        private async Task RefreshProviderStatusAsync()
+        {
+            var checkId = ++_providerStatusCheckId;
+            SetProviderStatus(
+                GetString("Chat.ProviderChecking", "Checking..."),
+                GetString("Chat.ProviderCheckingTooltip", "Checking the configured AI Server."),
+                GetStatusBrush("Brush.Warning"));
 
-            var selectedModel = selectedItem.Content?.ToString();
-            if (string.IsNullOrWhiteSpace(selectedModel))
+            var prefs = new PreferencesService().Load();
+            var baseUrl = NormalizeBackendUrl(prefs.BackendBaseUrl);
+            if (string.IsNullOrWhiteSpace(baseUrl))
+            {
+                SetProviderStatus(
+                    GetString("Chat.ProviderLocal", "Local mode"),
+                    GetString("Chat.ProviderLocalTooltip", "No AI Server is configured. Broad answers use the built-in local assistant."),
+                    GetStatusBrush("Brush.Warning"));
                 return;
+            }
 
             try
             {
-                var success = await _llmService.SwitchModelAsync(selectedModel);
-                if (!IsLoaded || ChatMessagesPanel == null)
+                using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(6) };
+                using var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl.TrimEnd('/')}/health");
+                var apiKey = prefs.BackendApiKey?.Trim();
+                if (!string.IsNullOrWhiteSpace(apiKey))
                 {
-                    UpdateModelStatus();
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+                    request.Headers.Add("X-API-Key", apiKey);
+                }
+
+                using var response = await client.SendAsync(request);
+                if (checkId != _providerStatusCheckId)
+                {
                     return;
                 }
 
-                if (success)
+                if (response.IsSuccessStatusCode)
                 {
-                    AddMessageToChat(Format("Chat.SwitchedFormat", "Switched to {0}", selectedModel), "system");
-                    UpdateModelStatus();
+                    SetProviderStatus(
+                        GetString("Chat.ProviderServerConnected", "AI Server connected"),
+                        Format("Chat.ProviderServerConnectedTooltip", "Connected to {0}. Broad answers can use the AI Server.", baseUrl),
+                        GetStatusBrush("Brush.Success"));
                 }
                 else
                 {
-                    AddMessageToChat(Format("Chat.SwitchFailedFormat", "Failed to switch to {0}", selectedModel), "system");
-                    PopulateModelSelector();
+                    SetProviderStatus(
+                        GetString("Chat.ProviderServerOffline", "AI Server offline, using local"),
+                        Format("Chat.ProviderServerFailedTooltip", "The configured AI Server returned HTTP {0}. Local tools still work.", (int)response.StatusCode),
+                        GetStatusBrush("Brush.Error"));
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                AddMessageToChat($"X Error switching model: {ex.Message}", "system");
+                if (checkId != _providerStatusCheckId)
+                {
+                    return;
+                }
+
+                SetProviderStatus(
+                    GetString("Chat.ProviderServerOffline", "AI Server offline, using local"),
+                    Format("Chat.ProviderServerOfflineTooltip", "Could not reach {0}. Local tools still work.", baseUrl),
+                    GetStatusBrush("Brush.Error"));
             }
         }
 
-        private async void ModeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SetProviderStatus(string text, string tooltip, Brush indicatorBrush)
         {
-            if (ModeSelector.SelectedItem is not ComboBoxItem selectedItem)
+            if (ProviderStatusText != null)
             {
-                return;
+                ProviderStatusText.Text = text;
             }
 
-            if (selectedItem.Tag is not AIModeType mode)
+            if (ProviderStatusPill != null)
             {
-                return;
+                ProviderStatusPill.ToolTip = tooltip;
             }
 
-            try
+            if (ProviderStatusDot != null)
             {
-                var success = await _llmService.SwitchModeAsync(mode);
-                if (!IsLoaded || ChatMessagesPanel == null)
-                {
-                    UpdateModelStatus();
-                    return;
-                }
+                ProviderStatusDot.Fill = indicatorBrush;
+            }
+        }
 
-                if (success)
-                {
-                    AddMessageToChat(Format("Chat.ModeSwitchedFormat", "Mode set to {0}", GetModeDisplayName(mode)), "system");
-                    UpdateModelStatus();
-                }
-                else
-                {
-                    AddMessageToChat(Format("Chat.ModeSwitchFailedFormat", "Failed to switch mode to {0}", GetModeDisplayName(mode)), "system");
-                    SyncModeSelector();
-                }
-            }
-            catch (Exception ex)
+        private Brush GetStatusBrush(string resourceKey)
+        {
+            return TryFindResource(resourceKey) as Brush ?? GetChatSystemForeground();
+        }
+
+        private static string NormalizeBackendUrl(string? value)
+        {
+            var trimmed = (value ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(trimmed))
             {
-                AddMessageToChat($"X Error switching mode: {ex.Message}", "system");
+                return string.Empty;
             }
+
+            if (!trimmed.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                !trimmed.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                trimmed = "http://" + trimmed;
+            }
+
+            return trimmed.TrimEnd('/');
         }
 
         private async void ClearChatButton_Click(object sender, RoutedEventArgs e)
@@ -587,7 +1251,7 @@ namespace Smartitecture.UI
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Child = new TextBlock
                 {
-                    Text = GetString("Chat.Welcome", "Welcome to Smartitecture AI Assistant! I can help you with automation, system commands, and more."),
+                    Text = FormatChatDisplayText(GetString("Chat.Welcome", "Welcome to Smartitecture AI Assistant! I can help you with automation, system commands, and more.")),
                     Style = (Style)FindResource("Text.Caption"),
                     Foreground = GetChatSystemForeground(),
                     TextWrapping = TextWrapping.Wrap,
@@ -716,6 +1380,7 @@ namespace Smartitecture.UI
 
         private void SetHistoryTab(bool showDeleted)
         {
+            // Toggle between active chat history and deleted chats.
             _previewingDeleted = showDeleted;
 
             if (HistoryListContainer != null)
@@ -759,6 +1424,7 @@ namespace Smartitecture.UI
 
         private void RenderHistoryPreview(ChatHistorySession? session)
         {
+            // Render a read-only preview of a chat session.
             HistoryPreviewPanel.Children.Clear();
             if (session == null || session.Messages.Count == 0)
             {
@@ -778,6 +1444,7 @@ namespace Smartitecture.UI
 
         private void LoadHistoryList()
         {
+            // Active sessions list.
             var sessions = _historyService.GetSessions();
             var items = sessions.Select(s => new HistorySessionItem
             {
@@ -795,6 +1462,7 @@ namespace Smartitecture.UI
 
         private void LoadDeletedList()
         {
+            // Deleted sessions list (recoverable).
             var sessions = _historyService.GetDeletedSessions();
             var items = sessions.Select(s => new DeletedSessionItem
             {
@@ -818,6 +1486,7 @@ namespace Smartitecture.UI
 
         private void ShowHistoryOverlay()
         {
+            // Slide-in side panel (no layout shift).
             if (HistoryPanel == null)
             {
                 return;
@@ -841,6 +1510,7 @@ namespace Smartitecture.UI
 
         private void HideHistoryOverlay()
         {
+            // Slide-out side panel.
             if (HistoryPanel == null)
             {
                 return;
@@ -871,6 +1541,7 @@ namespace Smartitecture.UI
 
         private void DeleteHistory_Click(object sender, RoutedEventArgs e)
         {
+            // Soft-delete: move to Deleted tab.
             if (sender is not Button button || button.Tag is not string id)
             {
                 return;
@@ -881,6 +1552,7 @@ namespace Smartitecture.UI
 
         private void RecoverDeleted_Click(object sender, RoutedEventArgs e)
         {
+            // Restore a deleted session.
             if (sender is not Button button || button.Tag is not string id)
             {
                 return;
@@ -899,6 +1571,7 @@ namespace Smartitecture.UI
 
         private void DeleteForever_Click(object sender, RoutedEventArgs e)
         {
+            // Permanent delete requires confirmation.
             if (sender is not Button button || button.Tag is not string id)
             {
                 return;
@@ -916,6 +1589,7 @@ namespace Smartitecture.UI
 
         private void DeleteConfirm_Click(object sender, RoutedEventArgs e)
         {
+            // Apply the delete decision (soft or permanent).
             if (string.IsNullOrWhiteSpace(_pendingDeleteId))
             {
                 HideDeleteConfirm();
@@ -948,6 +1622,7 @@ namespace Smartitecture.UI
 
         private void ShowDeleteConfirm(DeleteConfirmMode mode, string sessionId)
         {
+            // Inline confirmation inside the preview panel.
             if (DeleteConfirmCard == null)
             {
                 return;
@@ -1001,6 +1676,7 @@ namespace Smartitecture.UI
 
         private void HideDeleteConfirm()
         {
+            // Animate confirmation card away.
             if (DeleteConfirmCard == null || DeleteConfirmCard.Visibility != Visibility.Visible)
             {
                 return;
@@ -1027,6 +1703,7 @@ namespace Smartitecture.UI
 
         private void ShowToolConfirmation(ToolCall call)
         {
+            // Full-screen overlay asking for user confirmation.
             _pendingToolConfirmation = call;
             if (ToolConfirmOverlay == null || ToolConfirmCard == null)
             {
@@ -1064,6 +1741,7 @@ namespace Smartitecture.UI
 
         private void HideToolConfirmation()
         {
+            // Fade out the confirmation overlay.
             if (ToolConfirmOverlay == null || ToolConfirmCard == null)
             {
                 return;
@@ -1090,12 +1768,14 @@ namespace Smartitecture.UI
 
         private void ToolConfirmCancel_Click(object sender, RoutedEventArgs e)
         {
+            // User cancels the tool action.
             _pendingToolConfirmation = null;
             HideToolConfirmation();
         }
 
         private async void ToolConfirmConfirm_Click(object sender, RoutedEventArgs e)
         {
+            // User approves the tool action.
             if (_pendingToolConfirmation == null)
             {
                 HideToolConfirmation();
@@ -1112,6 +1792,7 @@ namespace Smartitecture.UI
 
         private void ResetChatToWelcome()
         {
+            // Reset chat UI when there is no active session.
             _hasUserMessages = false;
             ChatMessagesPanel.Children.Clear();
             ChatMessagesPanel.Children.Add(new Border
@@ -1133,9 +1814,10 @@ namespace Smartitecture.UI
 
         private Border CreateMessageBubble(string message, string role)
         {
+            // Builds a chat bubble based on role (user/assistant/system).
             var textBlock = new TextBlock
             {
-                Text = message,
+                Text = FormatChatDisplayText(message),
                 Foreground = GetChatAssistantForeground(),
                 FontSize = 14,
                 TextWrapping = TextWrapping.Wrap
@@ -1174,18 +1856,84 @@ namespace Smartitecture.UI
             return messageBorder;
         }
 
+        private static string FormatChatDisplayText(string message)
+        {
+            return ResponseTextCleaner.ForChatDisplay(message);
+        }
+
         private void AttachButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement file attachment functionality
+            var dialog = new OpenFileDialog
+            {
+                Title = GetString("Chat.Attach", "Attach"),
+                Multiselect = true,
+                CheckFileExists = true
+            };
+
+            if (dialog.ShowDialog() != true || dialog.FileNames.Length == 0)
+            {
+                return;
+            }
+
+            var attachmentText = string.Join(Environment.NewLine, dialog.FileNames.Select(path => $"Attached file: {path}"));
+            if (MessageInput.Text == GetString("Chat.Placeholder", "Type your message or command here..."))
+            {
+                MessageInput.Text = string.Empty;
+                MessageInput.Foreground = GetOnSurfaceBrush();
+            }
+
+            MessageInput.Text = string.IsNullOrWhiteSpace(MessageInput.Text)
+                ? attachmentText
+                : $"{MessageInput.Text}{Environment.NewLine}{attachmentText}";
+            MessageInput.CaretIndex = MessageInput.Text.Length;
+            MessageInput.Focus();
+        }
+
+        private async void VoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isProcessing)
+            {
+                return;
+            }
+
+            var originalContent = VoiceButton.Content;
+            VoiceButton.IsEnabled = false;
+            VoiceButton.Content = GetString("Chat.Listening", "Listening...");
+
+            try
+            {
+                var result = await _voiceInput.ListenOnceAsync();
+                if (!result.Success || string.IsNullOrWhiteSpace(result.Text))
+                {
+                    AddMessageToChat(result.Message, "system");
+                    return;
+                }
+
+                MessageInput.Text = result.Text.Trim();
+                MessageInput.Foreground = GetOnSurfaceBrush();
+                await SendMessageAsync();
+            }
+            catch (Exception ex)
+            {
+                AddMessageToChat($"Voice input error: {ex.Message}", "system");
+            }
+            finally
+            {
+                VoiceButton.Content = originalContent;
+                VoiceButton.IsEnabled = true;
+                MessageInput.Focus();
+            }
         }
 
         private void GoHome_Click(object sender, RoutedEventArgs e)
         {
+            // Top bar navigation.
             Smartitecture.Services.NavigationService.GoHome();
         }
 
         private void OpenSettings_Click(object sender, RoutedEventArgs e)
         {
+            // Top bar navigation.
             Smartitecture.Services.NavigationService.GoSettings();
         }
 
@@ -1205,11 +1953,13 @@ namespace Smartitecture.UI
 
         private static string GetString(string key, string fallback)
         {
+            // Localization helper.
             return Application.Current?.TryFindResource(key) as string ?? fallback;
         }
 
         private static string Format(string key, string fallback, params object[] args)
         {
+            // Localization + formatting helper.
             var template = GetString(key, fallback);
             try
             {

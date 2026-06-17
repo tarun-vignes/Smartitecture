@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace Smartitecture.Services.Providers
             return new LLMResponse { Content = response };
         }
 
-        public async IAsyncEnumerable<string> StreamResponseAsync(LLMRequest request, CancellationToken cancellationToken)
+        public async IAsyncEnumerable<string> StreamResponseAsync(LLMRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             if (!IsConfigured)
             {

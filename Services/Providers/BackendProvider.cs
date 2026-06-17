@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Smartitecture.Services.Core;
 using Smartitecture.Services.Interfaces;
@@ -13,35 +14,32 @@ namespace Smartitecture.Services.Providers
 {
     public sealed class BackendProvider : ILLMProvider
     {
-        private static readonly HttpClient Http = new HttpClient();
+        private static readonly HttpClient Http = new HttpClient
+        {
+            Timeout = TimeSpan.FromSeconds(90)
+        };
         private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         };
 
-        private readonly ProviderSettings _settings = ProviderSettings.Load();
-
         public string Name => "Smartitecture Backend";
-        public bool IsConfigured => !string.IsNullOrWhiteSpace(_settings.Backend.BaseUrl);
+        public bool IsConfigured => !string.IsNullOrWhiteSpace(ProviderSettings.Load().Backend.BaseUrl);
 
         public async Task<LLMResponse> GetResponseAsync(LLMRequest request, CancellationToken cancellationToken)
         {
-            if (!IsConfigured)
+            var settings = ProviderSettings.Load();
+            if (string.IsNullOrWhiteSpace(settings.Backend.BaseUrl))
             {
-                return new LLMResponse
-                {
-                    Content = "Smartitecture backend is not configured. Using the local assistant instead."
-                };
+                throw new InvalidOperationException("Smartitecture backend is not configured.");
             }
 
-            ConfigureTimeout();
-
             var payload = BuildRequest(request);
-            var baseUrl = _settings.Backend.BaseUrl.TrimEnd('/');
+            var baseUrl = settings.Backend.BaseUrl.TrimEnd('/');
             var url = $"{baseUrl}/v1/chat";
 
             using var message = new HttpRequestMessage(HttpMethod.Post, url);
-            var apiKey = _settings.Backend.ApiKey;
+            var apiKey = settings.Backend.ApiKey;
             if (!string.IsNullOrWhiteSpace(apiKey))
             {
                 message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
@@ -55,31 +53,26 @@ namespace Smartitecture.Services.Providers
 
             if (!response.IsSuccessStatusCode)
             {
-                return new LLMResponse
-                {
-                    Content = $"Backend error: {(int)response.StatusCode} {response.ReasonPhrase}. {json}"
-                };
+                throw new InvalidOperationException($"Backend error: {(int)response.StatusCode} {response.ReasonPhrase}. {json}");
             }
 
             return ParseResponse(json);
         }
 
-        public async IAsyncEnumerable<string> StreamResponseAsync(LLMRequest request, CancellationToken cancellationToken)
+        public async IAsyncEnumerable<string> StreamResponseAsync(LLMRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            if (!IsConfigured)
+            var settings = ProviderSettings.Load();
+            if (string.IsNullOrWhiteSpace(settings.Backend.BaseUrl))
             {
-                yield return "Smartitecture backend is not configured. Using the local assistant instead.";
-                yield break;
+                throw new InvalidOperationException("Smartitecture backend is not configured.");
             }
 
-            ConfigureTimeout();
-
             var payload = BuildRequest(request);
-            var baseUrl = _settings.Backend.BaseUrl.TrimEnd('/');
+            var baseUrl = settings.Backend.BaseUrl.TrimEnd('/');
             var url = $"{baseUrl}/v1/chat/stream";
 
             using var message = new HttpRequestMessage(HttpMethod.Post, url);
-            var apiKey = _settings.Backend.ApiKey;
+            var apiKey = settings.Backend.ApiKey;
             if (!string.IsNullOrWhiteSpace(apiKey))
             {
                 message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
@@ -92,8 +85,7 @@ namespace Smartitecture.Services.Providers
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadAsStringAsync(cancellationToken);
-                yield return $"Backend error: {(int)response.StatusCode} {response.ReasonPhrase}. {error}";
-                yield break;
+                throw new InvalidOperationException($"Backend error: {(int)response.StatusCode} {response.ReasonPhrase}. {error}");
             }
 
             await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
@@ -125,8 +117,7 @@ namespace Smartitecture.Services.Providers
 
                 if (!string.IsNullOrWhiteSpace(errorMessage))
                 {
-                    yield return errorMessage;
-                    yield break;
+                    throw new InvalidOperationException(errorMessage);
                 }
 
                 if (!string.IsNullOrWhiteSpace(token))
@@ -343,16 +334,6 @@ namespace Smartitecture.Services.Providers
             }
 
             return new LLMResponse { Content = json };
-        }
-
-        private void ConfigureTimeout()
-        {
-            if (_settings.Backend.TimeoutSeconds <= 0)
-            {
-                return;
-            }
-
-            Http.Timeout = TimeSpan.FromSeconds(_settings.Backend.TimeoutSeconds);
         }
 
         private sealed class BackendChatRequest

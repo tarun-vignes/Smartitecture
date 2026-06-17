@@ -37,6 +37,8 @@ packages/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
+!docs/release/
+!docs/release/**
 x64/
 x86/
 [Aa][Rr][Mm]/
@@ -49,7 +51,7 @@ bld/
 
 # Project cleanup
 deploy/
-deployment/
+artifacts/
 output/
 debug-app/
 temp-deploy/
@@ -66,3 +68,5 @@ backend-python/venv/
 backend-python/.venv/
 **/venv/
 **/.venv/
+
+.fake

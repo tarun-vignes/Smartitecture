@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: smartitecture-backend
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerContext: ./backend/Smartitecture.Backend
+    dockerfilePath: ./backend/Smartitecture.Backend/Dockerfile
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
+      - key: SMARTITECTURE_AI_PROVIDER
+        value: gemini
+      - key: SMARTITECTURE_REQUIRE_BACKEND_API_KEY
+        value: "true"
+      - key: GEMINI_MODEL
+        value: gemini-3.1-flash-lite
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SMARTITECTURE_BACKEND_API_KEY
+        sync: false

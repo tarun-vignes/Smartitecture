@@ -31,7 +31,7 @@
                 </Grid.ColumnDefinitions>
                 <ContentControl Grid.Column="0" Style="{StaticResource Logo.Badge}" Width="78" Height="78" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center">
-                    <TextBlock Text="{DynamicResource Dashboard.WelcomeTitle}" Style="{StaticResource Text.H1}"/>
+                    <TextBlock Text="{DynamicResource Dashboard.WelcomeTitle}" Style="{StaticResource Text.H1}" TextWrapping="Wrap"/>
                     <TextBlock Text="{DynamicResource Dashboard.WelcomeSubtitle}" Style="{StaticResource Text.Body}" TextWrapping="Wrap" MaxWidth="520"/>
                 </StackPanel>
                 <Border Grid.Column="2" Width="1" Background="Transparent"/>
@@ -54,11 +54,11 @@
                         <StackPanel>
                             <TextBlock Text="{DynamicResource Dashboard.QuickActions}" Style="{StaticResource Text.H2}"/>
                             <TextBlock Text="{DynamicResource Dashboard.QuickActionsSubtitle}" Style="{StaticResource Text.Caption}" Margin="0,4,0,8"/>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="{DynamicResource Dashboard.StartChat}" Style="{StaticResource Button.Primary}" Click="OpenChatButton_Click"/>
-                                <Button Content="{DynamicResource Dashboard.OpenSettings}" Style="{StaticResource Button.Glass}" Margin="8,0,0,0" Click="SettingsClicked"/>
-                                <Button Content="{DynamicResource Dashboard.About}" Style="{StaticResource Button.Glass}" Margin="8,0,0,0" Click="OpenAbout_Click"/>
-                            </StackPanel>
+                            <WrapPanel Margin="0,2,0,0">
+                                <Button Content="{DynamicResource Dashboard.StartChat}" Style="{StaticResource Button.Primary}" Click="OpenChatButton_Click" Margin="0,0,8,8"/>
+                                <Button Content="{DynamicResource Dashboard.OpenSettings}" Style="{StaticResource Button.Glass}" Click="SettingsClicked" Margin="0,0,8,8"/>
+                                <Button Content="{DynamicResource Dashboard.About}" Style="{StaticResource Button.Glass}" Click="OpenAbout_Click" Margin="0,0,8,8"/>
+                            </WrapPanel>
                         </StackPanel>
                     </Border>
 
@@ -68,22 +68,22 @@
                             <TextBlock Text="{DynamicResource Dashboard.SystemSnapshot}" Style="{StaticResource Text.H2}"/>
                             <TextBlock Text="{DynamicResource Dashboard.SystemSnapshotSubtitle}" Style="{StaticResource Text.Caption}" Margin="0,4,0,8"/>
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource Dashboard.SecurityStatus}" Style="{StaticResource Text.Body}"/>
-                                <TextBlock Text="{DynamicResource Dashboard.PerformanceStatus}" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
-                                <TextBlock Text="{DynamicResource Dashboard.UpdatesStatus}" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
+                                <TextBlock Text="{DynamicResource Dashboard.SecurityStatus}" Style="{StaticResource Text.Body}" TextWrapping="Wrap"/>
+                                <TextBlock Text="{DynamicResource Dashboard.PerformanceStatus}" Style="{StaticResource Text.Body}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                <TextBlock Text="{DynamicResource Dashboard.UpdatesStatus}" Style="{StaticResource Text.Body}" Margin="0,4,0,0" TextWrapping="Wrap"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
 
-                    <!-- Modes -->
+                    <!-- Assistant capabilities -->
                     <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource Card.Glass}" Margin="0,0,12,0">
                         <StackPanel>
-                            <TextBlock Text="{DynamicResource Dashboard.Modes}" Style="{StaticResource Text.H2}"/>
-                            <TextBlock Text="{DynamicResource Dashboard.ModesSubtitle}" Style="{StaticResource Text.Caption}" Margin="0,4,0,8"/>
+                            <TextBlock Text="{DynamicResource Dashboard.AssistantCapabilities}" Style="{StaticResource Text.H2}"/>
+                            <TextBlock Text="{DynamicResource Dashboard.AssistantCapabilitiesSubtitle}" Style="{StaticResource Text.Caption}" Margin="0,4,0,8"/>
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource Dashboard.ModeLumen}" Style="{StaticResource Text.Body}"/>
-                                <TextBlock Text="{DynamicResource Dashboard.ModeFortis}" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
-                                <TextBlock Text="{DynamicResource Dashboard.ModeNexa}" Style="{StaticResource Text.Body}" Margin="0,4,0,0"/>
+                                <TextBlock Text="{DynamicResource Dashboard.CapabilityChat}" Style="{StaticResource Text.Body}" TextWrapping="Wrap"/>
+                                <TextBlock Text="{DynamicResource Dashboard.CapabilityDiagnostics}" Style="{StaticResource Text.Body}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                <TextBlock Text="{DynamicResource Dashboard.CapabilitySafety}" Style="{StaticResource Text.Body}" Margin="0,4,0,0" TextWrapping="Wrap"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -93,7 +93,7 @@
                         <StackPanel>
                             <TextBlock Text="{DynamicResource Dashboard.RecentActivity}" Style="{StaticResource Text.H2}"/>
                             <TextBlock Text="{DynamicResource Dashboard.RecentActivitySubtitle}" Style="{StaticResource Text.Caption}" Margin="0,4,0,8"/>
-                            <TextBlock Text="{DynamicResource Dashboard.NoActivity}" Style="{StaticResource Text.Subtle}"/>
+                            <TextBlock Text="{DynamicResource Dashboard.NoActivity}" Style="{StaticResource Text.Subtle}" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Border>
                 </Grid>

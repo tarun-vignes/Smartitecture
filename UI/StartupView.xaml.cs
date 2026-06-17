@@ -15,12 +15,15 @@ namespace Smartitecture.UI
 {
     public partial class StartupView : UserControl
     {
+        // Live metric refresh loop (UI thread).
         private readonly DispatcherTimer _refreshTimer;
+        // Performance counters for live system data.
         private PerformanceCounter? _cpuCounter;
         private PerformanceCounter? _memoryAvailableCounter;
         private PerformanceCounter? _diskCounter;
         private PerformanceCounter? _netRecvCounter;
         private PerformanceCounter? _netSentCounter;
+        // Cached static info for formatting.
         private long _totalMemoryMb;
         private long _netSpeedBits;
         private string _netInterfaceLabel = "Network: --";
@@ -32,6 +35,7 @@ namespace Smartitecture.UI
             Loaded += StartupView_Loaded;
             Unloaded += StartupView_Unloaded;
 
+            // Setup counters once; values are read each tick.
             InitializeCounters();
 
             _refreshTimer = new DispatcherTimer
@@ -55,6 +59,7 @@ namespace Smartitecture.UI
             DisposeCounters();
         }
 
+        // Initialize system counters safely (failures are ignored).
         private void InitializeCounters()
         {
             try
@@ -121,6 +126,7 @@ namespace Smartitecture.UI
 
         private void UpdateStaticInfo()
         {
+            // One-time labels that do not change every tick.
             CpuSubText.Text = Format("Startup.CoresFormat", "Cores: {0}", Environment.ProcessorCount);
 
             if (_systemDrive != null)
@@ -144,6 +150,7 @@ namespace Smartitecture.UI
 
         private void UpdateMetrics()
         {
+            // Runs every tick to refresh live values.
             var now = DateTime.Now;
             LastUpdatedText.Text = Format("Startup.UpdatedFormat", "Updated {0}", now.ToString("T", CultureInfo.CurrentCulture));
 
@@ -246,6 +253,7 @@ namespace Smartitecture.UI
             _netSentCounter?.Dispose();
         }
 
+        // Footer navigation actions.
         private void LaunchDashboard_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoDashboard();
@@ -284,6 +292,7 @@ namespace Smartitecture.UI
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+            // Simple keyboard shortcuts (Alt+S, Alt+D).
             if (Keyboard.Modifiers == ModifierKeys.Alt)
             {
                 if (e.Key == Key.S)

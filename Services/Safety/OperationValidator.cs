@@ -11,7 +11,8 @@ namespace Smartitecture.Services.Safety
             "delete_file",
             "kill_process",
             "registry_write",
-            "firewall_rule"
+            "firewall_rule",
+            "defender_scan"
         };
 
         public bool RequiresConfirmation(string toolName)

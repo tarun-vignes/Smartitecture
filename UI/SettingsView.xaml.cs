@@ -1,4 +1,7 @@
 using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -9,10 +12,13 @@ namespace Smartitecture.UI
 {
     public partial class SettingsView : UserControl
     {
+        // Initialization guard to avoid reacting to SelectionChanged during load.
         private bool _isInitializing = true;
+        // Tracks whether there are unsaved user changes.
         private bool _hasPendingChanges = false;
         private Action? _pendingExitAction;
         private Smartitecture.Services.UserPreferences? _initialPreferences;
+        // Small UI timers for toast + save popup animations.
         private readonly DispatcherTimer _toastTimer = new DispatcherTimer();
         private readonly DispatcherTimer _savePopupTimer = new DispatcherTimer();
 
@@ -21,6 +27,7 @@ namespace Smartitecture.UI
             InitializeComponent();
             Loaded += SettingsView_Loaded;
 
+            // Toast hides itself after a short delay.
             _toastTimer.Interval = TimeSpan.FromSeconds(2.2);
             _toastTimer.Tick += (_, __) =>
             {
@@ -28,6 +35,7 @@ namespace Smartitecture.UI
                 HideToast();
             };
 
+            // Save popup auto-hides.
             _savePopupTimer.Interval = TimeSpan.FromSeconds(1.6);
             _savePopupTimer.Tick += (_, __) =>
             {
@@ -40,9 +48,12 @@ namespace Smartitecture.UI
         {
             try
             {
+                // Load persisted preferences and populate UI controls.
                 var prefs = new Smartitecture.Services.PreferencesService();
                 var loaded = prefs.Load();
                 _initialPreferences = ClonePreferences(loaded);
+
+                PopulateLanguageComboBox();
 
                 SelectComboByContent(ThemeComboBox, loaded.Theme);
                 SelectComboByContent(LanguageComboBox, loaded.Language);
@@ -60,6 +71,9 @@ namespace Smartitecture.UI
                 DiagnosticsCheckBox.IsChecked = loaded.ShareDiagnostics;
 
                 PortTextBox.Text = loaded.ApiPort.ToString();
+                BackendUrlTextBox.Text = loaded.BackendBaseUrl;
+                BackendApiKeyTextBox.Text = loaded.BackendApiKey;
+                UpdateBackendStatusText(loaded.BackendBaseUrl);
             }
             catch { }
             finally
@@ -76,6 +90,7 @@ namespace Smartitecture.UI
                 if (_isInitializing) return;
                 if (ThemeComboBox.SelectedItem is System.Windows.Controls.ComboBoxItem item)
                 {
+                    // Apply theme immediately so the user sees it.
                     var sel = (item.Tag?.ToString() ?? item.Content?.ToString() ?? "Dark").Trim();
                     ApplyThemeFromValue(sel);
                     MarkPendingChanges();
@@ -89,6 +104,7 @@ namespace Smartitecture.UI
             try
             {
                 if (_isInitializing) return;
+                // Apply language immediately so the UI updates.
                 var language = GetComboValue(LanguageComboBox, "en-US");
                 Smartitecture.Services.LocalizationManager.Apply(language);
                 MarkPendingChanges();
@@ -104,17 +120,20 @@ namespace Smartitecture.UI
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            // Persist preferences and show a confirmation popup.
             SavePreferences();
             ShowSavePopup(GetString("Settings.SavedMessage", "You have successfully changed your preferences."));
         }
 
         private void BackClicked(object sender, RoutedEventArgs e)
         {
+            // Respect unsaved changes.
             HandleExitRequest(() => Smartitecture.Services.NavigationService.GoDashboard());
         }
 
         private void HomeClicked(object sender, RoutedEventArgs e)
         {
+            // Respect unsaved changes.
             HandleExitRequest(() => Smartitecture.Services.NavigationService.GoHome());
         }
 
@@ -126,6 +145,7 @@ namespace Smartitecture.UI
 
         private void UnsavedConfirm_Click(object sender, RoutedEventArgs e)
         {
+            // Revert any unsaved edits before leaving.
             RevertToInitialPreferences();
             _hasPendingChanges = false;
             HideUnsavedPopup();
@@ -135,6 +155,7 @@ namespace Smartitecture.UI
 
         private void HandleExitRequest(Action exitAction)
         {
+            // Show a confirmation dialog if changes are pending.
             if (_hasPendingChanges)
             {
                 _pendingExitAction = exitAction;
@@ -155,6 +176,7 @@ namespace Smartitecture.UI
         {
             try
             {
+                // Save current UI selections into UserPreferences.
                 var prefs = new Smartitecture.Services.PreferencesService();
                 var loaded = prefs.Load();
                 loaded.Theme = GetComboValue(ThemeComboBox, loaded.Theme);
@@ -176,8 +198,13 @@ namespace Smartitecture.UI
                 {
                     loaded.ApiPort = port;
                 }
+
+                loaded.BackendBaseUrl = NormalizeBackendUrl(BackendUrlTextBox.Text);
+                loaded.BackendApiKey = BackendApiKeyTextBox.Text.Trim();
+
                 prefs.Save(loaded);
                 _initialPreferences = ClonePreferences(loaded);
+                UpdateBackendStatusText(loaded.BackendBaseUrl);
             }
             catch { }
 
@@ -193,6 +220,7 @@ namespace Smartitecture.UI
 
             _isInitializing = true;
 
+            // Restore UI controls to the initial snapshot.
             SelectComboByContent(ThemeComboBox, _initialPreferences.Theme);
             SelectComboByContent(LanguageComboBox, _initialPreferences.Language);
             SelectComboByContent(RegionComboBox, _initialPreferences.Region);
@@ -208,11 +236,28 @@ namespace Smartitecture.UI
             AutoUpdateCheckBox.IsChecked = _initialPreferences.AutoUpdate;
             DiagnosticsCheckBox.IsChecked = _initialPreferences.ShareDiagnostics;
             PortTextBox.Text = _initialPreferences.ApiPort.ToString();
+            BackendUrlTextBox.Text = _initialPreferences.BackendBaseUrl;
+            BackendApiKeyTextBox.Text = _initialPreferences.BackendApiKey;
+            UpdateBackendStatusText(_initialPreferences.BackendBaseUrl);
 
             _isInitializing = false;
 
+            // Apply the reverted theme + language.
             ApplyThemeFromValue(_initialPreferences.Theme);
             Smartitecture.Services.LocalizationManager.Apply(_initialPreferences.Language);
+        }
+
+        private void PopulateLanguageComboBox()
+        {
+            LanguageComboBox.Items.Clear();
+            foreach (var language in Smartitecture.Services.LocalizationManager.GetSupportedLanguageOptions())
+            {
+                LanguageComboBox.Items.Add(new ComboBoxItem
+                {
+                    Tag = language.Code,
+                    Content = language.DisplayName
+                });
+            }
         }
 
         private static Smartitecture.Services.UserPreferences ClonePreferences(Smartitecture.Services.UserPreferences prefs)
@@ -232,12 +277,90 @@ namespace Smartitecture.UI
                 AutoUpdate = prefs.AutoUpdate,
                 UpdateChannel = prefs.UpdateChannel,
                 ShareDiagnostics = prefs.ShareDiagnostics,
-                ApiPort = prefs.ApiPort
+                ApiPort = prefs.ApiPort,
+                BackendBaseUrl = prefs.BackendBaseUrl,
+                BackendApiKey = prefs.BackendApiKey
             };
+        }
+
+        private async void BackendTest_Click(object sender, RoutedEventArgs e)
+        {
+            await TestBackendAsync();
+        }
+
+        private async Task TestBackendAsync()
+        {
+            var baseUrl = NormalizeBackendUrl(BackendUrlTextBox.Text);
+            if (string.IsNullOrWhiteSpace(baseUrl))
+            {
+                BackendStatusText.Text = GetString("Settings.BackendStatusNotConfigured", "Not configured");
+                return;
+            }
+
+            BackendTestButton.IsEnabled = false;
+            BackendStatusText.Text = GetString("Settings.BackendStatusChecking", "Checking...");
+
+            try
+            {
+                using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
+                var url = $"{baseUrl.TrimEnd('/')}/health";
+                using var request = new HttpRequestMessage(HttpMethod.Get, url);
+                var apiKey = BackendApiKeyTextBox.Text.Trim();
+                if (!string.IsNullOrWhiteSpace(apiKey))
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+                    request.Headers.Add("X-API-Key", apiKey);
+                }
+
+                using var response = await client.SendAsync(request);
+                BackendStatusText.Text = response.IsSuccessStatusCode
+                    ? GetString("Settings.BackendStatusConnected", "Connected")
+                    : string.Format(
+                        GetString("Settings.BackendStatusFailedFormat", "Failed ({0})"),
+                        (int)response.StatusCode);
+            }
+            catch
+            {
+                BackendStatusText.Text = GetString("Settings.BackendStatusOffline", "Offline or unreachable");
+            }
+            finally
+            {
+                BackendTestButton.IsEnabled = true;
+            }
+        }
+
+        private void UpdateBackendStatusText(string? baseUrl)
+        {
+            if (BackendStatusText == null)
+            {
+                return;
+            }
+
+            BackendStatusText.Text = string.IsNullOrWhiteSpace(baseUrl)
+                ? GetString("Settings.BackendStatusNotConfigured", "Not configured")
+                : GetString("Settings.BackendStatusConfigured", "Configured");
+        }
+
+        private static string NormalizeBackendUrl(string? value)
+        {
+            var trimmed = (value ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(trimmed))
+            {
+                return string.Empty;
+            }
+
+            if (!trimmed.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                !trimmed.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                trimmed = "http://" + trimmed;
+            }
+
+            return trimmed.TrimEnd('/');
         }
 
         private static void ApplyThemeFromValue(string? value)
         {
+            // Map stored value to enum and apply.
             var sel = (value ?? "Dark").Trim();
             var theme = sel.Equals("Light", StringComparison.OrdinalIgnoreCase)
                 ? Smartitecture.Services.AppColorTheme.Light
@@ -249,6 +372,7 @@ namespace Smartitecture.UI
 
         private void ShowToast(string message)
         {
+            // Small top-right toast for pending changes.
             if (SettingsToastText == null || SettingsToast == null)
             {
                 return;
@@ -298,6 +422,7 @@ namespace Smartitecture.UI
 
         private void ShowSavePopup(string message)
         {
+            // Center popup after saving.
             if (SavePopupOverlay == null || SavePopupCard == null || SavePopupText == null)
             {
                 return;
@@ -349,6 +474,7 @@ namespace Smartitecture.UI
 
         private void ShowUnsavedPopup()
         {
+            // Center popup for unsaved changes.
             if (UnsavedPopupOverlay == null || UnsavedPopupCard == null)
             {
                 return;
@@ -396,6 +522,7 @@ namespace Smartitecture.UI
 
         private static void SelectComboByContent(ComboBox comboBox, string? value)
         {
+            // Select by Tag (preferred) or display text (fallback).
             if (comboBox == null || comboBox.Items.Count == 0)
             {
                 return;
@@ -425,6 +552,7 @@ namespace Smartitecture.UI
 
         private static string GetComboValue(ComboBox comboBox, string fallback)
         {
+            // Get the combo selection value from Tag or Content.
             if (comboBox.SelectedItem is ComboBoxItem item)
             {
                 var tag = item.Tag?.ToString();

@@ -1,14 +1,11 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
   <sys:String x:Key="App.Title">Smartitecture</sys:String>
   <sys:String x:Key="Nav.Home">Home</sys:String>
   <sys:String x:Key="Nav.Settings">Settings</sys:String>
   <sys:String x:Key="Nav.Back">Back</sys:String>
-
   <sys:String x:Key="Startup.Title">Welcome</sys:String>
   <sys:String x:Key="Startup.Subtitle">Live system insight, updated in real time.</sys:String>
-  <sys:String x:Key="Startup.MetricLegend">CPU &#x2022; MEMORY &#x2022; DISK &#x2022; NETWORK</sys:String>
+  <sys:String x:Key="Startup.MetricLegend">CPU • MEMORY • DISK • NETWORK</sys:String>
   <sys:String x:Key="Startup.OverviewTitle">Live System Overview</sys:String>
   <sys:String x:Key="Startup.UpdatedFormat">Updated {0}</sys:String>
   <sys:String x:Key="Startup.CpuTitle">CPU</sys:String>
@@ -24,17 +21,16 @@
   <sys:String x:Key="Startup.DiskFreeFormat">Free: {0} GB</sys:String>
   <sys:String x:Key="Startup.NetworkUnknown">Network: --</sys:String>
   <sys:String x:Key="Startup.NetworkRatesFormat">Down {0} Mbps | Up {1} Mbps</sys:String>
-  <sys:String x:Key="Startup.FooterStart">Let's Get Started &#x2192;</sys:String>
+  <sys:String x:Key="Startup.FooterStart">Let's Get Started →</sys:String>
   <sys:String x:Key="Startup.FooterSettings">Settings</sys:String>
   <sys:String x:Key="Startup.FooterHealth">Health Check</sys:String>
   <sys:String x:Key="Startup.FooterAbout">About &amp; Docs</sys:String>
-
   <sys:String x:Key="Dashboard.Title">Dashboard</sys:String>
   <sys:String x:Key="Dashboard.WelcomeTitle">Welcome to Smartitecture</sys:String>
   <sys:String x:Key="Dashboard.WelcomeSubtitle">AI-powered system intelligence that keeps your PC fast, secure, and organized.</sys:String>
   <sys:String x:Key="Dashboard.QuickActions">Quick Actions</sys:String>
   <sys:String x:Key="Dashboard.QuickActionsSubtitle">Jump into the most common tasks.</sys:String>
-  <sys:String x:Key="Dashboard.StartChat">Start Chat &#x2192;</sys:String>
+  <sys:String x:Key="Dashboard.StartChat">Start Chat →</sys:String>
   <sys:String x:Key="Dashboard.OpenSettings">Open Settings</sys:String>
   <sys:String x:Key="Dashboard.About">About</sys:String>
   <sys:String x:Key="Dashboard.SystemSnapshot">System Snapshot</sys:String>
@@ -42,19 +38,23 @@
   <sys:String x:Key="Dashboard.SecurityStatus">Security: Monitoring enabled</sys:String>
   <sys:String x:Key="Dashboard.PerformanceStatus">Performance: Stable</sys:String>
   <sys:String x:Key="Dashboard.UpdatesStatus">Updates: No pending actions</sys:String>
-  <sys:String x:Key="Dashboard.Modes">Modes</sys:String>
-  <sys:String x:Key="Dashboard.ModesSubtitle">Pick the right brain for the task.</sys:String>
-  <sys:String x:Key="Dashboard.ModeLumen">LUMEN &#x2014; General assistant &amp; automation</sys:String>
-  <sys:String x:Key="Dashboard.ModeFortis">FORTIS &#x2014; Security &amp; defense</sys:String>
-  <sys:String x:Key="Dashboard.ModeNexa">NEXA &#x2014; Performance &amp; optimization</sys:String>
   <sys:String x:Key="Dashboard.RecentActivity">Recent Activity</sys:String>
   <sys:String x:Key="Dashboard.RecentActivitySubtitle">Your latest actions will appear here.</sys:String>
   <sys:String x:Key="Dashboard.NoActivity">No activity yet.</sys:String>
-
   <sys:String x:Key="Chat.Title">Assistant</sys:String>
-  <sys:String x:Key="Chat.ModelLabel">Model</sys:String>
+  <sys:String x:Key="Chat.UnifiedAssistantStatus">One assistant routes chat, PC diagnostics, app control, and safe automation automatically.</sys:String>
+  <sys:String x:Key="Chat.ProviderStatusTooltip">Shows whether broad answers are using the AI Server or local assistant.</sys:String>
+  <sys:String x:Key="Chat.ProviderRefreshTooltip">Refresh AI Server status</sys:String>
+  <sys:String x:Key="Chat.ProviderChecking">Checking...</sys:String>
+  <sys:String x:Key="Chat.ProviderCheckingTooltip">Checking the configured AI Server.</sys:String>
+  <sys:String x:Key="Chat.ProviderLocal">Local mode</sys:String>
+  <sys:String x:Key="Chat.ProviderLocalTooltip">No AI Server is configured. Broad answers use the built-in local assistant.</sys:String>
+  <sys:String x:Key="Chat.ProviderServerConnected">AI Server connected</sys:String>
+  <sys:String x:Key="Chat.ProviderServerConnectedTooltip">Connected to {0}. Broad answers can use the AI Server.</sys:String>
+  <sys:String x:Key="Chat.ProviderServerOffline">AI Server offline, using local</sys:String>
+  <sys:String x:Key="Chat.ProviderServerOfflineTooltip">Could not reach {0}. Local tools still work.</sys:String>
+  <sys:String x:Key="Chat.ProviderServerFailedTooltip">The configured AI Server returned HTTP {0}. Local tools still work.</sys:String>
   <sys:String x:Key="Chat.ClearChat">Clear Chat</sys:String>
-  <sys:String x:Key="Chat.ModelLoading">(Loading...)</sys:String>
   <sys:String x:Key="Chat.Typing">AI is typing</sys:String>
   <sys:String x:Key="Chat.Attach">Attach</sys:String>
   <sys:String x:Key="Chat.AttachTooltip">Attach file or screenshot</sys:String>
@@ -73,22 +73,18 @@
   <sys:String x:Key="Chat.DeleteConfirm">Confirm delete</sys:String>
   <sys:String x:Key="Chat.Placeholder">Type your message or command here...</sys:String>
   <sys:String x:Key="Chat.Welcome">Welcome to Smartitecture AI Assistant! I can help you with automation, system commands, and more.</sys:String>
-  <sys:String x:Key="Chat.SwitchedFormat">Switched to {0}</sys:String>
-  <sys:String x:Key="Chat.SwitchFailedFormat">Failed to switch to {0}</sys:String>
-
   <sys:String x:Key="About.Title">About</sys:String>
   <sys:String x:Key="About.Header">About Smartitecture</sys:String>
   <sys:String x:Key="About.Tagline">AI-Powered System Intelligence</sys:String>
   <sys:String x:Key="About.Version">Version 0.1.0 (Preview)</sys:String>
-  <sys:String x:Key="About.Description">Smartitecture helps you automate tasks, monitor system health, and get answers quickly &#x2014; all in a modern, glass-styled interface.</sys:String>
+  <sys:String x:Key="About.Description">Smartitecture helps you automate tasks, monitor system health, and get answers quickly — all in a modern, glass-styled interface.</sys:String>
   <sys:String x:Key="About.CoreHighlights">Core Highlights</sys:String>
   <sys:String x:Key="About.Highlight1">- Chat-first assistant for automation and help</sys:String>
   <sys:String x:Key="About.Highlight2">- Modular AI modes for security and performance</sys:String>
   <sys:String x:Key="About.Highlight3">- Privacy-aware design with optional cloud keys</sys:String>
   <sys:String x:Key="About.OpenDocs">Open Documentation</sys:String>
   <sys:String x:Key="About.Back">Back</sys:String>
-  <sys:String x:Key="About.Copyright">&#169; Smartitecture</sys:String>
-
+  <sys:String x:Key="About.Copyright">© Smartitecture</sys:String>
   <sys:String x:Key="Settings.Title">Settings</sys:String>
   <sys:String x:Key="Settings.Appearance">Appearance</sys:String>
   <sys:String x:Key="Settings.SystemPrivacy">System &amp; Privacy</sys:String>
@@ -109,29 +105,37 @@
   <sys:String x:Key="Settings.Channel">Channel:</sys:String>
   <sys:String x:Key="Settings.Network">Network</sys:String>
   <sys:String x:Key="Settings.ApiPort">API Port:</sys:String>
+  <sys:String x:Key="Settings.AIServer">AI Server</sys:String>
+  <sys:String x:Key="Settings.AIServerDescription">Optional: connect Smartitecture to your hosted backend for broader answers on demand.</sys:String>
+  <sys:String x:Key="Settings.BackendUrl">Server URL:</sys:String>
+  <sys:String x:Key="Settings.BackendApiKey">API Key:</sys:String>
+  <sys:String x:Key="Settings.BackendStatus">Status:</sys:String>
+  <sys:String x:Key="Settings.BackendStatusNotConfigured">Not configured</sys:String>
+  <sys:String x:Key="Settings.BackendStatusConfigured">Configured</sys:String>
+  <sys:String x:Key="Settings.BackendStatusChecking">Checking...</sys:String>
+  <sys:String x:Key="Settings.BackendStatusConnected">Connected</sys:String>
+  <sys:String x:Key="Settings.BackendStatusOffline">Offline or unreachable</sys:String>
+  <sys:String x:Key="Settings.BackendStatusFailedFormat">Failed ({0})</sys:String>
+  <sys:String x:Key="Settings.BackendTest">Test</sys:String>
   <sys:String x:Key="Settings.Privacy">Privacy</sys:String>
   <sys:String x:Key="Settings.ShareDiagnostics">Share diagnostics</sys:String>
   <sys:String x:Key="Settings.Save">Save</sys:String>
   <sys:String x:Key="Settings.ChangesPending">Changes pending</sys:String>
   <sys:String x:Key="Settings.Saved">Settings saved</sys:String>
   <sys:String x:Key="Settings.SavedMessage">You have successfully changed your preferences.</sys:String>
-
   <sys:String x:Key="Theme.Dark">Dark</sys:String>
   <sys:String x:Key="Theme.Light">Light</sys:String>
   <sys:String x:Key="Theme.System">System</sys:String>
-
   <sys:String x:Key="Lang.EnglishUS">English (US)</sys:String>
   <sys:String x:Key="Lang.EnglishUK">English (UK)</sys:String>
   <sys:String x:Key="Lang.Spanish">Spanish</sys:String>
   <sys:String x:Key="Lang.French">French</sys:String>
   <sys:String x:Key="Lang.German">German</sys:String>
-
   <sys:String x:Key="Region.US">United States</sys:String>
   <sys:String x:Key="Region.UK">United Kingdom</sys:String>
   <sys:String x:Key="Region.Canada">Canada</sys:String>
   <sys:String x:Key="Region.Australia">Australia</sys:String>
   <sys:String x:Key="Region.Germany">Germany</sys:String>
-
   <sys:String x:Key="TimeFormat.12">12-hour</sys:String>
   <sys:String x:Key="TimeFormat.24">24-hour</sys:String>
   <sys:String x:Key="Units.Metric">Metric</sys:String>
@@ -141,22 +145,24 @@
   <sys:String x:Key="TextSize.Large">Large</sys:String>
   <sys:String x:Key="UpdateChannel.Stable">Stable</sys:String>
   <sys:String x:Key="UpdateChannel.Beta">Beta</sys:String>
-  <sys:String x:Key="Chat.ToolConfirmTitle">Confirm action</sys:String>
-  <sys:String x:Key="Chat.ToolConfirmMessage">You&#x2019;re about to run {0}. Continue?</sys:String>
-  <sys:String x:Key="Chat.ToolConfirmCancel">Cancel</sys:String>
-  <sys:String x:Key="Chat.ToolConfirmConfirm">Confirm</sys:String>
   <sys:String x:Key="Settings.UnsavedTitle">Unsaved changes</sys:String>
   <sys:String x:Key="Settings.UnsavedMessage">You have unsaved changes. Do you want to exit?</sys:String>
-  <sys:String x:Key="Settings.UnsavedCancel">Don&#x2019;t exit</sys:String>
+  <sys:String x:Key="Settings.UnsavedCancel">Don't exit</sys:String>
   <sys:String x:Key="Settings.UnsavedConfirm">Exit</sys:String>
-  <sys:String x:Key="Chat.DeletedTitle">Deleted chats</sys:String>
+  <sys:String x:Key="Chat.Voice">Voice</sys:String>
+  <sys:String x:Key="Chat.VoiceTooltip">Use microphone voice input</sys:String>
+  <sys:String x:Key="Chat.Listening">Listening...</sys:String>
+  <sys:String x:Key="Chat.HistoryTab">History</sys:String>
+  <sys:String x:Key="Chat.DeletedTab">Deleted</sys:String>
   <sys:String x:Key="Chat.DeletedEmpty">No deleted chats.</sys:String>
   <sys:String x:Key="Chat.Recover">Recover</sys:String>
   <sys:String x:Key="Chat.DeleteForever">Delete permanently</sys:String>
   <sys:String x:Key="Chat.DeleteForeverTitle">Delete permanently?</sys:String>
   <sys:String x:Key="Chat.DeleteForeverWarning">This permanently removes the chat and cannot be undone.</sys:String>
-  <sys:String x:Key="Chat.DeleteForeverCancel">Cancel</sys:String>
-  <sys:String x:Key="Chat.DeleteForeverConfirm">Delete permanently</sys:String>
+  <sys:String x:Key="Chat.ToolConfirmTitle">Confirm action</sys:String>
+  <sys:String x:Key="Chat.ToolConfirmMessage">You're about to run {0}. Continue?</sys:String>
+  <sys:String x:Key="Chat.ToolConfirmCancel">Cancel</sys:String>
+  <sys:String x:Key="Chat.ToolConfirmConfirm">Confirm</sys:String>
   <sys:String x:Key="Lang.Afrikaans">Afrikaans</sys:String>
   <sys:String x:Key="Lang.Amharic">Amharic</sys:String>
   <sys:String x:Key="Lang.Arabic">Arabic</sys:String>
@@ -172,8 +178,8 @@
   <sys:String x:Key="Lang.Czech">Czech</sys:String>
   <sys:String x:Key="Lang.Danish">Danish</sys:String>
   <sys:String x:Key="Lang.Dutch">Dutch</sys:String>
-  <sys:String x:Key="Lang.EnglishCanada">English (Canada)</sys:String>
   <sys:String x:Key="Lang.EnglishAustralia">English (Australia)</sys:String>
+  <sys:String x:Key="Lang.EnglishCanada">English (Canada)</sys:String>
   <sys:String x:Key="Lang.EnglishIndia">English (India)</sys:String>
   <sys:String x:Key="Lang.Estonian">Estonian</sys:String>
   <sys:String x:Key="Lang.Filipino">Filipino</sys:String>
@@ -200,8 +206,8 @@
   <sys:String x:Key="Lang.Norwegian">Norwegian</sys:String>
   <sys:String x:Key="Lang.Persian">Persian</sys:String>
   <sys:String x:Key="Lang.Polish">Polish</sys:String>
-  <sys:String x:Key="Lang.PortuguesePortugal">Portuguese (Portugal)</sys:String>
   <sys:String x:Key="Lang.PortugueseBrazil">Portuguese (Brazil)</sys:String>
+  <sys:String x:Key="Lang.PortuguesePortugal">Portuguese (Portugal)</sys:String>
   <sys:String x:Key="Lang.Punjabi">Punjabi</sys:String>
   <sys:String x:Key="Lang.Romanian">Romanian</sys:String>
   <sys:String x:Key="Lang.Russian">Russian</sys:String>
@@ -219,12 +225,9 @@
   <sys:String x:Key="Lang.Urdu">Urdu</sys:String>
   <sys:String x:Key="Lang.Vietnamese">Vietnamese</sys:String>
   <sys:String x:Key="Lang.Zulu">Zulu</sys:String>
-  <sys:String x:Key="Chat.HistoryTab">History</sys:String>
-  <sys:String x:Key="Chat.DeletedTab">Deleted</sys:String>
-  <sys:String x:Key="Chat.ModeFortis">FORTIS</sys:String>
-  <sys:String x:Key="Chat.ModeSwitchFailedFormat">Failed to switch mode to {0}</sys:String>
-  <sys:String x:Key="Chat.ModeLumen">LUMEN</sys:String>
-  <sys:String x:Key="Chat.ModeSwitchedFormat">Mode set to {0}</sys:String>
-  <sys:String x:Key="Chat.ModeNexa">NEXA</sys:String>
-  <sys:String x:Key="Chat.ModeLabel">Mode</sys:String>
+  <sys:String x:Key="Dashboard.AssistantCapabilities">Assistant Capabilities</sys:String>
+  <sys:String x:Key="Dashboard.AssistantCapabilitiesSubtitle">One assistant routes each request to the right tool automatically.</sys:String>
+  <sys:String x:Key="Dashboard.CapabilityChat">Answers general questions through the backend when configured, with local fallback.</sys:String>
+  <sys:String x:Key="Dashboard.CapabilityDiagnostics">Checks PC health, performance, network, processes, and system details.</sys:String>
+  <sys:String x:Key="Dashboard.CapabilitySafety">Uses confirmations before sensitive system actions.</sys:String>
 </ResourceDictionary>

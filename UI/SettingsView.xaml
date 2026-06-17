@@ -14,7 +14,7 @@
                          BackClicked="BackClicked" HomeClicked="HomeClicked" />
 
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-      <Grid Margin="24,12,24,24" MaxWidth="960" HorizontalAlignment="Center">
+      <Grid Margin="24,12,24,24" MaxWidth="1040" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
@@ -26,138 +26,94 @@
           <TextBlock Text="{DynamicResource Settings.Title}" Style="{StaticResource Text.H1}" VerticalAlignment="Center"/>
         </StackPanel>
 
-        <Border Grid.Row="1" Style="{StaticResource Card.Glass}" Padding="20" MinHeight="520">
-          <Grid>
+        <Border Grid.Row="1" Style="{StaticResource Card.Glass}" Padding="24" MinHeight="520">
+          <Grid Grid.IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Left column: Appearance -->
-            <StackPanel Grid.Column="0" Margin="0,0,14,0">
+            <StackPanel Grid.Column="0" Margin="0,0,18,0">
               <TextBlock Text="{DynamicResource Settings.Appearance}" Style="{StaticResource Text.H2}" Margin="0,0,0,10"/>
 
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="{DynamicResource Settings.Theme}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
-                <ComboBox x:Name="ThemeComboBox" Width="200" SelectionChanged="ThemeComboBox_SelectionChanged" Style="{StaticResource ComboBox.Glass}">
+              <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.Theme}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <ComboBox Grid.Column="1" x:Name="ThemeComboBox" MinWidth="220" SelectionChanged="ThemeComboBox_SelectionChanged" Style="{StaticResource ComboBox.Glass}">
                   <ComboBoxItem Tag="Dark" Content="{DynamicResource Theme.Dark}" IsSelected="True"/>
                   <ComboBoxItem Tag="Light" Content="{DynamicResource Theme.Light}"/>
                   <ComboBoxItem Tag="System" Content="{DynamicResource Theme.System}"/>
                 </ComboBox>
-              </StackPanel>
+              </Grid>
 
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="{DynamicResource Settings.Language}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
-                <ComboBox x:Name="LanguageComboBox" Width="200" SelectionChanged="LanguageComboBox_SelectionChanged" Style="{StaticResource ComboBox.Glass}">
-                  <ComboBoxItem Tag="af-ZA" Content="{DynamicResource Lang.Afrikaans}"/>
-                  <ComboBoxItem Tag="am-ET" Content="{DynamicResource Lang.Amharic}"/>
-                  <ComboBoxItem Tag="ar" Content="{DynamicResource Lang.Arabic}"/>
-                  <ComboBoxItem Tag="az-Latn-AZ" Content="{DynamicResource Lang.Azerbaijani}"/>
-                  <ComboBoxItem Tag="eu-ES" Content="{DynamicResource Lang.Basque}"/>
-                  <ComboBoxItem Tag="bn-BD" Content="{DynamicResource Lang.Bengali}"/>
-                  <ComboBoxItem Tag="bg-BG" Content="{DynamicResource Lang.Bulgarian}"/>
-                  <ComboBoxItem Tag="my-MM" Content="{DynamicResource Lang.Burmese}"/>
-                  <ComboBoxItem Tag="ca-ES" Content="{DynamicResource Lang.Catalan}"/>
-                  <ComboBoxItem Tag="zh-CN" Content="{DynamicResource Lang.ChineseSimplified}"/>
-                  <ComboBoxItem Tag="zh-TW" Content="{DynamicResource Lang.ChineseTraditional}"/>
-                  <ComboBoxItem Tag="hr-HR" Content="{DynamicResource Lang.Croatian}"/>
-                  <ComboBoxItem Tag="cs-CZ" Content="{DynamicResource Lang.Czech}"/>
-                  <ComboBoxItem Tag="da-DK" Content="{DynamicResource Lang.Danish}"/>
-                  <ComboBoxItem Tag="nl-NL" Content="{DynamicResource Lang.Dutch}"/>
-                  <ComboBoxItem Tag="en-US" Content="{DynamicResource Lang.EnglishUS}"/>
-                  <ComboBoxItem Tag="en-GB" Content="{DynamicResource Lang.EnglishUK}"/>
-                  <ComboBoxItem Tag="en-CA" Content="{DynamicResource Lang.EnglishCanada}"/>
-                  <ComboBoxItem Tag="en-AU" Content="{DynamicResource Lang.EnglishAustralia}"/>
-                  <ComboBoxItem Tag="en-IN" Content="{DynamicResource Lang.EnglishIndia}"/>
-                  <ComboBoxItem Tag="et-EE" Content="{DynamicResource Lang.Estonian}"/>
-                  <ComboBoxItem Tag="fil-PH" Content="{DynamicResource Lang.Filipino}"/>
-                  <ComboBoxItem Tag="fi-FI" Content="{DynamicResource Lang.Finnish}"/>
-                  <ComboBoxItem Tag="fr-FR" Content="{DynamicResource Lang.French}"/>
-                  <ComboBoxItem Tag="gl-ES" Content="{DynamicResource Lang.Galician}"/>
-                  <ComboBoxItem Tag="de-DE" Content="{DynamicResource Lang.German}"/>
-                  <ComboBoxItem Tag="el-GR" Content="{DynamicResource Lang.Greek}"/>
-                  <ComboBoxItem Tag="gu-IN" Content="{DynamicResource Lang.Gujarati}"/>
-                  <ComboBoxItem Tag="he-IL" Content="{DynamicResource Lang.Hebrew}"/>
-                  <ComboBoxItem Tag="hi-IN" Content="{DynamicResource Lang.Hindi}"/>
-                  <ComboBoxItem Tag="hu-HU" Content="{DynamicResource Lang.Hungarian}"/>
-                  <ComboBoxItem Tag="is-IS" Content="{DynamicResource Lang.Icelandic}"/>
-                  <ComboBoxItem Tag="id-ID" Content="{DynamicResource Lang.Indonesian}"/>
-                  <ComboBoxItem Tag="it-IT" Content="{DynamicResource Lang.Italian}"/>
-                  <ComboBoxItem Tag="ja-JP" Content="{DynamicResource Lang.Japanese}"/>
-                  <ComboBoxItem Tag="kn-IN" Content="{DynamicResource Lang.Kannada}"/>
-                  <ComboBoxItem Tag="km-KH" Content="{DynamicResource Lang.Khmer}"/>
-                  <ComboBoxItem Tag="ko-KR" Content="{DynamicResource Lang.Korean}"/>
-                  <ComboBoxItem Tag="lv-LV" Content="{DynamicResource Lang.Latvian}"/>
-                  <ComboBoxItem Tag="lt-LT" Content="{DynamicResource Lang.Lithuanian}"/>
-                  <ComboBoxItem Tag="ms-MY" Content="{DynamicResource Lang.Malay}"/>
-                  <ComboBoxItem Tag="ml-IN" Content="{DynamicResource Lang.Malayalam}"/>
-                  <ComboBoxItem Tag="mr-IN" Content="{DynamicResource Lang.Marathi}"/>
-                  <ComboBoxItem Tag="ne-NP" Content="{DynamicResource Lang.Nepali}"/>
-                  <ComboBoxItem Tag="nb-NO" Content="{DynamicResource Lang.Norwegian}"/>
-                  <ComboBoxItem Tag="fa-IR" Content="{DynamicResource Lang.Persian}"/>
-                  <ComboBoxItem Tag="pl-PL" Content="{DynamicResource Lang.Polish}"/>
-                  <ComboBoxItem Tag="pt-PT" Content="{DynamicResource Lang.PortuguesePortugal}"/>
-                  <ComboBoxItem Tag="pt-BR" Content="{DynamicResource Lang.PortugueseBrazil}"/>
-                  <ComboBoxItem Tag="pa-IN" Content="{DynamicResource Lang.Punjabi}"/>
-                  <ComboBoxItem Tag="ro-RO" Content="{DynamicResource Lang.Romanian}"/>
-                  <ComboBoxItem Tag="ru-RU" Content="{DynamicResource Lang.Russian}"/>
-                  <ComboBoxItem Tag="sr-RS" Content="{DynamicResource Lang.Serbian}"/>
-                  <ComboBoxItem Tag="si-LK" Content="{DynamicResource Lang.Sinhala}"/>
-                  <ComboBoxItem Tag="sk-SK" Content="{DynamicResource Lang.Slovak}"/>
-                  <ComboBoxItem Tag="sl-SI" Content="{DynamicResource Lang.Slovenian}"/>
-                  <ComboBoxItem Tag="es-ES" Content="{DynamicResource Lang.Spanish}"/>
-                  <ComboBoxItem Tag="sw-KE" Content="{DynamicResource Lang.Swahili}"/>
-                  <ComboBoxItem Tag="sv-SE" Content="{DynamicResource Lang.Swedish}"/>
-                  <ComboBoxItem Tag="ta-IN" Content="{DynamicResource Lang.Tamil}"/>
-                  <ComboBoxItem Tag="te-IN" Content="{DynamicResource Lang.Telugu}"/>
-                  <ComboBoxItem Tag="th-TH" Content="{DynamicResource Lang.Thai}"/>
-                  <ComboBoxItem Tag="tr-TR" Content="{DynamicResource Lang.Turkish}"/>
-                  <ComboBoxItem Tag="uk-UA" Content="{DynamicResource Lang.Ukrainian}"/>
-                  <ComboBoxItem Tag="ur-PK" Content="{DynamicResource Lang.Urdu}"/>
-                  <ComboBoxItem Tag="vi-VN" Content="{DynamicResource Lang.Vietnamese}"/>
-                  <ComboBoxItem Tag="zu-ZA" Content="{DynamicResource Lang.Zulu}"/>
-                </ComboBox>
-              </StackPanel>
+              <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.Language}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <ComboBox Grid.Column="1" x:Name="LanguageComboBox" MinWidth="220" SelectionChanged="LanguageComboBox_SelectionChanged" Style="{StaticResource ComboBox.Glass}"/>
+              </Grid>
 
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="{DynamicResource Settings.Region}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
-                <ComboBox x:Name="RegionComboBox" Width="200" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
+              <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.Region}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <ComboBox Grid.Column="1" x:Name="RegionComboBox" MinWidth="220" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
                   <ComboBoxItem Tag="US" Content="{DynamicResource Region.US}"/>
                   <ComboBoxItem Tag="UK" Content="{DynamicResource Region.UK}"/>
                   <ComboBoxItem Tag="CA" Content="{DynamicResource Region.Canada}"/>
                   <ComboBoxItem Tag="AU" Content="{DynamicResource Region.Australia}"/>
                   <ComboBoxItem Tag="DE" Content="{DynamicResource Region.Germany}"/>
                 </ComboBox>
-              </StackPanel>
+              </Grid>
 
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="{DynamicResource Settings.TimeFormat}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
-                <ComboBox x:Name="TimeFormatComboBox" Width="200" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
+              <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.TimeFormat}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <ComboBox Grid.Column="1" x:Name="TimeFormatComboBox" MinWidth="220" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
                   <ComboBoxItem Tag="12h" Content="{DynamicResource TimeFormat.12}"/>
                   <ComboBoxItem Tag="24h" Content="{DynamicResource TimeFormat.24}"/>
                 </ComboBox>
-              </StackPanel>
+              </Grid>
 
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="{DynamicResource Settings.Units}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
-                <ComboBox x:Name="UnitsComboBox" Width="200" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
+              <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.Units}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <ComboBox Grid.Column="1" x:Name="UnitsComboBox" MinWidth="220" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
                   <ComboBoxItem Tag="Metric" Content="{DynamicResource Units.Metric}"/>
                   <ComboBoxItem Tag="Imperial" Content="{DynamicResource Units.Imperial}"/>
                 </ComboBox>
-              </StackPanel>
+              </Grid>
 
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="{DynamicResource Settings.TextSize}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
-                <ComboBox x:Name="TextSizeComboBox" Width="200" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
+              <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.TextSize}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <ComboBox Grid.Column="1" x:Name="TextSizeComboBox" MinWidth="220" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
                   <ComboBoxItem Tag="Small" Content="{DynamicResource TextSize.Small}"/>
                   <ComboBoxItem Tag="Default" Content="{DynamicResource TextSize.Default}"/>
                   <ComboBoxItem Tag="Large" Content="{DynamicResource TextSize.Large}"/>
                 </ComboBox>
-              </StackPanel>
+              </Grid>
             </StackPanel>
 
             <!-- Right column: System & Privacy -->
-            <StackPanel Grid.Column="1" Margin="14,0,0,0">
+            <StackPanel Grid.Column="1" Margin="18,0,0,0">
               <TextBlock Text="{DynamicResource Settings.SystemPrivacy}" Style="{StaticResource Text.H2}" Margin="0,0,0,10"/>
 
               <TextBlock Text="{DynamicResource Settings.Startup}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
@@ -170,19 +126,57 @@
 
               <TextBlock Text="{DynamicResource Settings.Updates}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
               <CheckBox x:Name="AutoUpdateCheckBox" Content="{DynamicResource Settings.AutoUpdate}" Margin="0,0,0,6" Style="{StaticResource CheckBox.Glass}" Checked="SettingChanged" Unchecked="SettingChanged"/>
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                <TextBlock Text="{DynamicResource Settings.Channel}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
-                <ComboBox x:Name="UpdateChannelComboBox" Width="200" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
+              <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.Channel}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <ComboBox Grid.Column="1" x:Name="UpdateChannelComboBox" MinWidth="220" SelectionChanged="SettingChanged" Style="{StaticResource ComboBox.Glass}">
                   <ComboBoxItem Tag="Stable" Content="{DynamicResource UpdateChannel.Stable}"/>
                   <ComboBoxItem Tag="Beta" Content="{DynamicResource UpdateChannel.Beta}"/>
                 </ComboBox>
-              </StackPanel>
+              </Grid>
 
               <TextBlock Text="{DynamicResource Settings.Network}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
-              <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                <TextBlock Text="{DynamicResource Settings.ApiPort}" VerticalAlignment="Center" Margin="0,0,8,0" Width="120"/>
-                <TextBox x:Name="PortTextBox" Width="120" Text="8080" Style="{StaticResource TextBox.Glass}" TextChanged="SettingChanged"/>
-              </StackPanel>
+              <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.ApiPort}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <TextBox Grid.Column="1" x:Name="PortTextBox" Width="140" HorizontalAlignment="Left" Text="8080" Style="{StaticResource TextBox.Glass}" TextChanged="SettingChanged"/>
+              </Grid>
+
+              <TextBlock Text="{DynamicResource Settings.AIServer}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
+              <TextBlock Text="{DynamicResource Settings.AIServerDescription}" Style="{StaticResource Text.Subtle}" TextWrapping="Wrap" Margin="0,0,0,8"/>
+              <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.BackendUrl}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <TextBox Grid.Column="1" x:Name="BackendUrlTextBox" MinWidth="220" Style="{StaticResource TextBox.Glass}" TextChanged="SettingChanged"/>
+              </Grid>
+              <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.BackendApiKey}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <TextBox Grid.Column="1" x:Name="BackendApiKeyTextBox" MinWidth="220" Style="{StaticResource TextBox.Glass}" TextChanged="SettingChanged"/>
+              </Grid>
+              <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="136" SharedSizeGroup="SettingsLabel"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{DynamicResource Settings.BackendStatus}" VerticalAlignment="Center" Margin="0,0,12,0" TextWrapping="Wrap"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                  <TextBlock x:Name="BackendStatusText" Text="{DynamicResource Settings.BackendStatusNotConfigured}" Style="{StaticResource Text.Subtle}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                  <Button x:Name="BackendTestButton" Content="{DynamicResource Settings.BackendTest}" MinWidth="88" Height="32" Margin="10,0,0,0" Click="BackendTest_Click" Style="{StaticResource Button.Glass}"/>
+                </StackPanel>
+              </Grid>
 
               <TextBlock Text="{DynamicResource Settings.Privacy}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
               <CheckBox x:Name="DiagnosticsCheckBox" Content="{DynamicResource Settings.ShareDiagnostics}" Margin="0,0,0,0" Style="{StaticResource CheckBox.Glass}" Checked="SettingChanged" Unchecked="SettingChanged"/>

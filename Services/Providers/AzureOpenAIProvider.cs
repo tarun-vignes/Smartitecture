@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Smartitecture.Services.Core;
 using Smartitecture.Services.Interfaces;
@@ -33,7 +34,7 @@ namespace Smartitecture.Services.Providers
             return SendAsync(request, cancellationToken);
         }
 
-        public async IAsyncEnumerable<string> StreamResponseAsync(LLMRequest request, CancellationToken cancellationToken)
+        public async IAsyncEnumerable<string> StreamResponseAsync(LLMRequest request, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             if (!IsConfigured)
             {
