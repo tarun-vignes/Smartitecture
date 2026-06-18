@@ -9,6 +9,8 @@ const packageDetails = [
   ['Portable ZIP SHA256', 'F632F4D6D3D661F35859D24029D0E149B331CB2169A57E8E7EA47C98E8274374']
 ]
 
+const releaseBaseUrl = 'https://github.com/tarun-vignes/Smartitecture/releases/download/v1.0.0.1-beta'
+
 function DownloadPage() {
   return (
     <div className="download-page">
@@ -43,10 +45,13 @@ function DownloadPage() {
               The current release artifact is generated locally and signed for beta validation. Upload
               this MSIX to your release host before making this page public.
             </p>
-            <a className="button large download-button" href="#" aria-disabled="true">
+            <a
+              className="button large download-button"
+              href={`${releaseBaseUrl}/Smartitecture-1.0.0.1-win-x64.msix`}
+            >
               Smartitecture-1.0.0.1-win-x64.msix
             </a>
-            <p className="download-note">Public file hosting is the next setup step.</p>
+            <p className="download-note">Signed Windows beta installer.</p>
           </motion.article>
 
           <motion.article
@@ -60,10 +65,13 @@ function DownloadPage() {
               The ZIP build is useful for internal testing and quick checks. It should be distributed
               only with clear beta instructions.
             </p>
-            <a className="button secondary large download-button" href="#" aria-disabled="true">
+            <a
+              className="button secondary large download-button"
+              href={`${releaseBaseUrl}/Smartitecture-win-x64.zip`}
+            >
               Smartitecture-win-x64.zip
             </a>
-            <p className="download-note">Portable download link pending.</p>
+            <p className="download-note">Portable build for internal testing.</p>
           </motion.article>
         </div>
       </section>
