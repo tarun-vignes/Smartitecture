@@ -43,6 +43,15 @@ var app = builder.Build();
 
 app.UseRateLimiter();
 
+app.MapGet("/", () => Results.Ok(new
+{
+    service = "smartitecture-backend",
+    status = "ok",
+    message = "Smartitecture backend is running. Use /health for status or /v1/chat for chat requests.",
+    endpoints = new[] { "/health", "/v1/chat", "/v1/chat/stream" },
+    time = DateTimeOffset.UtcNow
+}));
+
 app.MapGet("/health", () => Results.Ok(new
 {
     status = "ok",
