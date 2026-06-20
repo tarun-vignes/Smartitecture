@@ -9,7 +9,7 @@ const packageDetails = [
   ['Portable ZIP SHA256', 'F632F4D6D3D661F35859D24029D0E149B331CB2169A57E8E7EA47C98E8274374']
 ]
 
-const releaseBaseUrl = 'https://github.com/tarun-vignes/Smartitecture/releases/download/v1.0.0.1-beta'
+const releaseBaseUrl = '/downloads'
 
 function DownloadPage() {
   return (
@@ -48,6 +48,7 @@ function DownloadPage() {
             <a
               className="button large download-button"
               href={`${releaseBaseUrl}/Smartitecture-1.0.0.1-win-x64.msix`}
+              download
             >
               Smartitecture-1.0.0.1-win-x64.msix
             </a>
@@ -68,6 +69,7 @@ function DownloadPage() {
             <a
               className="button secondary large download-button"
               href={`${releaseBaseUrl}/Smartitecture-win-x64.zip`}
+              download
             >
               Smartitecture-win-x64.zip
             </a>
