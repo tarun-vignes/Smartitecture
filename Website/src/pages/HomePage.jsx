@@ -3,122 +3,107 @@ import { motion } from 'framer-motion'
 import './HomePage.css'
 
 const capabilities = [
-  {
-    title: 'AI answers on demand',
-    text: 'Connects to the Smartitecture backend for general questions, explanations, and follow-up reasoning.'
-  },
-  {
-    title: 'Local PC diagnostics',
-    text: 'Checks performance, memory pressure, battery status, network adapters, and Windows Defender results.'
-  },
-  {
-    title: 'App and tool launching',
-    text: 'Opens common Windows apps and Start Menu apps from plain-language requests.'
-  },
-  {
-    title: 'Safety-first automation',
-    text: 'Keeps sensitive actions guarded and explains what it is doing before touching system tools.'
-  }
+  ['Ask anything', 'General questions route through the Smartitecture backend when configured.'],
+  ['Understand your PC', 'Check memory, battery, Defender status, network adapters, and running processes.'],
+  ['Open apps faster', 'Launch Windows tools and installed Start Menu apps from plain language.'],
+  ['Stay in control', 'Sensitive actions stay guarded and local diagnostics remain transparent.']
 ]
 
 function HomePage() {
   return (
     <div className="home-page">
-      <section className="beta-hero">
-        <div className="container beta-hero-grid">
+      <section className="hero-showcase">
+        <div className="container hero-grid">
           <motion.div
-            className="beta-hero-copy"
+            className="hero-copy"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
           >
-            <p className="eyebrow">Windows beta now available</p>
+            <p className="eyebrow">Windows AI system assistant</p>
             <h1>Smartitecture</h1>
-            <p className="hero-summary">
-              A desktop assistant that combines cloud AI with local Windows diagnostics, app control,
-              and clear explanations for everyday computer problems.
+            <p className="hero-lede">
+              A desktop assistant that helps people understand what is happening on their PC,
+              get AI answers, run local checks, and take action without digging through Windows menus.
             </p>
             <div className="hero-actions">
               <Link to="/download" className="button large">Download beta</Link>
-              <Link to="/features" className="button secondary large">See features</Link>
+              <Link to="/features" className="button secondary large">Explore features</Link>
             </div>
           </motion.div>
 
           <motion.div
-            className="product-panel"
+            className="hero-status-panel"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.1 }}
-            aria-label="Smartitecture assistant preview"
           >
-            <div className="mock-window-bar">
+            <div className="status-header">
               <span></span>
-              <span></span>
-              <span></span>
+              <strong>Beta status</strong>
             </div>
-            <div className="mock-toolbar">
-              <span>AI Server connected</span>
-              <span>History</span>
+            <div className="status-metric">
+              <span>Version</span>
+              <strong>1.0.0.1 beta</strong>
             </div>
-            <div className="mock-chat">
-              <p className="mock-user">Why is my PC slow?</p>
-              <p className="mock-assistant">
-                Memory usage is elevated. Close unused editor windows, browser tabs, or heavy apps first.
-              </p>
-              <p className="mock-user">Scan results?</p>
-              <p className="mock-assistant">
-                Defender finished the last scan and did not report any threats.
-              </p>
+            <div className="status-metric">
+              <span>Backend</span>
+              <strong>Render connected</strong>
             </div>
+            <div className="status-metric">
+              <span>Platform</span>
+              <strong>Windows 10 / 11</strong>
+            </div>
+            <Link to="/download" className="status-link">View download options</Link>
           </motion.div>
-        </div>
-      </section>
-
-      <section className="section proof-strip">
-        <div className="container proof-grid">
-          <div>
-            <strong>Version</strong>
-            <span>1.0.0.1 beta</span>
-          </div>
-          <div>
-            <strong>Platform</strong>
-            <span>Windows 10 and Windows 11</span>
-          </div>
-          <div>
-            <strong>Backend</strong>
-            <span>Render-hosted Smartitecture API</span>
-          </div>
         </div>
       </section>
 
       <section className="section capability-section">
         <div className="container">
-          <div className="section-heading">
-            <p className="eyebrow">What it does today</p>
-            <h2>One assistant for questions, diagnostics, and safe automation.</h2>
+          <div className="section-intro">
+            <p className="eyebrow">What it does</p>
+            <h2>One assistant for chat, diagnostics, app control, and safe automation.</h2>
           </div>
           <div className="capability-grid">
-            {capabilities.map((item) => (
-              <article className="capability-card" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
+            {capabilities.map(([title, text]) => (
+              <article className="capability-card" key={title}>
+                <h3>{title}</h3>
+                <p>{text}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section beta-status-section">
-        <div className="container beta-status">
-          <div>
-            <p className="eyebrow">Release status</p>
-            <h2>Ready for beta testers, not a broad public launch yet.</h2>
-            <p>
-              The Windows package, backend connection, and clean-machine QA flow are in place. The next
-              release step is a public download page with clear beta instructions and a small tester group.
-            </p>
+      <section className="section demo-section">
+        <div className="container demo-grid">
+          <div className="demo-panel">
+            <div className="mock-topbar">
+              <span>AI Server connected</span>
+              <span>Local tools ready</span>
+            </div>
+            <div className="mock-thread">
+              <p className="mock-user">Why is my PC slow?</p>
+              <p className="mock-assistant">
+                Memory usage is elevated. I would close unused editor windows and heavy browser tabs first.
+              </p>
+              <p className="mock-user">Did Defender find anything?</p>
+              <p className="mock-assistant">
+                The last scan finished, and Defender did not report any threats.
+              </p>
+            </div>
           </div>
-          <Link to="/download" className="button large">Get the beta</Link>
+          <div>
+            <p className="eyebrow">Built for real use</p>
+            <h2>Not just hardcoded replies.</h2>
+            <p>
+              Smartitecture combines a hosted AI backend with local Windows connectors, so it can answer
+              broad questions and still inspect the machine when the user asks about performance,
+              battery, network, security, or installed apps.
+            </p>
+            <Link to="/download" className="button">Get the beta</Link>
+          </div>
         </div>
       </section>
     </div>

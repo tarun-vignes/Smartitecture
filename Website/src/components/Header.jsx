@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import smartitectureLogoLight from '../assets/images/smartitecture-logo-light.svg'
-import smartitectureLogoDark from '../assets/images/smartitecture-logo-dark.svg'
 import './Header.css'
 
-function Header({ darkMode, toggleDarkMode }) {
+function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   
   const toggleMenu = () => {
@@ -15,13 +13,9 @@ function Header({ darkMode, toggleDarkMode }) {
     <header className="header">
       <div className="container header-container">
         <div className="logo-container">
-          <Link to="/" className="logo-link">
+          <Link to="/" className="logo-link" aria-label="Smartitecture home">
             <div className="logo">
-              <img 
-                src={darkMode ? smartitectureLogoDark : smartitectureLogoLight} 
-                alt="Smartitecture Logo" 
-                className="logo-full"
-              />
+              <img src="/brand/smartitecture-logo.png" alt="" className="logo-image" aria-hidden="true" />
             </div>
           </Link>
         </div>
@@ -29,15 +23,20 @@ function Header({ darkMode, toggleDarkMode }) {
         <button 
           className={`mobile-menu-button ${menuOpen ? 'active' : ''}`} 
           onClick={toggleMenu}
-          aria-label="Toggle menu"
+          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-controls="primary-navigation"
           aria-expanded={menuOpen}
         >
-          <span className="menu-bar"></span>
-          <span className="menu-bar"></span>
-          <span className="menu-bar"></span>
+          <span className="menu-bar" aria-hidden="true"></span>
+          <span className="menu-bar" aria-hidden="true"></span>
+          <span className="menu-bar" aria-hidden="true"></span>
         </button>
         
-        <nav className={`main-nav ${menuOpen ? 'open' : ''}`}>
+        <nav
+          id="primary-navigation"
+          className={`main-nav ${menuOpen ? 'open' : ''}`}
+          aria-label="Primary navigation"
+        >
           <ul className="nav-list">
             <li className="nav-item">
               <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMenuOpen(false)}>
@@ -64,20 +63,7 @@ function Header({ darkMode, toggleDarkMode }) {
                 About
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink to="/contact" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMenuOpen(false)}>
-                Contact
-              </NavLink>
-            </li>
           </ul>
-          
-          <button 
-            className="theme-toggle" 
-            onClick={toggleDarkMode}
-            aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            {darkMode ? 'Light' : 'Dark'}
-          </button>
         </nav>
       </div>
     </header>

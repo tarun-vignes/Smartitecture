@@ -10,8 +10,7 @@ function Footer() {
         <div className="footer-grid">
           <div className="footer-brand">
             <div className="footer-logo">
-              <div className="logo-icon"></div>
-              <span className="logo-text">Smartitecture</span>
+              <span className="footer-logo-text">Smartitecture</span>
             </div>
             <p className="footer-tagline">
               Beta Windows assistant for AI answers, PC diagnostics, app launching, and safe automation.
@@ -31,10 +30,27 @@ function Footer() {
           <div className="footer-links">
             <h3 className="footer-heading">Project</h3>
             <ul className="footer-nav">
-              <li><a href="https://github.com/tarun-vignes/Smartitecture" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-              <li><a href="https://smartitecture-backend.onrender.com/health" target="_blank" rel="noopener noreferrer">Backend health</a></li>
+              <li>
+                <a
+                  href="https://github.com/tarun-vignes/Smartitecture"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Smartitecture GitHub repository, opens in a new tab"
+                >
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://smartitecture-backend.onrender.com/health"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Smartitecture backend health endpoint, opens in a new tab"
+                >
+                  Backend health
+                </a>
+              </li>
               <li><Link to="/about">About</Link></li>
-              <li><Link to="/contact">Contact</Link></li>
             </ul>
           </div>
 

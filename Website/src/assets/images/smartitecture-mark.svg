@@ -1,0 +1,31 @@
+<svg width="256" height="192" viewBox="0 0 256 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="smartitectureGradient" x1="37" y1="38" x2="218" y2="151" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="0.55" stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#A855F7"/>
+    </linearGradient>
+  </defs>
+  <g stroke="url(#smartitectureGradient)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M75 108V70L113 32H161L198 69V120L170 148H128L105 126H75"/>
+    <path d="M198 70C219 73 233 90 233 112C233 128 224 141 211 148"/>
+    <path d="M75 84H43"/>
+    <path d="M75 108H37"/>
+    <path d="M74 70H52"/>
+    <path d="M105 126H64"/>
+    <path d="M113 32L75 70"/>
+    <path d="M161 32L198 69"/>
+    <path d="M110 76L136 50H163L176 63L146 93"/>
+    <path d="M110 76V98L137 114H170"/>
+    <path d="M170 148L194 172"/>
+    <path d="M128 148L104 172"/>
+  </g>
+  <g fill="#FFFFFF" stroke="url(#smartitectureGradient)" stroke-width="10">
+    <circle cx="75" cy="70" r="15"/>
+    <circle cx="37" cy="108" r="15"/>
+    <circle cx="64" cy="126" r="15"/>
+    <circle cx="146" cy="93" r="15"/>
+    <circle cx="211" cy="148" r="15"/>
+    <rect x="184" y="88" width="36" height="36" rx="6"/>
+  </g>
+</svg>

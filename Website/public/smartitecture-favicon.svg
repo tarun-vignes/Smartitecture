@@ -1,27 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Smartitecture Favicon -->
-  <circle cx="256" cy="256" r="240" fill="#4169E1"/>
-  
-  <!-- Building Structure -->
-  <rect x="156" y="256" width="200" height="150" rx="10" ry="10" fill="#4169E1" stroke="white" stroke-width="12"/>
-  
-  <!-- Windows/Structure Elements -->
-  <rect x="186" y="286" width="30" height="30" rx="5" ry="5" fill="white"/>
-  <rect x="241" y="286" width="30" height="30" rx="5" ry="5" fill="white"/>
-  <rect x="296" y="286" width="30" height="30" rx="5" ry="5" fill="white"/>
-  <rect x="186" y="346" width="30" height="30" rx="5" ry="5" fill="white"/>
-  <rect x="241" y="346" width="30" height="30" rx="5" ry="5" fill="white"/>
-  <rect x="296" y="346" width="30" height="30" rx="5" ry="5" fill="white"/>
-  
-  <!-- Brain Circuit Elements -->
-  <circle cx="256" cy="156" r="60" fill="#4169E1" stroke="white" stroke-width="12"/>
-  <path d="M226 136C226 136 236 116 256 116C276 116 286 136 286 136" stroke="white" stroke-width="12" stroke-linecap="round"/>
-  <path d="M226 176C226 176 236 196 256 196C276 196 286 176 286 176" stroke="white" stroke-width="12" stroke-linecap="round"/>
-  <path d="M226 136L226 176" stroke="white" stroke-width="12" stroke-linecap="round"/>
-  <path d="M256 116L256 196" stroke="white" stroke-width="12" stroke-linecap="round"/>
-  <path d="M286 136L286 176" stroke="white" stroke-width="12" stroke-linecap="round"/>
-  
-  <!-- Connection Lines -->
-  <path d="M256 256L256 196" stroke="white" stroke-width="12" stroke-linecap="round"/>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="18" y1="24" x2="112" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="0.55" stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#A855F7"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#FFFFFF"/>
+  <g stroke="url(#g)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M39 73V49L59 29H84L104 49V78L89 93H67L55 82H39"/>
+    <path d="M104 50C116 53 122 63 121 76C120 85 115 92 108 96"/>
+    <path d="M39 60H23"/>
+    <path d="M39 73H19"/>
+    <path d="M55 82H34"/>
+    <path d="M59 29L39 49"/>
+    <path d="M84 29L104 49"/>
+    <path d="M57 53L70 40H85L92 47L77 63"/>
+    <path d="M57 53V65L72 73H89"/>
+    <path d="M89 93L101 106"/>
+    <path d="M67 93L54 106"/>
+  </g>
+  <g fill="#FFFFFF" stroke="url(#g)" stroke-width="6">
+    <circle cx="39" cy="49" r="8"/>
+    <circle cx="19" cy="73" r="8"/>
+    <circle cx="34" cy="82" r="8"/>
+    <circle cx="77" cy="63" r="8"/>
+    <circle cx="108" cy="96" r="8"/>
+    <rect x="96" y="59" width="20" height="20" rx="4"/>
+  </g>
 </svg>

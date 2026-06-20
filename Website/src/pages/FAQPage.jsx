@@ -59,20 +59,29 @@ function FAQPage() {
 
       <section className="section faq-main">
         <div className="container faq-container">
-          {questions.map((item) => {
+          {questions.map((item, index) => {
             const isOpen = openQuestion === item.question
+            const answerId = `faq-answer-${index}`
+            const buttonId = `faq-question-${index}`
             return (
               <article className={`faq-item ${isOpen ? 'expanded' : ''}`} key={item.question}>
                 <button
+                  id={buttonId}
                   className="faq-question"
                   onClick={() => setOpenQuestion(isOpen ? '' : item.question)}
                   aria-expanded={isOpen}
+                  aria-controls={answerId}
                 >
                   {item.question}
-                  <span className="toggle-icon">{isOpen ? '-' : '+'}</span>
+                  <span className="toggle-icon" aria-hidden="true">{isOpen ? '-' : '+'}</span>
                 </button>
                 {isOpen && (
-                  <div className="faq-answer">
+                  <div
+                    id={answerId}
+                    className="faq-answer"
+                    role="region"
+                    aria-labelledby={buttonId}
+                  >
                     <p>{item.answer}</p>
                   </div>
                 )}

@@ -15,7 +15,13 @@
 }
 
 .about-hero h1 {
+  color: #ffffff;
   font-size: clamp(2.2rem, 5vw, 4rem);
+}
+
+.about-hero .eyebrow {
+  color: #ffffff;
+  opacity: 0.92;
 }
 
 .about-hero p {
@@ -49,10 +55,6 @@
 
 .about-values {
   background: #f8fafc;
-}
-
-.dark-mode .about-values {
-  background: #111827;
 }
 
 .values-grid {

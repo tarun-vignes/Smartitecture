@@ -10,11 +10,13 @@
 }
 
 .faq-hero h1 {
+  color: #ffffff;
   font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
 .faq-hero p {
+  color: rgba(255, 255, 255, 0.86);
   font-size: 1.2rem;
   max-width: 600px;
   margin: 0 auto;

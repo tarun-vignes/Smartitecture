@@ -15,7 +15,13 @@
 }
 
 .features-hero h1 {
+  color: #ffffff;
   font-size: clamp(2.2rem, 5vw, 4rem);
+}
+
+.features-hero .eyebrow {
+  color: #ffffff;
+  opacity: 0.92;
 }
 
 .features-hero p {
@@ -48,10 +54,6 @@
 
 .limitations-section {
   background: #f8fafc;
-}
-
-.dark-mode .limitations-section {
-  background: #111827;
 }
 
 .limitations-grid {

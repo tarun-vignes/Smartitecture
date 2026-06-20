@@ -15,8 +15,14 @@
 }
 
 .download-hero h1 {
+  color: #ffffff;
   font-size: clamp(2.2rem, 5vw, 4rem);
   margin-bottom: 1rem;
+}
+
+.download-hero .eyebrow {
+  color: #ffffff;
+  opacity: 0.92;
 }
 
 .download-hero p {
@@ -57,10 +63,6 @@
 
 .requirements-section {
   background: #f8fafc;
-}
-
-.dark-mode .requirements-section {
-  background: #111827;
 }
 
 .requirements-grid {
