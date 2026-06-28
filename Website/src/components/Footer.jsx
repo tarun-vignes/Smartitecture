@@ -56,7 +56,7 @@ function Footer() {
 
           <div className="footer-status">
             <h3 className="footer-heading">Release Status</h3>
-            <p>Version 1.0.0.1 beta is ready for controlled Windows testing.</p>
+            <p>Version 1.0.0.5 beta is ready for controlled Windows testing.</p>
             <p>Mac and Linux support are future roadmap items, not current beta targets.</p>
           </div>
         </div>

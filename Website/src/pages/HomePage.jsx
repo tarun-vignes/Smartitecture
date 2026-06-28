@@ -44,7 +44,7 @@ function HomePage() {
             </div>
             <div className="status-metric">
               <span>Version</span>
-              <strong>1.0.0.1 beta</strong>
+              <strong>1.0.0.5 beta</strong>
             </div>
             <div className="status-metric">
               <span>Backend</span>

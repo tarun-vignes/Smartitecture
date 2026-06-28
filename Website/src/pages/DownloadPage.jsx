@@ -2,10 +2,10 @@ import { motion } from 'framer-motion'
 import './DownloadPage.css'
 
 const packageDetails = [
-  ['Version', '1.0.0.1 beta'],
+  ['Version', '1.0.0.5 beta'],
   ['Platform', 'Windows 10 / Windows 11'],
   ['Backend', 'https://smartitecture-backend.onrender.com'],
-  ['Package SHA256', 'E7B9213666823192CDE7DA3DBE5BDCCC7A52D28A6B721F29B057B6DD4D339E5A'],
+  ['Package SHA256', 'E6582BF90B02217535B4365D21CD9B8D3BD8652620BC91B6F42B7F0ACA788103'],
   ['Portable ZIP SHA256', 'F632F4D6D3D661F35859D24029D0E149B331CB2169A57E8E7EA47C98E8274374']
 ]
 
@@ -47,10 +47,10 @@ function DownloadPage() {
             </p>
             <a
               className="button large download-button"
-              href={`${releaseBaseUrl}/Smartitecture-1.0.0.1-win-x64.msix`}
+              href={`${releaseBaseUrl}/Smartitecture-1.0.0.5-win-x64.msix`}
               download
             >
-              Smartitecture-1.0.0.1-win-x64.msix
+              Smartitecture-1.0.0.5-win-x64.msix
             </a>
             <p className="download-note">Signed Windows beta installer.</p>
           </motion.article>
