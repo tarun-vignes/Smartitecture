@@ -1,8 +1,11 @@
 using System;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Smartitecture.Services.Safety;
 
 namespace Smartitecture
 {
@@ -41,6 +44,8 @@ namespace Smartitecture
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            RegisterExceptionLogging();
+            AppLog.Info("Smartitecture startup started.");
 
             // Set up basic configuration
             var configuration = new ConfigurationBuilder()
@@ -73,12 +78,50 @@ namespace Smartitecture
                         : Smartitecture.Services.AppColorTheme.Dark;
                 Smartitecture.Services.ThemeManager.Apply(theme);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                AppLog.Error("Failed to apply saved localization or theme preferences.", ex);
+            }
 
             var main = new MainWindow();
             this.MainWindow = main;
             _window = main;
             main.Show();
+            AppLog.Info("Smartitecture main window shown.");
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            AppLog.Info($"Smartitecture exited with code {e.ApplicationExitCode}.");
+            base.OnExit(e);
+        }
+
+        private void RegisterExceptionLogging()
+        {
+            this.DispatcherUnhandledException += OnDispatcherUnhandledException;
+
+            AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+            {
+                if (args.ExceptionObject is Exception ex)
+                {
+                    AppLog.Error("Unhandled app-domain exception.", ex);
+                }
+                else
+                {
+                    AppLog.Info($"Unhandled app-domain exception object: {args.ExceptionObject}");
+                }
+            };
+
+            TaskScheduler.UnobservedTaskException += (_, args) =>
+            {
+                AppLog.Error("Unobserved task exception.", args.Exception);
+                args.SetObserved();
+            };
+        }
+
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            AppLog.Error("Unhandled UI exception.", e.Exception);
         }
 
     }

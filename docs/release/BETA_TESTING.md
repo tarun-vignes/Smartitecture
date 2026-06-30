@@ -1,6 +1,6 @@
 # Smartitecture Beta Testing
 
-Beta version: `1.0.0.1`
+Beta version: `1.0.0.5`
 
 ## What This Beta Tests
 
@@ -30,7 +30,7 @@ Import-Certificate -FilePath .\artifacts\certs\Smartitecture-dev-signing.cer -Ce
 Install:
 
 ```powershell
-Add-AppxPackage -Path .\artifacts\msix-beta\Smartitecture-1.0.0.1-win-x64.msix
+Add-AppxPackage -Path .\artifacts\msix-beta\Smartitecture-1.0.0.5-win-x64.msix
 ```
 
 Launch from Start Menu:
@@ -79,10 +79,36 @@ Open notepad
 - Language/theme switching does not blank out labels.
 - Voice either transcribes or explains Windows microphone/speech permission setup.
 
+## Tester Bug Reports
+
+Ask testers to include:
+
+- Windows version.
+- Smartitecture version from Windows Settings > Apps > Installed apps.
+- What they typed or clicked.
+- What they expected.
+- What actually happened.
+- Screenshot or short screen recording if it is visual.
+- Logs from `%LOCALAPPDATA%\Smartitecture\Logs`.
+
+The main app log is:
+
+```text
+%LOCALAPPDATA%\Smartitecture\Logs\app.log
+```
+
+Tool execution audit logs are in:
+
+```text
+%LOCALAPPDATA%\Smartitecture\Logs\audit.log
+```
+
 ## Known Beta Limits
 
 - Windows only.
 - Dev-signed MSIX requires trusting the development certificate.
 - Render free tier can cold-start slowly.
 - Some app launch names may need the exact Start Menu display name.
+- Windows may keep a stale pinned taskbar icon until the user unpins and repins Smartitecture.
+- Hosted AI answers depend on the Render backend and configured Gemini quota.
 - There are limited automated tests; clean-machine QA is still required before sharing wider.

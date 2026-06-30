@@ -4,7 +4,7 @@ Use this on a Windows 10/11 machine or fresh Windows user profile before sending
 
 ## Inputs
 
-- MSIX package: `artifacts/msix-beta/Smartitecture-1.0.0.1-win-x64.msix`
+- MSIX package: `artifacts/msix-beta/Smartitecture-1.0.0.5-win-x64.msix`
 - Dev certificate: `artifacts/certs/Smartitecture-dev-signing.cer`
 - Backend URL: `https://smartitecture-backend.onrender.com`
 - Backend API key: the value configured in Render as `SMARTITECTURE_BACKEND_API_KEY`
@@ -22,7 +22,7 @@ Import-Certificate -FilePath .\artifacts\certs\Smartitecture-dev-signing.cer -Ce
 Install the package:
 
 ```powershell
-Add-AppxPackage -Path .\artifacts\msix-beta\Smartitecture-1.0.0.1-win-x64.msix
+Add-AppxPackage -Path .\artifacts\msix-beta\Smartitecture-1.0.0.5-win-x64.msix
 ```
 
 Confirm it is registered:
@@ -81,10 +81,13 @@ Pass criteria:
 - No text is clipped or overlapping in Chat, Settings, Dashboard, or About.
 - Voice either transcribes or gives clear Windows permission guidance.
 - Language and theme changes keep all labels readable.
+- `%LOCALAPPDATA%\Smartitecture\Logs\app.log` is created after launch.
+- `%LOCALAPPDATA%\Smartitecture\Logs\audit.log` records local tool actions after diagnostics/app-launch prompts.
 
 ## Known Beta Limits
 
 - The app is Windows-only.
 - The Render free instance may spin down and take around a minute to wake.
 - The current MSIX uses a development certificate. Public release needs a trusted code-signing certificate.
+- Windows icon cache may require unpinning and repinning Smartitecture after app icon changes.
 - Automated unit/integration tests are still limited; this checklist is the current beta release gate.

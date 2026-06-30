@@ -52,6 +52,8 @@ Use this before every desktop release.
 - Switch light/dark/system theme.
 - Open History and Clear Chat.
 - Press Voice and confirm either transcription works or the Windows permission guidance is clear.
+- Confirm `%LOCALAPPDATA%\Smartitecture\Logs\app.log` is created after launch.
+- Trigger at least one local diagnostic and confirm `%LOCALAPPDATA%\Smartitecture\Logs\audit.log` records the tool action.
 
 ## Release Notes
 
@@ -59,3 +61,4 @@ Use this before every desktop release.
 - Record backend URL environment.
 - Record validation date.
 - Record known limitations.
+- Record the app log path and instructions for collecting tester reports.
