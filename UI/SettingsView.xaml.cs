@@ -1,6 +1,10 @@
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -288,6 +292,39 @@ namespace Smartitecture.UI
             await TestBackendAsync();
         }
 
+        private void OpenLogs_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var dir = Smartitecture.Services.Safety.AppLog.LogDirectory;
+                Directory.CreateDirectory(dir);
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = dir,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Smartitecture.Services.Safety.AppLog.Error("Failed to open logs folder.", ex);
+                ShowSavePopup(GetString("Settings.OpenLogsFailed", "Could not open the logs folder."));
+            }
+        }
+
+        private void CopyDiagnostics_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText(BuildDiagnosticsSummary());
+                ShowSavePopup(GetString("Settings.DiagnosticsCopied", "Diagnostics copied to clipboard."));
+            }
+            catch (Exception ex)
+            {
+                Smartitecture.Services.Safety.AppLog.Error("Failed to copy diagnostics summary.", ex);
+                ShowSavePopup(GetString("Settings.DiagnosticsCopyFailed", "Could not copy diagnostics."));
+            }
+        }
+
         private async Task TestBackendAsync()
         {
             var baseUrl = NormalizeBackendUrl(BackendUrlTextBox.Text);
@@ -356,6 +393,37 @@ namespace Smartitecture.UI
             }
 
             return trimmed.TrimEnd('/');
+        }
+
+        private string BuildDiagnosticsSummary()
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown";
+            var baseUrl = NormalizeBackendUrl(BackendUrlTextBox.Text);
+            var backendConfigured = !string.IsNullOrWhiteSpace(baseUrl);
+            var backendStatus = BackendStatusText?.Text ?? "unknown";
+            var logDir = Smartitecture.Services.Safety.AppLog.LogDirectory;
+            var appLog = Smartitecture.Services.Safety.AppLog.LogPath;
+            var auditLog = Path.Combine(logDir, "audit.log");
+
+            var sb = new StringBuilder();
+            sb.AppendLine("Smartitecture diagnostics");
+            sb.AppendLine($"Generated: {DateTimeOffset.Now:O}");
+            sb.AppendLine($"App version: {version}");
+            sb.AppendLine($"OS: {Environment.OSVersion}");
+            sb.AppendLine($"Machine: {Environment.MachineName}");
+            sb.AppendLine($"User: {Environment.UserName}");
+            sb.AppendLine($"64-bit OS: {Environment.Is64BitOperatingSystem}");
+            sb.AppendLine($"Process architecture: {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture}");
+            sb.AppendLine($"Backend configured: {backendConfigured}");
+            sb.AppendLine($"Backend URL: {(backendConfigured ? baseUrl : "not configured")}");
+            sb.AppendLine($"Backend status: {backendStatus}");
+            sb.AppendLine($"Selected language: {GetComboValue(LanguageComboBox, "en-US")}");
+            sb.AppendLine($"Selected theme: {GetComboValue(ThemeComboBox, "Dark")}");
+            sb.AppendLine($"Share diagnostics enabled: {DiagnosticsCheckBox.IsChecked == true}");
+            sb.AppendLine($"Logs folder: {logDir}");
+            sb.AppendLine($"App log exists: {File.Exists(appLog)}");
+            sb.AppendLine($"Audit log exists: {File.Exists(auditLog)}");
+            return sb.ToString();
         }
 
         private static void ApplyThemeFromValue(string? value)

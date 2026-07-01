@@ -179,7 +179,14 @@
               </Grid>
 
               <TextBlock Text="{DynamicResource Settings.Privacy}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
-              <CheckBox x:Name="DiagnosticsCheckBox" Content="{DynamicResource Settings.ShareDiagnostics}" Margin="0,0,0,0" Style="{StaticResource CheckBox.Glass}" Checked="SettingChanged" Unchecked="SettingChanged"/>
+              <CheckBox x:Name="DiagnosticsCheckBox" Content="{DynamicResource Settings.ShareDiagnostics}" Margin="0,0,0,12" Style="{StaticResource CheckBox.Glass}" Checked="SettingChanged" Unchecked="SettingChanged"/>
+
+              <TextBlock Text="{DynamicResource Settings.Support}" Style="{StaticResource Text.Caption}" FontWeight="SemiBold" Margin="0,0,0,6"/>
+              <TextBlock Text="{DynamicResource Settings.SupportDescription}" Style="{StaticResource Text.Subtle}" TextWrapping="Wrap" Margin="0,0,0,8"/>
+              <WrapPanel Margin="0,0,0,0">
+                <Button Content="{DynamicResource Settings.OpenLogs}" MinWidth="120" Height="34" Margin="0,0,8,8" Click="OpenLogs_Click" Style="{StaticResource Button.Glass}"/>
+                <Button Content="{DynamicResource Settings.CopyDiagnostics}" MinWidth="148" Height="34" Margin="0,0,0,8" Click="CopyDiagnostics_Click" Style="{StaticResource Button.Glass}"/>
+              </WrapPanel>
             </StackPanel>
 
             <!-- Change toast -->

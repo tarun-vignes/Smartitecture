@@ -91,6 +91,8 @@ Ask testers to include:
 - Screenshot or short screen recording if it is visual.
 - Logs from `%LOCALAPPDATA%\Smartitecture\Logs`.
 
+In the app, open Settings > Support to open the logs folder or copy a diagnostics summary.
+
 The main app log is:
 
 ```text

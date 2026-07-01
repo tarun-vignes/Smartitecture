@@ -124,6 +124,13 @@
   <sys:String x:Key="Settings.BackendTest">Test</sys:String>
   <sys:String x:Key="Settings.Privacy">Privacy</sys:String>
   <sys:String x:Key="Settings.ShareDiagnostics">Share diagnostics</sys:String>
+  <sys:String x:Key="Settings.Support">Support</sys:String>
+  <sys:String x:Key="Settings.SupportDescription">Use these when reporting beta issues.</sys:String>
+  <sys:String x:Key="Settings.OpenLogs">Open logs</sys:String>
+  <sys:String x:Key="Settings.OpenLogsFailed">Could not open the logs folder.</sys:String>
+  <sys:String x:Key="Settings.CopyDiagnostics">Copy diagnostics</sys:String>
+  <sys:String x:Key="Settings.DiagnosticsCopied">Diagnostics copied to clipboard.</sys:String>
+  <sys:String x:Key="Settings.DiagnosticsCopyFailed">Could not copy diagnostics.</sys:String>
   <sys:String x:Key="Settings.Save">Save</sys:String>
   <sys:String x:Key="Settings.ChangesPending">Changes pending</sys:String>
   <sys:String x:Key="Settings.Saved">Settings saved</sys:String>
