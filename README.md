@@ -2,6 +2,8 @@
 
 Smartitecture is a premium Windows WPF desktop assistant with a glassmorphic UI, a guided startup wizard, a unified AI assistant, and local system tools for diagnostics, security checks, and automation.
 
+Website: https://smartitecture-backend.onrender.com
+
 Status: In active development. Expect frequent changes and rapid iteration.
 
 ## Key Features
