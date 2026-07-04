@@ -189,12 +189,9 @@ namespace Smartitecture.UI
                 // Show typing indicator while processing.
                 ShowTypingIndicator();
 
-                if (ShouldRefreshProcessListForCloseRequest(userMessage))
+                if (TryRouteLocalIntent(userMessage, out var localCommandName, out var localParameters))
                 {
-                    await ExecuteCommandAsync(
-                        "list_processes",
-                        new Dictionary<string, object> { ["count"] = 12 },
-                        userMessage);
+                    await ExecuteCommandAsync(localCommandName, localParameters, userMessage);
                     return;
                 }
 
@@ -485,6 +482,262 @@ namespace Smartitecture.UI
         private static bool ContainsAny(string value, params string[] patterns)
         {
             return patterns.Any(pattern => value.Contains(pattern, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static bool TryRouteLocalIntent(
+            string userMessage,
+            out string commandName,
+            out Dictionary<string, object> parameters)
+        {
+            commandName = string.Empty;
+            parameters = new Dictionary<string, object>();
+
+            var normalized = (userMessage ?? string.Empty).Trim().ToLowerInvariant();
+            if (string.IsNullOrWhiteSpace(normalized))
+            {
+                return false;
+            }
+
+            if (IsDefenderScanStatusIntent(normalized))
+            {
+                commandName = "defender_scan_status";
+                return true;
+            }
+
+            if (IsDefenderScanIntent(normalized))
+            {
+                commandName = "defender_scan";
+                parameters["full"] = ContainsAny(normalized, "full", "complete", "deep");
+                return true;
+            }
+
+            if (IsDefenderStatusIntent(normalized))
+            {
+                commandName = "defender_status";
+                return true;
+            }
+
+            if (IsBatteryIntent(normalized))
+            {
+                commandName = "battery_status";
+                return true;
+            }
+
+            if (IsNetworkIntent(normalized))
+            {
+                commandName = "network_adapters";
+                return true;
+            }
+
+            if (IsCloseOrProcessIntent(normalized))
+            {
+                commandName = "list_processes";
+                parameters["count"] = 12;
+                return true;
+            }
+
+            if (IsPerformanceIntent(normalized))
+            {
+                commandName = "performance_snapshot";
+                return true;
+            }
+
+            if (IsSystemInfoIntent(normalized))
+            {
+                commandName = "system_info";
+                return true;
+            }
+
+            var launchTarget = ExtractLaunchTarget(userMessage ?? string.Empty);
+            if (!string.IsNullOrWhiteSpace(launchTarget))
+            {
+                commandName = "launch";
+                parameters["target"] = launchTarget;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsDefenderScanStatusIntent(string normalized)
+        {
+            return ContainsAny(normalized,
+                "scan result",
+                "scan results",
+                "scan status",
+                "defender scan result",
+                "defender scan status",
+                "did the scan find",
+                "did my scan find",
+                "did scan find",
+                "did it find anything",
+                "any threats found",
+                "threats found",
+                "what did the scan find",
+                "was anything found",
+                "find any malware",
+                "find any virus");
+        }
+
+        private static bool IsDefenderScanIntent(string normalized)
+        {
+            return ContainsAny(normalized,
+                "scan my pc",
+                "scan this pc",
+                "scan computer",
+                "scan for malware",
+                "scan for viruses",
+                "malware scan",
+                "virus scan",
+                "defender scan",
+                "windows defender scan",
+                "run a scan",
+                "run scan");
+        }
+
+        private static bool IsDefenderStatusIntent(string normalized)
+        {
+            return ContainsAny(normalized,
+                "defender status",
+                "windows security",
+                "security status",
+                "antivirus status",
+                "is my pc safe",
+                "am i protected",
+                "am i secure",
+                "malicious files",
+                "files malicious",
+                "file malicious",
+                "any files that are malicious",
+                "is there any files that are malicious");
+        }
+
+        private static bool IsBatteryIntent(string normalized)
+        {
+            return ContainsAny(normalized,
+                "battery percentage",
+                "battery percent",
+                "battery level",
+                "battery status",
+                "how much battery",
+                "battery do i have",
+                "charge remaining",
+                "charge percentage",
+                "power level");
+        }
+
+        private static bool IsNetworkIntent(string normalized)
+        {
+            return ContainsAny(normalized,
+                "show my ip",
+                "what is my ip",
+                "what's my ip",
+                "ip address",
+                "network status",
+                "network adapters",
+                "wifi status",
+                "wi-fi status",
+                "internet status");
+        }
+
+        private static bool IsCloseOrProcessIntent(string normalized)
+        {
+            return IsCloseRecommendationRequest(normalized) ||
+                   ContainsAny(normalized,
+                       "free ram",
+                       "free memory",
+                       "using my ram",
+                       "using ram",
+                       "using my memory",
+                       "using memory",
+                       "highest memory",
+                       "top memory",
+                       "running processes",
+                       "show processes",
+                       "list processes",
+                       "process list",
+                       "top processes");
+        }
+
+        private static bool IsPerformanceIntent(string normalized)
+        {
+            return ContainsAny(normalized,
+                "why is my pc slow",
+                "why is my computer slow",
+                "pc slow",
+                "computer slow",
+                "running slow",
+                "laggy",
+                "lagging",
+                "check performance",
+                "performance check",
+                "diagnose performance",
+                "diagnose my pc",
+                "why is my pc hot",
+                "why is my computer hot",
+                "pc hot",
+                "computer hot",
+                "overheating",
+                "fan loud",
+                "fan noise");
+        }
+
+        private static bool IsSystemInfoIntent(string normalized)
+        {
+            return ContainsAny(normalized,
+                "system info",
+                "system information",
+                "computer info",
+                "computer information",
+                "information of my pc",
+                "info of my pc",
+                "my pc information",
+                "pc specs",
+                "device specs",
+                "about this pc",
+                "check my pc",
+                "health check");
+        }
+
+        private static string? ExtractLaunchTarget(string userMessage)
+        {
+            var normalized = (userMessage ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(normalized))
+            {
+                return null;
+            }
+
+            normalized = System.Text.RegularExpressions.Regex.Replace(
+                normalized,
+                @"^(can\s+you|could\s+you|would\s+you|please|pls)\s+",
+                string.Empty,
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+            var match = System.Text.RegularExpressions.Regex.Match(
+                normalized,
+                @"\b(open|launch|start|run)\s+(?<target>.+)$",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            if (!match.Success)
+            {
+                return null;
+            }
+
+            var target = match.Groups["target"].Value.Trim();
+            target = System.Text.RegularExpressions.Regex.Replace(
+                target,
+                @"[?.!]+$",
+                string.Empty).Trim();
+            target = System.Text.RegularExpressions.Regex.Replace(
+                target,
+                @"^(the\s+)?(app|application)\s+",
+                string.Empty,
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase).Trim();
+
+            return string.IsNullOrWhiteSpace(target) ||
+                   target.Equals("app", StringComparison.OrdinalIgnoreCase) ||
+                   target.Equals("application", StringComparison.OrdinalIgnoreCase)
+                ? null
+                : target;
         }
 
         private string? TryBuildContextualFollowUp(string userMessage)
