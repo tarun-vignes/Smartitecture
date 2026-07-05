@@ -9,7 +9,7 @@ const questions = [
   },
   {
     question: 'Is this ready for public release?',
-    answer: 'It is ready for controlled beta testing. The app, backend, signed package, and QA script are working, but public download hosting and a tester feedback loop still need to be finalized.'
+    answer: 'It is public as a controlled beta. The app, backend, signed package, and QA scripts are working, but wider distribution still needs a trusted code-signing certificate and a tighter tester feedback loop.'
   },
   {
     question: 'Does it work on Mac or Linux?',

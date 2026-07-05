@@ -42,8 +42,8 @@ function DownloadPage() {
           >
             <h2>Recommended beta package</h2>
             <p>
-              The current release artifact is generated locally and signed for beta validation. Upload
-              this MSIX to your release host before making this page public.
+              The current release artifact is available for public beta testing. Windows may ask you
+              to trust the beta certificate until a production code-signing certificate is in place.
             </p>
             <a
               className="button large download-button"
@@ -63,8 +63,8 @@ function DownloadPage() {
           >
             <h2>Portable build</h2>
             <p>
-              The ZIP build is useful for internal testing and quick checks. It should be distributed
-              only with clear beta instructions.
+              The ZIP build is useful for quick checks when you do not want to use the installer.
+              Use the MSIX package for the normal beta path.
             </p>
             <a
               className="button secondary large download-button"
@@ -73,7 +73,7 @@ function DownloadPage() {
             >
               Smartitecture-win-x64.zip
             </a>
-            <p className="download-note">Portable build for internal testing.</p>
+            <p className="download-note">Portable build for beta testing.</p>
           </motion.article>
         </div>
       </section>

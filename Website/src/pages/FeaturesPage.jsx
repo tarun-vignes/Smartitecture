@@ -77,7 +77,7 @@ function FeaturesPage() {
             <li>Windows is the only supported desktop platform for this beta.</li>
             <li>Mac and Linux would need separate app shells and system connectors.</li>
             <li>Destructive or sensitive actions should require confirmation before execution.</li>
-            <li>Public downloads still need hosted artifacts and release notes.</li>
+            <li>The current MSIX uses a beta/dev certificate; a trusted production certificate is still needed for wider distribution.</li>
           </ul>
         </div>
       </section>
