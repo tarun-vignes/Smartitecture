@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Smartitecture beta testing guide
+    url: https://github.com/tarun-vignes/Smartitecture/blob/main/docs/release/BETA_TESTING.md
+    about: Read the beta setup, test prompts, and known limits before filing a report.

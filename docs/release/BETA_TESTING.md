@@ -81,7 +81,9 @@ Open notepad
 
 ## Tester Bug Reports
 
-Ask testers to include:
+Ask testers to file GitHub issues with the **Beta bug report** template. For non-bug usability notes, use the **Beta feedback** template.
+
+Bug reports should include:
 
 - Windows version.
 - Smartitecture version from Windows Settings > Apps > Installed apps.

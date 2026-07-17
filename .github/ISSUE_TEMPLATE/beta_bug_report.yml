@@ -1,0 +1,97 @@
+name: Beta bug report
+description: Report a reproducible issue from the Smartitecture public beta.
+title: "[Beta bug]: "
+labels:
+  - beta
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing Smartitecture. Please include enough detail for the issue to be reproduced on a Windows test machine.
+  - type: input
+    id: app-version
+    attributes:
+      label: Smartitecture version
+      description: Find this in Windows Settings > Apps > Installed apps, or from the package/download name.
+      placeholder: "1.0.0.5 beta"
+    validations:
+      required: true
+  - type: input
+    id: windows-version
+    attributes:
+      label: Windows version
+      description: Include Windows 10/11 and build number if available.
+      placeholder: "Windows 11 23H2, build 22631"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Install or launch
+        - AI server/backend
+        - Chat answer quality
+        - Local PC diagnostics
+        - Defender/security tools
+        - App launching
+        - Voice input
+        - Settings/language/theme
+        - Website/download
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: backend-status
+    attributes:
+      label: AI Server status
+      description: What did Settings > AI Server show?
+      options:
+        - Connected
+        - Not configured
+        - Test failed
+        - Not checked
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: List exactly what you typed, clicked, or installed.
+      placeholder: |
+        1. Open Smartitecture.
+        2. Go to Chat.
+        3. Type "..."
+        4. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      placeholder: "What should have happened?"
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      placeholder: "What happened instead? Include exact error text if possible."
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics and logs
+      description: In Smartitecture, open Settings > Support and use Copy diagnostics. Attach screenshots or relevant log excerpts from %LOCALAPPDATA%\Smartitecture\Logs if possible. Do not paste API keys.
+      placeholder: "Paste diagnostics summary or describe attached app.log/audit.log snippets."
+    validations:
+      required: false
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots or recording
+      description: Drag screenshots or short screen recordings here if the issue is visual.
+    validations:
+      required: false

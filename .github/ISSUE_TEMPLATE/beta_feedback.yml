@@ -1,0 +1,39 @@
+name: Beta feedback
+description: Share usability feedback, confusing behavior, or beta improvement ideas.
+title: "[Beta feedback]: "
+labels:
+  - beta
+  - feedback
+body:
+  - type: dropdown
+    id: feedback-area
+    attributes:
+      label: Feedback area
+      options:
+        - First launch/install
+        - Chat experience
+        - Local diagnostics
+        - AI answer quality
+        - Safety confirmations
+        - Settings/configuration
+        - Website/download
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: feedback
+    attributes:
+      label: What should improve?
+      description: Explain the friction, confusion, or desired improvement.
+      placeholder: "I expected..., but..."
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Include app version, Windows version, backend status, or exact prompt if relevant.
+      placeholder: "1.0.0.5 beta, Windows 11, AI Server connected, prompt: ..."
+    validations:
+      required: false
