@@ -2,9 +2,9 @@ name: Smartitecture CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 jobs:
   build-website:
@@ -32,4 +32,24 @@ jobs:
       
     # We'll add deployment steps later when ready
 
-  # We'll add test verification back when we have a better approach
+  test-desktop:
+    name: Build and Test Desktop
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore
+      run: dotnet restore Smartitecture.sln
+
+    - name: Build
+      run: dotnet build Smartitecture.sln -c Release --no-restore
+
+    - name: Test
+      run: dotnet test Smartitecture.sln -c Release --no-build

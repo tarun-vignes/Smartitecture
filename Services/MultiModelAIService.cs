@@ -209,7 +209,7 @@ namespace Smartitecture.Services
             var launchMatch = Regex.Match(lowerMessage, @"\b(open|launch|start)\s+(?<target>.+)");
             if (launchMatch.Success)
             {
-                var target = launchMatch.Groups["target"].Value.Trim();
+                var target = launchMatch.Groups["target"].Value.Trim().TrimEnd('.', '?', '!');
                 if (!string.IsNullOrWhiteSpace(target))
                 {
                     return ("launch", new Dictionary<string, object> { ["target"] = target });
@@ -329,6 +329,13 @@ namespace Smartitecture.Services
                 "what's using memory",
                 "what is using my memory",
                 "what's using my memory",
+                "what should i close",
+                "what can i close",
+                "what do i close",
+                "what should i stop",
+                "what can i stop",
+                "free ram",
+                "free memory",
                 "what is using cpu",
                 "what's using cpu",
                 "what is using my cpu",

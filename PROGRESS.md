@@ -9,6 +9,7 @@ of the project. It is not a full commit history.
 - Modern glass-style UI with consistent theming and typography.
 - Chat experience uses one assistant with automatic routing, microphone voice input, streaming responses, local system tools, backend fallback, and history.
 - Hosted backend service exists for cloud inference with Gemini/OpenAI provider support, rate limiting, SSE streaming, and smoke-test coverage.
+- Automated service tests cover core chat intent routing and sensitive-operation confirmation rules.
 - Deployment scripts exist for backend publish, backend Docker, desktop publish, MSIX packaging, dev signing certificate creation, and smoke testing.
 - Public beta website and downloadable Windows beta artifacts are available.
 - Signed development MSIX installs and launches from the Windows package path after trusting the dev certificate.
@@ -55,11 +56,11 @@ of the project. It is not a full commit history.
 
 ## Known Gaps / TODO
 - Public release needs a trusted code-signing certificate; the current MSIX is signed with a local dev certificate.
-- No active automated test project is present yet; release validation currently depends on build, smoke scripts, package creation, and manual desktop checks.
+- Automated coverage is still early; release validation also depends on build, smoke scripts, package creation, and manual desktop checks.
 - Optional: telemetry, usage tracking, update feed, and admin controls.
 
 ## Recommended Next Steps
 1. Run a clean-machine manual smoke pass for chat, backend answers, Defender scan status, battery, network, app launching, and performance tools.
 2. Replace the dev certificate with a trusted public code-signing certificate before wider distribution.
-3. Add service-level automated tests for routing, safety checks, provider fallback, and local system tools.
+3. Expand automated tests for provider fallback, backend errors, local system tool parsing, and UI-independent settings persistence.
 4. Tighten the beta feedback loop with issue templates, tester instructions, and release notes for each package.

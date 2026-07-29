@@ -8,8 +8,9 @@
     <!-- Fix for duplicate XAML items -->
     <EnableDefaultPageItems>false</EnableDefaultPageItems>
     <!-- Platform configuration -->
-    <Platforms>x86;x64;ARM64</Platforms>
-    <PlatformTarget>$(Platform)</PlatformTarget>
+    <Platforms>AnyCPU;x86;x64;ARM64</Platforms>
+    <PlatformTarget Condition="'$(Platform)' == 'Any CPU'">AnyCPU</PlatformTarget>
+    <PlatformTarget Condition="'$(Platform)' != 'Any CPU'">$(Platform)</PlatformTarget>
   </PropertyGroup>
   
   <!-- Common package versions -->
