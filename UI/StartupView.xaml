@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Smartitecture.UI.StartupView"
+<UserControl x:Class="Smartitecture.UI.StartupView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:Smartitecture.Controls"
@@ -34,7 +34,14 @@
                     <ContentControl Style="{StaticResource Logo.Badge}" Width="88" Height="88" HorizontalAlignment="Center"/>
                     <TextBlock Text="{DynamicResource Startup.Title}" Style="{StaticResource Text.H1}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,12,0,2"/>
                     <TextBlock Text="{DynamicResource Startup.Subtitle}" Style="{StaticResource Text.Body}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" FontSize="16"/>
-                    <TextBlock Text="{DynamicResource Startup.MetricLegend}" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Opacity="0.9"/>
+                    <TextBlock Text="Start with a PC check. No account or setup needed for local tools."
+                               Style="{StaticResource Text.Caption}" TextWrapping="Wrap" TextAlignment="Center" Margin="0,8,0,12"/>
+                    <WrapPanel HorizontalAlignment="Center">
+                        <Button Content="Check my PC" Tag="check my PC" Click="QuickAction_Click" Style="{StaticResource Button.Primary}" Margin="4"/>
+                        <Button Content="Why is my PC slow?" Tag="why is my PC slow" Click="QuickAction_Click" Style="{StaticResource Button.Glass}" Margin="4"/>
+                        <Button Content="Check protection" Tag="Defender status" Click="QuickAction_Click" Style="{StaticResource Button.Glass}" Margin="4"/>
+                        <Button Content="Ask the assistant" Click="OpenChat_Click" Style="{StaticResource Button.Glass}" Margin="4"/>
+                    </WrapPanel>
                 </StackPanel>
 
                 <!-- Overview header -->

@@ -1,133 +1,14 @@
-import { motion } from 'framer-motion'
-import './DownloadPage.css'
-
-const packageDetails = [
-  ['Version', '1.0.0.5 beta'],
-  ['Platform', 'Windows 10 / Windows 11'],
-  ['Backend', 'https://smartitecture-backend.onrender.com'],
-  ['Package SHA256', 'E6582BF90B02217535B4365D21CD9B8D3BD8652620BC91B6F42B7F0ACA788103'],
-  ['Portable ZIP SHA256', 'F632F4D6D3D661F35859D24029D0E149B331CB2169A57E8E7EA47C98E8274374']
-]
-
-const releaseBaseUrl = '/downloads'
-
-function DownloadPage() {
-  return (
-    <div className="download-page">
-      <section className="download-hero">
-        <div className="container">
-          <motion.div
-            className="download-hero-copy"
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-          >
-            <p className="eyebrow">Beta release</p>
-            <h1>Download Smartitecture for Windows</h1>
-            <p>
-              Use the signed MSIX package for normal beta testing, or the portable ZIP when you need
-              a no-installer build.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="section download-main">
-        <div className="container download-layout">
-          <motion.article
-            className="download-card primary-download"
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.1 }}
-          >
-            <h2>Recommended beta package</h2>
-            <p>
-              The current release artifact is available for public beta testing. Windows may ask you
-              to trust the beta certificate until a production code-signing certificate is in place.
-            </p>
-            <a
-              className="button large download-button"
-              href={`${releaseBaseUrl}/Smartitecture-1.0.0.5-win-x64.msix`}
-              download
-            >
-              Smartitecture-1.0.0.5-win-x64.msix
-            </a>
-            <p className="download-note">Signed Windows beta installer.</p>
-          </motion.article>
-
-          <motion.article
-            className="download-card"
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.2 }}
-          >
-            <h2>Portable build</h2>
-            <p>
-              The ZIP build is useful for quick checks when you do not want to use the installer.
-              Use the MSIX package for the normal beta path.
-            </p>
-            <a
-              className="button secondary large download-button"
-              href={`${releaseBaseUrl}/Smartitecture-win-x64.zip`}
-              download
-            >
-              Smartitecture-win-x64.zip
-            </a>
-            <p className="download-note">Portable build for beta testing.</p>
-          </motion.article>
-        </div>
-      </section>
-
-      <section className="section requirements-section">
-        <div className="container requirements-grid">
-          <div>
-            <h2>System requirements</h2>
-            <ul className="clean-list">
-              <li>Windows 10 or Windows 11</li>
-              <li>64-bit processor</li>
-              <li>4 GB RAM minimum, 8 GB recommended</li>
-              <li>Internet connection for AI server answers</li>
-              <li>Microphone permission for voice input</li>
-            </ul>
-          </div>
-          <div>
-            <h2>Current release details</h2>
-            <dl className="release-details">
-              {packageDetails.map(([key, value]) => (
-                <div key={key}>
-                  <dt>{key}</dt>
-                  <dd>{value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </div>
-      </section>
-
-      <section className="section install-section">
-        <div className="container">
-          <h2>Beta install checklist</h2>
-          <div className="install-grid">
-            <article>
-              <span>1</span>
-              <h3>Install the package</h3>
-              <p>Use the signed MSIX on a Windows test machine and confirm Smartitecture appears in Start.</p>
-            </article>
-            <article>
-              <span>2</span>
-              <h3>Connect the backend</h3>
-              <p>Open Settings, set the Smartitecture backend URL, and add the beta API key.</p>
-            </article>
-            <article>
-              <span>3</span>
-              <h3>Run the smoke tests</h3>
-              <p>Ask general questions, check performance, view scan results, and launch a few apps.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-    </div>
-  )
+import { Link } from 'react-router-dom';
+import './DownloadPage.css';
+export default function DownloadPage() {
+  return <div className="download-page"><section className="page-intro"><div className="container"><p className="eyebrow">For your Windows PC</p><h1>A little help.<br />One download away.</h1><p>Try Smartitecture’s early beta. Before you start, please know that installation and online AI are still being improved.</p></div></section>
+    <section className="section download-main"><div className="container">
+      <aside className="beta-notice"><strong>This is an early beta, not a finished release.</strong><p>The installer may be blocked by Windows because it uses a development certificate. The portable option also needs Microsoft’s .NET 8 Desktop Runtime. If you want an app that’s ready to use with no extra setup, please wait for the public release.</p></aside>
+      <div className="download-layout">
+        <article className="download-card primary-download"><p className="eyebrow">Windows installer</p><h2>Install the beta</h2><p>Add Smartitecture to your Windows apps. This package is intended for early testers who are comfortable with possible installation issues.</p><a className="button large download-button" href="/downloads/Smartitecture-1.0.0.5-win-x64.msix" download>Download Windows installer <span aria-hidden="true">&#8594;</span></a><p className="download-note">Version 1.0.0.5 beta &middot; Windows 10 / 11 &middot; 64-bit</p><details className="download-help"><summary>Windows won’t install it?</summary><p>The beta certificate may not be trusted on your PC. Don’t turn off Windows protections. You can try the portable version, or wait for the public installer.</p></details></article>
+        <article className="download-card"><p className="eyebrow">An alternative for testers</p><h2>Run from a folder</h2><p>Download the ZIP, choose &ldquo;Extract All,&rdquo; then open Smartitecture from the extracted folder. Keep all the files together.</p><a className="button secondary large download-button" href="/downloads/Smartitecture-win-x64.zip" download>Download portable version <span aria-hidden="true">&#8594;</span></a><p className="download-note">Windows 10 / 11 &middot; 64-bit &middot; Extra runtime required</p><details className="download-help"><summary>What else do I need?</summary><p>Install Microsoft’s .NET 8 Desktop Runtime for Windows x64 if it isn’t already on your computer. This is the software the beta needs to run.</p><a href="https://dotnet.microsoft.com/en-us/download/dotnet/8.0" target="_blank" rel="noopener noreferrer">Get the runtime from Microsoft &#8599;</a></details></article>
+      </div>
+    </div></section>
+    <section className="section calm-section"><div className="container"><p className="eyebrow">Once you’re in</p><h2>Start with something simple.</h2><div className="install-grid"><article><span>1</span><h3>Open Smartitecture</h3><p>Start with the local PC tools. You don’t need online AI to check your computer.</p></article><article><span>2</span><h3>Ask about your PC</h3><p>Try &ldquo;Check my PC,&rdquo; &ldquo;How much battery do I have?&rdquo; or &ldquo;Open calculator.&rdquo;</p></article><article><span>3</span><h3>Tell us how it feels</h3><p>Something confusing or not working? Your feedback helps us make the app easier to use.</p></article></div><p className="setup-note">Online AI needs service access and may require extra setup in this beta. Downloading the app doesn’t automatically enable it.</p><Link className="text-link" to="/faq">Read the common questions &#8594;</Link></div></section>
+    <section className="section"><div className="container"><details className="release-disclosure"><summary>File details for advanced users</summary><p>Version 1.0.0.5 beta. These are the existing beta downloads; they do not include every change currently in development.</p><dl className="release-details"><div><dt>Installer SHA256</dt><dd>E6582BF90B02217535B4365D21CD9B8D3BD8652620BC91B6F42B7F0ACA788103</dd></div><div><dt>Portable ZIP SHA256</dt><dd>F632F4D6D3D661F35859D24029D0E149B331CB2169A57E8E7EA47C98E8274374</dd></div></dl></details></div></section></div>;
 }
-
-export default DownloadPage

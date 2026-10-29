@@ -24,7 +24,9 @@ namespace Smartitecture.Services
         /// <param name="onTokenReceived">Callback for each token received</param>
         /// <param name="conversationId">Optional conversation ID for context</param>
         /// <returns>The complete response</returns>
-        Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, string? conversationId = null);
+        Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, string? conversationId = null, System.Threading.CancellationToken cancellationToken = default);
+
+        void SetConversationHistory(string conversationId, IEnumerable<ConversationMessage> messages);
 
         /// <summary>
         /// Parses a message to extract command information

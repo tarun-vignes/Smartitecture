@@ -49,6 +49,7 @@ namespace Smartitecture
 
             // Set up basic configuration
             var configuration = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
 
@@ -61,6 +62,7 @@ namespace Smartitecture
             });
 
             _serviceProvider = services.BuildServiceProvider();
+            AppLog.Info("Application services initialized.");
 
             // Apply localization + theme from preferences then show Startup window
             try
@@ -83,6 +85,7 @@ namespace Smartitecture
                 AppLog.Error("Failed to apply saved localization or theme preferences.", ex);
             }
 
+            AppLog.Info("Creating main window.");
             var main = new MainWindow();
             this.MainWindow = main;
             _window = main;

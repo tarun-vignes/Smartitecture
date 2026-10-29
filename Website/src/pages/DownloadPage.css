@@ -1,147 +1,69 @@
-.download-page {
-  min-height: 100vh;
-}
-
-.download-hero {
-  background:
-    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(49, 46, 129, 0.9)),
-    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.3), transparent 32%);
-  color: #ffffff;
-  padding: 4rem 0;
-}
-
-.download-hero-copy {
-  max-width: 820px;
-}
-
-.download-hero h1 {
-  color: #ffffff;
-  font-size: clamp(2.2rem, 5vw, 4rem);
-  margin-bottom: 1rem;
-}
-
-.download-hero .eyebrow {
-  color: #ffffff;
-  opacity: 0.92;
-}
-
-.download-hero p {
-  color: rgba(255, 255, 255, 0.84);
-  font-size: 1.15rem;
-  max-width: 760px;
-}
-
 .download-layout {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
 }
-
 .download-card {
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1.75rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 2rem;
 }
-
 .primary-download {
-  border-color: rgba(53, 132, 217, 0.45);
+  border-color: #a7bfd6;
 }
-
 .download-button {
-  margin-top: 0.5rem;
-  text-align: center;
+  margin-top: 1rem;
   width: 100%;
 }
-
 .download-note {
-  color: var(--text-color);
-  font-size: 0.95rem;
+  font-size: .8rem;
   margin: 1rem 0 0;
-  opacity: 0.75;
 }
-
-.requirements-section {
-  background: #f8fafc;
-}
-
-.requirements-grid {
-  display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
-  gap: 2rem;
-}
-
-.clean-list {
-  list-style: none;
-  padding: 0;
-}
-
-.clean-list li {
-  border-bottom: 1px solid var(--border-color);
-  padding: 0.75rem 0;
-}
-
 .release-details {
   display: grid;
-  gap: 0.75rem;
+  gap: .75rem;
 }
-
 .release-details div {
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  background: white;
+  border: 1px solid var(--line);
   padding: 1rem;
+  border-radius: 8px;
 }
-
 .release-details dt {
   font-weight: 700;
-  margin-bottom: 0.35rem;
+  margin-bottom: .5rem;
 }
-
 .release-details dd {
-  margin: 0;
   overflow-wrap: anywhere;
 }
-
-.install-section {
-  background: var(--background-color);
-}
-
 .install-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
-
 .install-grid article {
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1.4rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.5rem;
 }
-
 .install-grid span {
-  align-items: center;
-  background: var(--primary-color);
-  border-radius: 999px;
-  color: #ffffff;
   display: inline-flex;
-  font-weight: 700;
-  height: 36px;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  border-radius: 50%;
   width: 36px;
+  height: 36px;
+  color: white;
+  background: var(--brand-blue);
+  margin-bottom: 1rem;
 }
-
 .install-grid p {
-  margin-bottom: 0;
+  margin: 0;
 }
-
 @media (max-width: 900px) {
-  .download-layout,
-  .requirements-grid,
-  .install-grid {
+  .download-layout, .install-grid {
     grid-template-columns: 1fr;
   }
 }

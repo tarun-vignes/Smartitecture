@@ -11,6 +11,12 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     
   </PropertyGroup>
+  <Target Name="PinDesktopRuntime" BeforeTargets="ProcessFrameworkReferences" Condition="'$(SmartitectureRuntimeVersion)' != ''">
+    <ItemGroup>
+      <!-- Pin .NET and WPF without applying their patch number to the Windows SDK. -->
+      <FrameworkReference Update="Microsoft.NETCore.App;Microsoft.WindowsDesktop.App.WPF" RuntimeFrameworkVersion="$(SmartitectureRuntimeVersion)" />
+    </ItemGroup>
+  </Target>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />

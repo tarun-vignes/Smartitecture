@@ -173,7 +173,7 @@ namespace Smartitecture.Services
                     "",
                     "What I can do next:",
                     "- If it is about this PC, ask me to run a local check such as \"check performance\", \"show processes\", \"network status\", or \"Defender status\".",
-                    "- If it is a broader knowledge question, connect Settings > AI Server so I can answer through the backend instead of guessing.",
+                    "- If it is a broader knowledge question, online answers are unavailable right now. You can still use the PC checks above.",
                     "",
                     "I would rather say what I can verify than make up a confident-sounding answer."
                 });
@@ -188,7 +188,7 @@ namespace Smartitecture.Services
                 "- Open apps and Windows tools.",
                 "- Answer basic verified facts and calculations.",
                 "",
-                "For broader questions, open Settings > AI Server and connect your Smartitecture backend so I can answer through the server on demand."
+                "Open-ended AI answers are not available in offline mode. Try a specific PC check, or ask a basic Windows question."
             });
         }
 

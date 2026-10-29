@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Smartitecture.UI.ChatView"
+<UserControl x:Class="Smartitecture.UI.ChatView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:Smartitecture.Controls"
@@ -121,7 +121,7 @@
                                      VerticalAlignment="Center"
                                      MaxHeight="120" VerticalScrollBarVisibility="Auto" KeyDown="MessageInput_KeyDown" TextWrapping="Wrap"
                                      Text=""/>
-                            <Button Grid.Column="1" Name="AttachButton" Content="{DynamicResource Chat.Attach}" MinWidth="112" Height="36"
+                            <Button Grid.Column="1" Name="AttachButton" Visibility="Collapsed" Content="{DynamicResource Chat.Attach}" MinWidth="112" Height="36"
                                     VerticalAlignment="Center" Margin="10,0,5,0"
                                     Style="{StaticResource Button.Glass}" Click="AttachButton_Click" ToolTip="{DynamicResource Chat.AttachTooltip}"/>
                             <Button Grid.Column="2" Name="VoiceButton" Content="{DynamicResource Chat.Voice}" MinWidth="112" Height="36"

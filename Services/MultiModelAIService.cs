@@ -49,12 +49,12 @@ namespace Smartitecture.Services
             remove { }
         }
 
-        public MultiModelAIService()
+        public MultiModelAIService(ILLMProvider? backendProvider = null, ILLMProvider? localProvider = null)
         {
             _providers = new Dictionary<string, ILLMProvider>(StringComparer.OrdinalIgnoreCase)
             {
-                ["backend"] = new BackendProvider(),
-                ["local"] = new LocalFallbackProvider(),
+                ["backend"] = backendProvider ?? new BackendProvider(),
+                ["local"] = localProvider ?? new LocalFallbackProvider(),
                 ["openai"] = new OpenAIProvider(),
                 ["anthropic"] = new AnthropicProvider(),
                 ["ollama"] = new OllamaProvider(),
@@ -113,17 +113,18 @@ namespace Smartitecture.Services
             return content;
         }
 
-        public async Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, string? conversationId = null)
+        public async Task<string> GetStreamingResponseAsync(string message, Action<string> onTokenReceived, string? conversationId = null, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var request = BuildRequest(message, conversationId);
             var provider = GetProvider(request);
 
             await StoreMessageAsync(conversationId, "user", message);
 
             var fullResponse = string.Empty;
-            await foreach (var token in StreamWithFallbackAsync(provider, request, CancellationToken.None))
+            await foreach (var token in StreamWithFallbackAsync(provider, request, cancellationToken))
             {
-                if (string.IsNullOrWhiteSpace(token))
+                if (string.IsNullOrEmpty(token))
                 {
                     continue;
                 }
@@ -189,7 +190,7 @@ namespace Smartitecture.Services
                 return ("list_processes", new Dictionary<string, object> { ["count"] = 12 });
             }
 
-            var killMatch = Regex.Match(lowerMessage, @"\b(kill|stop|end|terminate)\s+(process\s+)?(?<target>[\w\-.]+)");
+            var killMatch = Regex.Match(lowerMessage, @"^(?:(?:please|can you|could you)\s+)?(kill|stop|end|terminate)\s+(process\s+)?(?<target>[\w\-.]+)[.!?]*$");
             if (killMatch.Success)
             {
                 var target = killMatch.Groups["target"].Value.Trim();
@@ -206,7 +207,7 @@ namespace Smartitecture.Services
                 return ("network_adapters", new Dictionary<string, object>());
             }
 
-            var launchMatch = Regex.Match(lowerMessage, @"\b(open|launch|start)\s+(?<target>.+)");
+            var launchMatch = Regex.Match(lowerMessage, @"^(?:(?:please|can you|could you)\s+)?(open|launch|start)\s+(?<target>.+)");
             if (launchMatch.Success)
             {
                 var target = launchMatch.Groups["target"].Value.Trim().TrimEnd('.', '?', '!');
@@ -227,7 +228,7 @@ namespace Smartitecture.Services
 
             foreach (var (command, patterns) in commandPatterns)
             {
-                if (patterns.Any(pattern => lowerMessage.Contains(pattern)))
+                if (patterns.Any(pattern => lowerMessage.Trim().TrimEnd('.', '!', '?').Equals(pattern, StringComparison.OrdinalIgnoreCase)))
                 {
                     return (command, new Dictionary<string, object>());
                 }
@@ -419,6 +420,16 @@ namespace Smartitecture.Services
             return patterns.Any(value.Contains);
         }
 
+        public void SetConversationHistory(string conversationId, IEnumerable<ConversationMessage> messages)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(conversationId);
+            _conversations[conversationId] = messages
+                .Where(m => m.Role is "user" or "assistant")
+                .TakeLast(50)
+                .Select(m => new ConversationMessage { Role = m.Role, Content = m.Content, Timestamp = m.Timestamp })
+                .ToList();
+        }
+
         public async Task<List<ConversationMessage>> GetConversationHistoryAsync(string conversationId)
         {
             await Task.Delay(10);
@@ -505,11 +516,11 @@ namespace Smartitecture.Services
             {
                 return await provider.GetResponseAsync(request, CancellationToken.None);
             }
-            catch (Exception ex) when (!IsLocalProvider(provider))
+            catch (Exception) when (!IsLocalProvider(provider))
             {
                 var local = _providers["local"];
                 var fallback = await local.GetResponseAsync(request, CancellationToken.None);
-                fallback.Content = BuildServerFallbackMessage(ex, fallback.Content);
+                fallback.Content = BuildServerFallbackMessage(fallback.Content);
                 return fallback;
             }
         }
@@ -524,14 +535,16 @@ namespace Smartitecture.Services
             {
                 response = await provider.GetResponseAsync(request, cancellationToken);
             }
-            catch (Exception ex) when (!IsLocalProvider(provider))
+            catch (Exception) when (!IsLocalProvider(provider))
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 response = await _providers["local"].GetResponseAsync(request, cancellationToken);
-                response.Content = BuildServerFallbackMessage(ex, response.Content);
+                response.Content = BuildServerFallbackMessage(response.Content);
             }
 
             foreach (var token in SplitForStreaming(response.Content))
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 yield return token;
             }
         }
@@ -550,15 +563,9 @@ namespace Smartitecture.Services
             }
         }
 
-        private static string BuildServerFallbackMessage(Exception ex, string localResponse)
+        private static string BuildServerFallbackMessage(string localResponse)
         {
-            var detail = ex.Message;
-            if (detail.Length > 160)
-            {
-                detail = detail.Substring(0, 160).TrimEnd() + "...";
-            }
-
-            return $"I couldn't reach the Smartitecture server, so I used the local assistant instead.\n\nReason: {detail}\n\n{localResponse}";
+            return $"Online answers are temporarily unavailable. You can still use PC checks and local tools.\n\n{localResponse}";
         }
 
         private static bool IsLocalProvider(ILLMProvider provider)

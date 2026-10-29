@@ -23,6 +23,14 @@ dotnet publish $project `
     -o $publishDir `
     /p:PublishSingleFile=false
 
+if ($LASTEXITCODE -ne 0) {
+    throw "Desktop publish failed with exit code $LASTEXITCODE. No release archive was created."
+}
+
+if (-not (Test-Path (Join-Path $publishDir 'Smartitecture.exe'))) {
+    throw "Publish did not produce Smartitecture.exe."
+}
+
 if ($Zip) {
     $zipPath = Join-Path $repoRoot "artifacts/Smartitecture-$Runtime.zip"
     if (Test-Path $zipPath) {

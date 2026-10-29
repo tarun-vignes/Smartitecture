@@ -1,15 +1,15 @@
 :root {
-  --brand-blue: #2563eb;
-  --brand-indigo: #4f46e5;
-  --brand-purple: #7c3aed;
-  --ink: #172536;
-  --muted: #5b6575;
-  --surface: #ffffff;
+  --brand-blue: #245c94;
+  --brand-indigo: #245c94;
+  --brand-purple: #245c94;
+  --ink: #17334c;
+  --muted: #566978;
+  --surface: #f9faf8;
   --surface-soft: #f6f8fc;
   --surface-raised: #ffffff;
   --line: #dfe5ef;
   --shadow: 0 18px 50px rgba(23, 37, 54, 0.12);
-  --gradient-brand: linear-gradient(135deg, var(--brand-blue), var(--brand-indigo), var(--brand-purple));
+  --gradient-brand: #245c94;
   --primary-color: var(--brand-indigo);
   --secondary-color: #2563eb;
   --text-color: var(--ink);
@@ -70,17 +70,17 @@ h1,
 h2,
 h3 {
   color: var(--ink);
-  line-height: 1.08;
-  letter-spacing: 0;
+  line-height: 1.15;
+  letter-spacing: -.035em;
 }
 
 h1 {
   font-size: clamp(3rem, 7vw, 6rem);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 h2 {
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
   font-weight: 760;
 }
 
@@ -104,7 +104,7 @@ img {
   background: var(--gradient-brand);
   border: 1px solid transparent;
   border-radius: 8px;
-  box-shadow: 0 14px 32px rgba(79, 70, 229, 0.25);
+  box-shadow: 0 6px 15px #17334c12;
   color: #ffffff;
   cursor: pointer;
   display: inline-flex;
@@ -117,7 +117,7 @@ img {
 }
 
 .button:hover {
-  box-shadow: 0 18px 42px rgba(79, 70, 229, 0.32);
+  box-shadow: 0 8px 20px #17334c24;
   transform: translateY(-2px);
 }
 
@@ -142,7 +142,7 @@ img {
 .eyebrow {
   color: var(--brand-indigo);
   font-size: 0.82rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0;
   margin-bottom: 0.8rem;
   text-transform: uppercase;

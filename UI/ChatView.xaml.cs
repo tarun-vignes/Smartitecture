@@ -29,6 +29,7 @@ namespace Smartitecture.UI
         // UI/interaction state.
         private readonly DispatcherTimer _typingTimer;
         private bool _isProcessing = false;
+        private System.Threading.CancellationTokenSource? _responseCancellation;
         private bool _isReplayingHistory = false;
         private bool _hasUserMessages = false;
         private bool _previewingDeleted = false;
@@ -155,8 +156,20 @@ namespace Smartitecture.UI
             return TryFindResource("Brush.ChatBubbleSystemForeground") as Brush ?? GetOnSurfaceBrush();
         }
 
+        public async Task SendPromptAsync(string prompt)
+        {
+            if (_isProcessing) return;
+            MessageInput.Text = prompt;
+            await SendMessageAsync();
+        }
+
         private async void SendButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_isProcessing)
+            {
+                _responseCancellation?.Cancel();
+                return;
+            }
             await SendMessageAsync();
         }
 
@@ -179,7 +192,9 @@ namespace Smartitecture.UI
             MessageInput.Text = string.Empty;
             MessageInput.Foreground = GetOnSurfaceBrush();
             _isProcessing = true;
+            _responseCancellation = new System.Threading.CancellationTokenSource();
             SendButton.IsEnabled = false;
+            MessageInput.IsReadOnly = true;
 
             try
             {
@@ -188,19 +203,6 @@ namespace Smartitecture.UI
 
                 // Show typing indicator while processing.
                 ShowTypingIndicator();
-
-                if (TryRouteLocalIntent(userMessage, out var localCommandName, out var localParameters))
-                {
-                    await ExecuteCommandAsync(localCommandName, localParameters, userMessage);
-                    return;
-                }
-
-                var contextualFollowUp = TryBuildContextualFollowUp(userMessage);
-                if (!string.IsNullOrWhiteSpace(contextualFollowUp))
-                {
-                    AddMessageToChat(contextualFollowUp, "assistant");
-                    return;
-                }
 
                 // Check if the message maps to a system command.
                 var (commandName, parameters) = await _llmService.ParseCommandAsync(userMessage);
@@ -212,19 +214,31 @@ namespace Smartitecture.UI
                 }
                 else
                 {
+                    var contextualFollowUp = TryBuildContextualFollowUp(userMessage);
+                    if (!string.IsNullOrWhiteSpace(contextualFollowUp))
+                    {
+                        AddMessageToChat(contextualFollowUp, "assistant");
+                        return;
+                    }
+
                     // Get AI response
                     await GetAIResponseAsync(userMessage);
                 }
             }
             catch (Exception ex)
             {
-                AddMessageToChat($"Something went wrong: {ex.Message}", "system");
+                System.Diagnostics.Trace.TraceError("Chat request failed: {0}", ex);
+                AddMessageToChat("That request could not finish. Please try again, or choose a PC check from Home.", "system");
             }
             finally
             {
                 HideTypingIndicator();
                 _isProcessing = false;
+                _responseCancellation?.Dispose();
+                _responseCancellation = null;
                 SendButton.IsEnabled = true;
+                SendButton.SetResourceReference(ContentControl.ContentProperty, "Chat.Send");
+                MessageInput.IsReadOnly = false;
                 MessageInput.Focus();
             }
         }
@@ -1230,19 +1244,36 @@ namespace Smartitecture.UI
         {
             try
             {
+                var messages = _historyService.GetSession(_conversationId)?.Messages;
+                if (messages != null)
+                {
+                    // The current user message is already on disk; BuildRequest adds it separately.
+                    _llmService.SetConversationHistory(_conversationId, messages.Take(Math.Max(0, messages.Count - 1))
+                        .Select(m => new ConversationMessage { Role = m.Role, Content = m.Content, Timestamp = m.Timestamp }));
+                }
+                SendButton.Content = "Stop";
+                SendButton.IsEnabled = true;
                 // Stream tokens into the UI for a live typing effect.
                 var response = await _llmService.GetStreamingResponseAsync(
                     userMessage,
                     OnTokenReceived,
-                    _conversationId);
+                    _conversationId,
+                    _responseCancellation?.Token ?? default);
 
                 // Post-process final response (e.g., tool confirmations).
                 var finalResponse = HandleAssistantPostProcess(response);
                 PersistAssistantMessage(finalResponse);
             }
+            catch (OperationCanceledException)
+            {
+                if (_currentStreamingTextBlock != null)
+                    PersistAssistantMessage(_currentStreamingTextBlock.Text);
+                AddMessageToChat("Response stopped. You can send another message.", "system");
+            }
             catch (Exception ex)
             {
-                AddMessageToChat($"I could not generate a response: {ex.Message}", "system");
+                System.Diagnostics.Trace.TraceError("Chat response failed: {0}", ex);
+                AddMessageToChat("I could not finish that answer. Please try again. PC checks are still available from Home.", "system");
             }
         }
 
@@ -1400,14 +1431,14 @@ namespace Smartitecture.UI
                 GetString("Chat.ProviderCheckingTooltip", "Checking the configured AI Server."),
                 GetStatusBrush("Brush.Warning"));
 
-            var prefs = new PreferencesService().Load();
-            var baseUrl = NormalizeBackendUrl(prefs.BackendBaseUrl);
+            var backend = ProviderSettings.Load().Backend;
+            var baseUrl = NormalizeBackendUrl(backend.BaseUrl);
             if (string.IsNullOrWhiteSpace(baseUrl))
             {
                 SetProviderStatus(
-                    GetString("Chat.ProviderLocal", "Local mode"),
-                    GetString("Chat.ProviderLocalTooltip", "No AI Server is configured. Broad answers use the built-in local assistant."),
-                    GetStatusBrush("Brush.Warning"));
+                    "PC tools ready",
+                    "PC checks, app launching, and basic help work without setup. Open-ended AI answers are not connected.",
+                    GetStatusBrush("Brush.Success"));
                 return;
             }
 
@@ -1415,7 +1446,7 @@ namespace Smartitecture.UI
             {
                 using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(6) };
                 using var request = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl.TrimEnd('/')}/health");
-                var apiKey = prefs.BackendApiKey?.Trim();
+                var apiKey = backend.ApiKey?.Trim();
                 if (!string.IsNullOrWhiteSpace(apiKey))
                 {
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
@@ -1431,8 +1462,8 @@ namespace Smartitecture.UI
                 if (response.IsSuccessStatusCode)
                 {
                     SetProviderStatus(
-                        GetString("Chat.ProviderServerConnected", "AI Server connected"),
-                        Format("Chat.ProviderServerConnectedTooltip", "Connected to {0}. Broad answers can use the AI Server.", baseUrl),
+                        "Online service reachable",
+                        "The service is reachable. Online answers also depend on service access and availability.",
                         GetStatusBrush("Brush.Success"));
                 }
                 else
@@ -1480,25 +1511,19 @@ namespace Smartitecture.UI
             return TryFindResource(resourceKey) as Brush ?? GetChatSystemForeground();
         }
 
-        private static string NormalizeBackendUrl(string? value)
-        {
-            var trimmed = (value ?? string.Empty).Trim();
-            if (string.IsNullOrWhiteSpace(trimmed))
-            {
-                return string.Empty;
-            }
-
-            if (!trimmed.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
-                !trimmed.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-            {
-                trimmed = "http://" + trimmed;
-            }
-
-            return trimmed.TrimEnd('/');
-        }
+        private static string NormalizeBackendUrl(string? value) => ConnectionAddress.Normalize(value);
 
         private async void ClearChatButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_isProcessing) return;
+            // Start a distinct session; old messages remain available in History.
+            _conversationId = Guid.NewGuid().ToString();
+            _hasUserMessages = false;
+            _lastAssistantMessage = null;
+            _lastToolMemory = null;
+            _pendingToolConfirmation = null;
+            _currentStreamingMessage = null;
+            _currentStreamingTextBlock = null;
             // Silent clear for cleaner UX
             ChatMessagesPanel.Children.Clear();
 
@@ -1540,7 +1565,7 @@ namespace Smartitecture.UI
 
         private void HistoryOpen_Click(object sender, RoutedEventArgs e)
         {
-            if (_previewingDeleted)
+            if (_previewingDeleted || _isProcessing)
             {
                 return;
             }
@@ -1565,6 +1590,11 @@ namespace Smartitecture.UI
             _isReplayingHistory = false;
 
             _conversationId = session.Id;
+            _lastAssistantMessage = session.Messages.LastOrDefault(m => m.Role == "assistant")?.Content;
+            _lastToolMemory = null;
+            _pendingToolConfirmation = null;
+            _currentStreamingMessage = null;
+            _currentStreamingTextBlock = null;
             _hasUserMessages = session.Messages.Any(m => m.Role.Equals("user", StringComparison.OrdinalIgnoreCase));
             HideHistoryOverlay();
             ChatScrollViewer.ScrollToEnd();

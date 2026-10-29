@@ -1,73 +1,7 @@
-import { motion } from 'framer-motion'
-import './AboutPage.css'
-
-const milestones = [
-  'Unified the assistant into one chat experience.',
-  'Connected the desktop app to a hosted backend for broader AI answers.',
-  'Added local Windows diagnostics for performance, battery, network, and security checks.',
-  'Built signed beta packaging and clean-machine QA scripts.'
-]
-
-function AboutPage() {
-  return (
-    <div className="about-page">
-      <section className="about-hero">
-        <div className="container">
-          <motion.div
-            className="about-hero-copy"
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-          >
-            <p className="eyebrow">About the project</p>
-            <h1>Smartitecture makes PC help feel direct and understandable.</h1>
-            <p>
-              The project is focused on a practical Windows assistant: ask normal questions,
-              run local checks, launch apps, and get explanations that connect to the current system state.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="section about-mission">
-        <div className="container about-grid">
-          <div>
-            <h2>Mission</h2>
-            <p>
-              Smartitecture is being built for people who want a useful computer assistant, not a demo
-              that only answers hardcoded prompts. The beta combines a hosted AI service with local
-              Windows tools so users can ask both general and machine-specific questions.
-            </p>
-          </div>
-          <div>
-            <h2>Current progress</h2>
-            <ul className="milestone-list">
-              {milestones.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className="section about-values">
-        <div className="container values-grid">
-          <article>
-            <h3>Honest scope</h3>
-            <p>Only claim features that are implemented or clearly marked as roadmap work.</p>
-          </article>
-          <article>
-            <h3>Safety</h3>
-            <p>Keep destructive automation guarded and make system actions understandable.</p>
-          </article>
-          <article>
-            <h3>Production path</h3>
-            <p>Use hosted backend keys, signed packages, QA scripts, and clear beta release notes.</p>
-          </article>
-        </div>
-      </section>
-    </div>
-  )
+import { Link } from 'react-router-dom';
+import './AboutPage.css';
+export default function AboutPage() {
+  return <div className="about-page"><section className="page-intro"><div className="container"><p className="eyebrow">Why Smartitecture</p><h1>Computers should<br />feel easier to use.</h1><p>You shouldn’t have to become a computer expert to understand why your laptop is slow or find the tool you need.</p></div></section>
+    <section className="section"><div className="container about-grid"><div><h2>A helping hand, in your own words.</h2><p>Smartitecture brings everyday Windows checks and shortcuts into one assistant. Ask a question, look at what it finds, and choose your next step.</p><p>We’re building it for people who want to spend less time searching through settings and more time doing what matters to them.</p></div><div><h2>Built with your feedback.</h2><p>This is an early beta. Some things will feel unfinished, and the online AI experience is still being improved.</p><p>If something is confusing, doesn’t work, or could be simpler, we want to hear about it.</p><a className="text-link" href="https://github.com/tarun-vignes/Smartitecture/issues/new" target="_blank" rel="noopener noreferrer">Share feedback on GitHub <span aria-hidden="true">&#8594;</span></a></div></div></section>
+    <section className="section calm-section"><div className="container values-grid"><article><h3>Easy to understand</h3><p>Plain explanations that help you decide what to do.</p></article><article><h3>Useful on your PC</h3><p>Help with real Windows tasks, from checking memory to opening apps.</p></article><article><h3>Room to grow</h3><p>An evolving beta shaped by the people who try it.</p></article></div></section><section className="section"><div className="container closing-cta"><h2>Come try it.</h2><p>A little help for your everyday computer.</p><Link className="button" to="/download">Explore the beta</Link></div></section></div>;
 }
-
-export default AboutPage

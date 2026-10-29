@@ -36,6 +36,9 @@ internal static class BackendHelpers
 
     public static IResult? ValidateApiKey(HttpRequest request, BackendConfig config)
     {
+        if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("SMARTITECTURE_AUTH_AUTHORITY")))
+            return request.HttpContext.User.Identity?.IsAuthenticated == true
+                ? null : ErrorResponse("Please sign in.", 401, "sign_in_required");
         if (config.RequireApiKey && string.IsNullOrWhiteSpace(config.ApiKey))
         {
             return ErrorResponse(
@@ -56,6 +59,8 @@ internal static class BackendHelpers
 
     public static async Task<bool> ValidateApiKeyForSseAsync(HttpRequest request, HttpResponse response, BackendConfig config)
     {
+        if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("SMARTITECTURE_AUTH_AUTHORITY")))
+            return request.HttpContext.User.Identity?.IsAuthenticated == true;
         if (config.RequireApiKey && string.IsNullOrWhiteSpace(config.ApiKey))
         {
             response.StatusCode = StatusCodes.Status500InternalServerError;
@@ -97,19 +102,10 @@ internal static class BackendHelpers
 
     public static string GetRateLimitKey(HttpContext context)
     {
-        var apiKey = context.Request.Headers["X-API-Key"].ToString();
-        if (!string.IsNullOrWhiteSpace(apiKey))
-        {
-            return $"key:{apiKey}";
-        }
-
-        var authHeader = context.Request.Headers.Authorization.ToString();
-        if (authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-        {
-            return $"key:{authHeader.Substring("Bearer ".Length).Trim()}";
-        }
-
-        return $"ip:{context.Connection.RemoteIpAddress}";
+        var subject = context.User.FindFirst("sub")?.Value;
+        return context.User.Identity?.IsAuthenticated == true && !string.IsNullOrWhiteSpace(subject)
+            ? $"user:{context.User.FindFirst("iss")?.Value}:{subject}"
+            : $"ip:{context.Connection.RemoteIpAddress}";
     }
 
     private static bool RequestHasApiKey(HttpRequest request, string expectedApiKey)

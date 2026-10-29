@@ -1,40 +1,16 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import './FAQPage.css'
 
 const questions = [
-  {
-    question: 'What is Smartitecture?',
-    answer: 'Smartitecture is a Windows desktop assistant that combines backend AI answers with local PC diagnostics, app launching, and safe automation.'
-  },
-  {
-    question: 'Is this ready for public release?',
-    answer: 'It is public as a controlled beta. The app, backend, signed package, and QA scripts are working, but wider distribution still needs a trusted code-signing certificate and a tighter tester feedback loop.'
-  },
-  {
-    question: 'Does it work on Mac or Linux?',
-    answer: 'Not in the current beta. The app is WPF and uses Windows-specific APIs for Defender, speech recognition, app launching, battery, and system diagnostics.'
-  },
-  {
-    question: 'Does it need the internet?',
-    answer: 'General AI answers need the Smartitecture backend. Local diagnostics such as performance, battery, network, and Defender status can still run locally.'
-  },
-  {
-    question: 'What languages are supported?',
-    answer: 'The interface includes many localization files, but beta validation should focus on English first. Full translation quality review is still a release task before claiming broad language support.'
-  },
-  {
-    question: 'Is the backend secure?',
-    answer: 'The production backend requires an API key and keeps provider secrets on the server. Do not ship Gemini or provider keys inside the desktop app.'
-  },
-  {
-    question: 'Can it scan for malware?',
-    answer: 'On Windows, it can request Microsoft Defender scan actions and read Defender scan status. It does not replace Windows Security or a full antivirus product.'
-  },
-  {
-    question: 'What should beta testers try?',
-    answer: 'Ask general questions, check performance, check battery, view Defender scan results, scan the PC, launch common apps, and test the Settings backend connection.'
-  }
+  { question: 'What does Smartitecture do?', answer: 'It helps you understand your Windows PC, check things such as memory and battery, open apps, and get basic computer help in one place.' },
+  { question: 'Do I need to know about computers?', answer: 'You can ask in everyday language, such as “Why is my PC slow?” The beta installation can still take a few extra steps. See the download page before you start.' },
+  { question: 'Which computers can use it?', answer: 'The current beta is for 64-bit Windows 10 and Windows 11 PCs. It isn’t available for Mac, Linux, phones, or tablets.' },
+  { question: 'Does it work without the internet?', answer: 'PC checks and app shortcuts can work offline. Broader AI conversations need an internet connection and access to the online AI service, which is still being improved.' },
+  { question: 'Is it finished?', answer: 'Not yet. This is early-access software for people who are comfortable trying an app while it is still being developed. Expect rough edges and occasional problems.' },
+  { question: 'Will it replace my antivirus?', answer: 'No. Smartitecture can show information from Microsoft Defender and request supported scans. Keep Windows Security or your existing antivirus enabled.' },
+  { question: 'Where does my information go?', answer: 'PC checks run on your computer. Questions sent to online AI are processed by the connected service. Chat history and settings are saved on your PC. Avoid including passwords or private information in messages.' },
+  { question: 'Why does Windows show a warning when I install?', answer: 'The beta installer uses a development signing certificate, so Windows may block it. A simpler public installer is still in progress. Don’t turn off Windows security protections to install it.' },
+  { question: 'How can I report a problem?', answer: 'Use the Report a problem link at the bottom of this site. It opens GitHub, where you can describe what happened. A GitHub account is required. Please leave passwords and other private details out of your report.' }
 ]
 
 function FAQPage() {
@@ -42,18 +18,9 @@ function FAQPage() {
 
   return (
     <div className="faq-page">
-      <section className="faq-hero">
+      <section className="page-intro">
         <div className="container">
-          <motion.div
-            className="hero-content"
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-          >
-            <p className="eyebrow">FAQ</p>
-            <h1>Beta questions, answered plainly.</h1>
-            <p>Current scope, limits, and testing guidance for the Smartitecture Windows beta.</p>
-          </motion.div>
+          <div className="hero-content"><p className="eyebrow">A little clarity</p><h1>Questions? Start here.</h1><p>What it does, what you need, and what to expect from the beta.</p></div>
         </div>
       </section>
 

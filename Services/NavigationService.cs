@@ -5,10 +5,12 @@ namespace Smartitecture.Services
     public static class NavigationService
     {
         private static ContentControl? _host;
+        private static Smartitecture.UI.ChatView? _chat;
 
         public static void Initialize(ContentControl host)
         {
             _host = host;
+            _chat = null;
         }
 
         private static void SetContent(UserControl view)
@@ -33,7 +35,14 @@ namespace Smartitecture.Services
 
         public static void GoChat()
         {
-            SetContent(new Smartitecture.UI.ChatView(new Smartitecture.Services.MultiModelAIService()));
+            _chat ??= new Smartitecture.UI.ChatView(new Smartitecture.Services.MultiModelAIService());
+            SetContent(_chat);
+        }
+
+        public static async System.Threading.Tasks.Task GoChatAsync(string prompt)
+        {
+            GoChat();
+            if (_chat != null) await _chat.SendPromptAsync(prompt);
         }
 
         public static void GoSettings()

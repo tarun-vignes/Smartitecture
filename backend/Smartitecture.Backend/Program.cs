@@ -1,9 +1,28 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var authority = builder.Configuration["SMARTITECTURE_AUTH_AUTHORITY"];
+var audience = builder.Configuration["SMARTITECTURE_AUTH_AUDIENCE"];
+var accountAuth = !string.IsNullOrWhiteSpace(authority);
+if (accountAuth)
+{
+    if (!Uri.TryCreate(authority, UriKind.Absolute, out var issuer) || issuer.Scheme != "https"
+        || string.IsNullOrWhiteSpace(audience))
+        throw new InvalidOperationException("Account authentication requires an HTTPS authority and API audience.");
+    builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = authority;
+        options.Audience = audience;
+        options.MapInboundClaims = false;
+        options.TokenValidationParameters.ClockSkew = TimeSpan.FromSeconds(30);
+    });
+    builder.Services.AddAuthorization();
+}
 
 builder.Services.AddHttpClient("openai", client =>
 {
@@ -41,7 +60,38 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder.Build();
 
+if (accountAuth)
+{
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.Use(async (context, next) =>
+    {
+        if (context.Request.Path.StartsWithSegments("/v1")
+            && (context.User.Identity?.IsAuthenticated != true || string.IsNullOrWhiteSpace(context.User.FindFirst("sub")?.Value)))
+        {
+            context.Response.StatusCode = 401;
+            await context.Response.WriteAsJsonAsync(new { error = new { code = "sign_in_required", message = "Please sign in to use online AI." } });
+            return;
+        }
+        await next(context);
+    });
+}
 app.UseRateLimiter();
+
+app.MapGet("/v1/account", (HttpContext context) =>
+    accountAuth && context.User.Identity?.IsAuthenticated == true
+        ? Results.Ok(new { signedIn = true })
+        : Results.Unauthorized());
+
+app.MapGet("/auth/config", () => accountAuth
+    ? Results.Ok(new
+    {
+        authority,
+        audience,
+        clientId = builder.Configuration["SMARTITECTURE_AUTH_CLIENT_ID"],
+        scope = builder.Configuration["SMARTITECTURE_AUTH_SCOPE"] ?? "openid profile"
+    })
+    : Results.Json(new { message = "Account sign-in is not available yet. Local tools are ready to use." }, statusCode: 503));
 
 app.MapGet("/", () => Results.Ok(new
 {

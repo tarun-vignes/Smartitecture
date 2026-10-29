@@ -39,11 +39,12 @@ namespace Smartitecture.Services.Providers
             var url = $"{baseUrl}/v1/chat";
 
             using var message = new HttpRequestMessage(HttpMethod.Post, url);
-            var apiKey = settings.Backend.ApiKey;
+            var session = new AccountSessionStore().Load(baseUrl);
+            var apiKey = session?.AccessToken ?? settings.Backend.ApiKey;
             if (!string.IsNullOrWhiteSpace(apiKey))
             {
                 message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-                message.Headers.Add("X-API-Key", apiKey);
+                if (session == null) message.Headers.Add("X-API-Key", apiKey);
             }
 
             message.Content = new StringContent(JsonSerializer.Serialize(payload, JsonOptions), Encoding.UTF8, "application/json");
@@ -72,11 +73,12 @@ namespace Smartitecture.Services.Providers
             var url = $"{baseUrl}/v1/chat/stream";
 
             using var message = new HttpRequestMessage(HttpMethod.Post, url);
-            var apiKey = settings.Backend.ApiKey;
+            var session = new AccountSessionStore().Load(baseUrl);
+            var apiKey = session?.AccessToken ?? settings.Backend.ApiKey;
             if (!string.IsNullOrWhiteSpace(apiKey))
             {
                 message.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-                message.Headers.Add("X-API-Key", apiKey);
+                if (session == null) message.Headers.Add("X-API-Key", apiKey);
             }
 
             message.Content = new StringContent(JsonSerializer.Serialize(payload, JsonOptions), Encoding.UTF8, "application/json");

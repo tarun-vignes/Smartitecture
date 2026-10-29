@@ -1,75 +1,14 @@
-.about-page {
-  min-height: 100vh;
-}
-
-.about-hero {
-  background:
-    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(67, 56, 202, 0.82)),
-    radial-gradient(circle at 78% 0%, rgba(14, 165, 233, 0.25), transparent 34%);
-  color: #ffffff;
-  padding: 4rem 0;
-}
-
-.about-hero-copy {
-  max-width: 860px;
-}
-
-.about-hero h1 {
-  color: #ffffff;
-  font-size: clamp(2.2rem, 5vw, 4rem);
-}
-
-.about-hero .eyebrow {
-  color: #ffffff;
-  opacity: 0.92;
-}
-
-.about-hero p {
-  color: rgba(255, 255, 255, 0.84);
-  font-size: 1.15rem;
-  max-width: 760px;
-}
-
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 4rem;
 }
-
-.about-grid > div,
-.values-grid article {
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1.5rem;
-}
-
-.milestone-list {
-  margin: 0;
-  padding-left: 1.25rem;
-}
-
-.milestone-list li {
-  margin-bottom: 0.8rem;
-}
-
-.about-values {
-  background: #f8fafc;
-}
-
 .values-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 3rem;
 }
-
-.values-grid p {
-  margin-bottom: 0;
-}
-
+.values-grid p { margin-bottom: 0; }
 @media (max-width: 900px) {
-  .about-grid,
-  .values-grid {
-    grid-template-columns: 1fr;
-  }
+  .about-grid, .values-grid { grid-template-columns: 1fr; gap: 2rem; }
 }

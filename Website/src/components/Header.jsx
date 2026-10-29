@@ -14,9 +14,7 @@ function Header() {
       <div className="container header-container">
         <div className="logo-container">
           <Link to="/" className="logo-link" aria-label="Smartitecture home">
-            <div className="logo">
-              <img src="/brand/smartitecture-logo.png" alt="" className="logo-image" aria-hidden="true" />
-            </div>
+            <span className="wordmark">Smartitecture<span className="wordmark-spark" aria-hidden="true">&#10022;</span></span>
           </Link>
         </div>
         
@@ -35,6 +33,7 @@ function Header() {
         <nav
           id="primary-navigation"
           className={`main-nav ${menuOpen ? 'open' : ''}`}
+          onKeyDown={(event) => { if (event.key === 'Escape') { setMenuOpen(false); document.querySelector('.mobile-menu-button')?.focus() } }}
           aria-label="Primary navigation"
         >
           <ul className="nav-list">
@@ -45,22 +44,22 @@ function Header() {
             </li>
             <li className="nav-item">
               <NavLink to="/features" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMenuOpen(false)}>
-                Features
+                How it helps
               </NavLink>
             </li>
-            <li className="nav-item">
+            <li className="nav-item nav-download">
               <NavLink to="/download" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMenuOpen(false)}>
-                Download
+                Try the beta
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/faq" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMenuOpen(false)}>
-                FAQ
+                Questions
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMenuOpen(false)}>
-                About
+                Our story
               </NavLink>
             </li>
           </ul>

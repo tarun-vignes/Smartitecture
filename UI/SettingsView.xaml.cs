@@ -26,10 +26,48 @@ namespace Smartitecture.UI
         private readonly DispatcherTimer _toastTimer = new DispatcherTimer();
         private readonly DispatcherTimer _savePopupTimer = new DispatcherTimer();
 
+        private System.Threading.CancellationTokenSource? _signInCancellation;
+
+        private async void AccountSignIn_Click(object sender, RoutedEventArgs e)
+        {
+            if (_signInCancellation != null) return;
+            using var cancellation = new System.Threading.CancellationTokenSource();
+            _signInCancellation = cancellation;
+            AccountSignInButton.IsEnabled = false;
+            try
+            {
+                var serviceUrl = Smartitecture.Services.Core.ProviderSettings.Load().Backend.BaseUrl;
+                var signIn = new Smartitecture.Services.AccountSignInService();
+                AccountStatusText.Text = "Preparing secure sign-in?";
+                var challenge = await signIn.BeginAsync(serviceUrl, cancellation.Token);
+                AccountStatusText.Text = $"Enter code {challenge.Code} at {challenge.VerificationUrl}. Keep this window open.";
+                Process.Start(new ProcessStartInfo(challenge.VerificationUrl) { UseShellExecute = true });
+                var session = await signIn.CompleteAsync(serviceUrl, challenge, cancellation.Token);
+                cancellation.Token.ThrowIfCancellationRequested();
+                new Smartitecture.Services.AccountSessionStore().Save(session);
+                AccountStatusText.Text = "Signed in. Online AI is connected to your account.";
+            }
+            catch (OperationCanceledException) { AccountStatusText.Text = "Sign-in stopped or expired. You can try again."; }
+            catch (Exception) { AccountStatusText.Text = "Sign-in is unavailable right now. Please try later. PC tools still work."; }
+            finally { _signInCancellation = null; AccountSignInButton.IsEnabled = true; }
+        }
+
+        private void AccountSignOut_Click(object sender, RoutedEventArgs e)
+        {
+            _signInCancellation?.Cancel();
+            try
+            {
+                new Smartitecture.Services.AccountSessionStore().Clear();
+                AccountStatusText.Text = "Signed out on this PC. Local tools are ready.";
+            }
+            catch (Exception) { AccountStatusText.Text = "Could not remove the saved session. Please try again."; }
+        }
+
         public SettingsView()
         {
             InitializeComponent();
             Loaded += SettingsView_Loaded;
+            Unloaded += (_, _) => _signInCancellation?.Cancel();
 
             // Toast hides itself after a short delay.
             _toastTimer.Interval = TimeSpan.FromSeconds(2.2);
@@ -52,9 +90,18 @@ namespace Smartitecture.UI
         {
             try
             {
+                var serviceUrl = Smartitecture.Services.Core.ProviderSettings.Load().Backend.BaseUrl;
+                if (string.IsNullOrWhiteSpace(serviceUrl))
+                {
+                    AccountSignInButton.IsEnabled = false;
+                    AccountStatusText.Text = "PC tools are ready. Online AI access is not available in this preview yet.";
+                }
+                else if (new Smartitecture.Services.AccountSessionStore().Load(serviceUrl) != null)
+                    AccountStatusText.Text = "Signed in on this PC.";
                 // Load persisted preferences and populate UI controls.
                 var prefs = new Smartitecture.Services.PreferencesService();
                 var loaded = prefs.Load();
+                if (prefs.LoadWarning != null) ShowSavePopup(prefs.LoadWarning);
                 _initialPreferences = ClonePreferences(loaded);
 
                 PopulateLanguageComboBox();
@@ -76,7 +123,7 @@ namespace Smartitecture.UI
 
                 PortTextBox.Text = loaded.ApiPort.ToString();
                 BackendUrlTextBox.Text = loaded.BackendBaseUrl;
-                BackendApiKeyTextBox.Text = loaded.BackendApiKey;
+                BackendApiKeyTextBox.Password = loaded.BackendApiKey;
                 UpdateBackendStatusText(loaded.BackendBaseUrl);
             }
             catch { }
@@ -125,7 +172,7 @@ namespace Smartitecture.UI
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             // Persist preferences and show a confirmation popup.
-            SavePreferences();
+            if (!SavePreferences()) return;
             ShowSavePopup(GetString("Settings.SavedMessage", "You have successfully changed your preferences."));
         }
 
@@ -176,7 +223,7 @@ namespace Smartitecture.UI
             ShowToast(GetString("Settings.ChangesPending", "Changes pending"));
         }
 
-        private void SavePreferences()
+        private bool SavePreferences()
         {
             try
             {
@@ -203,16 +250,28 @@ namespace Smartitecture.UI
                     loaded.ApiPort = port;
                 }
 
-                loaded.BackendBaseUrl = NormalizeBackendUrl(BackendUrlTextBox.Text);
-                loaded.BackendApiKey = BackendApiKeyTextBox.Text.Trim();
+                var address = NormalizeBackendUrl(BackendUrlTextBox.Text);
+                if (!Smartitecture.Services.ConnectionAddress.IsValid(address))
+                {
+                    ShowSavePopup("Use a secure HTTPS address, or HTTP for a local connection. Leave it blank to use local tools.");
+                    return false;
+                }
+                loaded.BackendBaseUrl = address;
+                loaded.BackendApiKey = BackendApiKeyTextBox.Password.Trim();
 
                 prefs.Save(loaded);
                 _initialPreferences = ClonePreferences(loaded);
                 UpdateBackendStatusText(loaded.BackendBaseUrl);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Smartitecture.Services.Safety.AppLog.Error("Could not save preferences.", ex);
+                ShowSavePopup("Your settings could not be saved. Please try again. Your changes are still here.");
+                return false;
+            }
 
             _hasPendingChanges = false;
+            return true;
         }
 
         private void RevertToInitialPreferences()
@@ -241,7 +300,7 @@ namespace Smartitecture.UI
             DiagnosticsCheckBox.IsChecked = _initialPreferences.ShareDiagnostics;
             PortTextBox.Text = _initialPreferences.ApiPort.ToString();
             BackendUrlTextBox.Text = _initialPreferences.BackendBaseUrl;
-            BackendApiKeyTextBox.Text = _initialPreferences.BackendApiKey;
+            BackendApiKeyTextBox.Password = _initialPreferences.BackendApiKey;
             UpdateBackendStatusText(_initialPreferences.BackendBaseUrl);
 
             _isInitializing = false;
@@ -334,6 +393,12 @@ namespace Smartitecture.UI
                 return;
             }
 
+            if (!Smartitecture.Services.ConnectionAddress.IsValid(baseUrl))
+            {
+                BackendStatusText.Text = "Use HTTPS for online AI, or HTTP for a local connection.";
+                return;
+            }
+
             BackendTestButton.IsEnabled = false;
             BackendStatusText.Text = GetString("Settings.BackendStatusChecking", "Checking...");
 
@@ -342,7 +407,7 @@ namespace Smartitecture.UI
                 using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
                 var url = $"{baseUrl.TrimEnd('/')}/health";
                 using var request = new HttpRequestMessage(HttpMethod.Get, url);
-                var apiKey = BackendApiKeyTextBox.Text.Trim();
+                var apiKey = BackendApiKeyTextBox.Password.Trim();
                 if (!string.IsNullOrWhiteSpace(apiKey))
                 {
                     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
@@ -351,7 +416,7 @@ namespace Smartitecture.UI
 
                 using var response = await client.SendAsync(request);
                 BackendStatusText.Text = response.IsSuccessStatusCode
-                    ? GetString("Settings.BackendStatusConnected", "Connected")
+                    ? "Service reachable; AI access has not been verified"
                     : string.Format(
                         GetString("Settings.BackendStatusFailedFormat", "Failed ({0})"),
                         (int)response.StatusCode);
@@ -378,22 +443,7 @@ namespace Smartitecture.UI
                 : GetString("Settings.BackendStatusConfigured", "Configured");
         }
 
-        private static string NormalizeBackendUrl(string? value)
-        {
-            var trimmed = (value ?? string.Empty).Trim();
-            if (string.IsNullOrWhiteSpace(trimmed))
-            {
-                return string.Empty;
-            }
-
-            if (!trimmed.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
-                !trimmed.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-            {
-                trimmed = "http://" + trimmed;
-            }
-
-            return trimmed.TrimEnd('/');
-        }
+        private static string NormalizeBackendUrl(string? value) => Smartitecture.Services.ConnectionAddress.Normalize(value);
 
         private string BuildDiagnosticsSummary()
         {

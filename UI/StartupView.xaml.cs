@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 using Smartitecture.Services;
 
@@ -17,6 +18,9 @@ namespace Smartitecture.UI
     {
         // Live metric refresh loop (UI thread).
         private readonly DispatcherTimer _refreshTimer;
+        private Task? _counterInitialization;
+        private bool _isActive;
+        private int _loadRevision;
         // Performance counters for live system data.
         private PerformanceCounter? _cpuCounter;
         private PerformanceCounter? _memoryAvailableCounter;
@@ -35,9 +39,6 @@ namespace Smartitecture.UI
             Loaded += StartupView_Loaded;
             Unloaded += StartupView_Unloaded;
 
-            // Setup counters once; values are read each tick.
-            InitializeCounters();
-
             _refreshTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
@@ -45,9 +46,31 @@ namespace Smartitecture.UI
             _refreshTimer.Tick += (_, __) => UpdateMetrics();
         }
 
-        private void StartupView_Loaded(object sender, RoutedEventArgs e)
+        private async void StartupView_Loaded(object sender, RoutedEventArgs e)
         {
+            _isActive = true;
+            var revision = ++_loadRevision;
             Focus();
+            // Windows can take a long time to initialize performance counters.
+            // Keep this off the UI thread so the window and quick actions remain usable.
+            _counterInitialization ??= Task.Run(InitializeCounters);
+            try
+            {
+                await _counterInitialization;
+            }
+            catch (Exception ex)
+            {
+                Smartitecture.Services.Safety.AppLog.Error("Could not initialize home metrics.", ex);
+            }
+            if (revision != _loadRevision || !_isActive)
+            {
+                if (!_isActive)
+                {
+                    DisposeCounters();
+                    _counterInitialization = null;
+                }
+                return;
+            }
             UpdateStaticInfo();
             UpdateMetrics();
             _refreshTimer.Start();
@@ -55,8 +78,14 @@ namespace Smartitecture.UI
 
         private void StartupView_Unloaded(object sender, RoutedEventArgs e)
         {
+            _isActive = false;
+            ++_loadRevision;
             _refreshTimer.Stop();
-            DisposeCounters();
+            if (_counterInitialization?.IsCompleted == true)
+            {
+                DisposeCounters();
+                _counterInitialization = null;
+            }
         }
 
         // Initialize system counters safely (failures are ignored).
@@ -252,6 +281,14 @@ namespace Smartitecture.UI
             _netRecvCounter?.Dispose();
             _netSentCounter?.Dispose();
         }
+
+        private async void QuickAction_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Button { Tag: string prompt })
+                await NavigationService.GoChatAsync(prompt);
+        }
+
+        private void OpenChat_Click(object sender, RoutedEventArgs e) => NavigationService.GoChat();
 
         // Footer navigation actions.
         private void LaunchDashboard_Click(object sender, RoutedEventArgs e)
